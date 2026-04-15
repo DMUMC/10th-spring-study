@@ -17,10 +17,10 @@ public class StoreImage {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "file_url", nullable = false, length = 255)
+    @Column(name = "file_url", nullable = true, length = 255)
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "store_id")
     private Store store;
 }

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 public class StoreReview {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "review_id")
     private Long id;
 
     private String title;
@@ -16,11 +17,9 @@ public class StoreReview {
     private Integer popularity;
     private LocalDate createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    @Column(name = "store_id", nullable = false)
+    private Long storeId;
 }

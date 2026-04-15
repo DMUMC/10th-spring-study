@@ -13,6 +13,6 @@ public class ReviewComment {
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "review_id")
     private StoreReview review;
 }

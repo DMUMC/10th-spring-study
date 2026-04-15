@@ -18,6 +18,6 @@ public class IQFile {
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "inquiry_id")
     private Inquiry inquiry;
 }
