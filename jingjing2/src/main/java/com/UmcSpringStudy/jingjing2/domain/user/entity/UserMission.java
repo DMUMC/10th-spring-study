@@ -16,7 +16,7 @@ public class UserMission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "umid")
+    @Column(name = "id")
     private Long umid;
 
     @Enumerated(EnumType.STRING)
@@ -26,10 +26,10 @@ public class UserMission {
     private Integer progress;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "msid")
+    @JoinColumn(name = "id")
     private Mission mission;
 }

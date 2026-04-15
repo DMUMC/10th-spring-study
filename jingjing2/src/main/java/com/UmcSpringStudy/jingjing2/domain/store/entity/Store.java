@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 @Entity
 public class Store {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long stid;
+    private Long id;
 
     private String name;
     private BigDecimal lat;

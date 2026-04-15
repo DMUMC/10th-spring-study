@@ -10,11 +10,11 @@ import lombok.*;
 public class Autorication {
 
     @Id
-    private Long uid;
+    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "id")
     private User user;
 
     private Boolean adAllow;

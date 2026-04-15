@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Entity
 public class StoreReview {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long srid;
+    private Long id;
 
     private String title;
     private String context;
@@ -17,10 +17,10 @@ public class StoreReview {
     private LocalDate createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stid")
+    @JoinColumn(name = "store_id")
     private Store store;
 }

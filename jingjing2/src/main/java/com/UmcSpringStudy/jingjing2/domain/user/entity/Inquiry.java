@@ -13,7 +13,7 @@ public class Inquiry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long iqid;
+    private Long id;
 
     @Column(length = 30)
     private String title;
@@ -28,7 +28,7 @@ public class Inquiry {
     private String response;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "id")
     private User user;
 
     @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL)

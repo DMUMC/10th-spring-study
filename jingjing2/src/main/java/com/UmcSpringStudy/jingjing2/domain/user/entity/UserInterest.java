@@ -11,13 +11,13 @@ public class UserInterest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rtid;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "itid")
+    @JoinColumn(name = "id")
     private Interest interest;
 }

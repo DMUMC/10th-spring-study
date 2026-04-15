@@ -6,7 +6,7 @@ import java.time.LocalDate;
 @Entity
 public class Mission {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long msid;
+    private Long id;
 
     private String msname;
     private String context;
