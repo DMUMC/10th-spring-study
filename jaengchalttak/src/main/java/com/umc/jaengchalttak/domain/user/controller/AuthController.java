@@ -1,6 +1,6 @@
 package com.umc.jaengchalttak.domain.user.controller;
 
-import com.umc.jaengchalttak.domain.user.dto.request.LoginRequestDTO;
+import com.umc.jaengchalttak.domain.user.dto.request.LoginReqDTO;
 import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
@@ -28,7 +28,7 @@ public class AuthController {
 
     // ====== 로그인  ======
     @PostMapping("/login")
-    public ApiResponse<String> loginUser(@Valid @RequestBody LoginRequestDTO request) {
+    public ApiResponse<String> loginUser(@Valid @RequestBody LoginReqDTO request) {
         BaseSuccessCode code = UserSuccessCode.LOGIN_OK;
         return ApiResponse.onSuccess(code, "엑세스 토큰"); // 임시값, 완성되면 엑세스 토큰 넣음
     }

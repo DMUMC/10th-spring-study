@@ -1,8 +1,8 @@
 package com.umc.jaengchalttak.domain.store.controller;
 
-import com.umc.jaengchalttak.domain.store.dto.request.CommentRequestDTO;
-import com.umc.jaengchalttak.domain.store.dto.request.StoreReviewRequestDTO;
-import com.umc.jaengchalttak.domain.store.dto.response.StoreReviewListResponseDTO;
+import com.umc.jaengchalttak.domain.store.dto.request.CommentReqDTO;
+import com.umc.jaengchalttak.domain.store.dto.request.StoreReviewReqDTO;
+import com.umc.jaengchalttak.domain.store.dto.response.StoreReviewListResDTO;
 import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
@@ -17,11 +17,11 @@ public class ReviewController {
 
     // ====== 가게 리뷰 목록 조회 ======
     @GetMapping
-    public ApiResponse<List<StoreReviewListResponseDTO>> getStoreReviewList(@RequestParam("storeId") Long storeId,
-                                                                            @RequestParam("page") int page) {
+    public ApiResponse<List<StoreReviewListResDTO>> getStoreReviewList(@RequestParam("storeId") Long storeId,
+                                                                       @RequestParam("page") int page) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        List<StoreReviewListResponseDTO> result = List.of(
-                StoreReviewListResponseDTO.builder()
+        List<StoreReviewListResDTO> result = List.of(
+                StoreReviewListResDTO.builder()
                         .userId(1L)
                         .userName("홍길동")
                         .reviewStar(5)
@@ -41,7 +41,7 @@ public class ReviewController {
 
     // ====== 가게 리뷰 작성 ======
     @PostMapping
-    public ApiResponse<String> writerReview(@RequestBody StoreReviewRequestDTO request) {
+    public ApiResponse<String> writerReview(@RequestBody StoreReviewReqDTO request) {
         BaseSuccessCode code = StoreSuccessCode.REVIEW_CREATED;
         return ApiResponse.onSuccess(code, "리뷰 작성 완료!");
     }
@@ -49,7 +49,7 @@ public class ReviewController {
 
     // ====== 사장님 댓글 작성 ======
     @PostMapping("/comment")
-    public ApiResponse<String> writerComment(@RequestBody CommentRequestDTO request) {
+    public ApiResponse<String> writerComment(@RequestBody CommentReqDTO request) {
         BaseSuccessCode code = StoreSuccessCode.COMMENT_CREATED;
         return ApiResponse.onSuccess(code, "댓글 작성 완료!");
     }

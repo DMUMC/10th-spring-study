@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record InquiryInfoResponseDTO(
+public record InquiryInfoResDTO(
         String inquiryTitle,
         String inquiryContent,
         String inquiryType,

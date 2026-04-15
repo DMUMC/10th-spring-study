@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record StoreReviewListResponseDTO(
+public record StoreReviewListResDTO(
         Long userId,
         String userName,
 

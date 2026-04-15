@@ -9,7 +9,7 @@ public record UserAlarmDTO(
     Boolean inquiry
 ) {
     @Builder
-    public static record AlarmResponseDTO(
+    public static record AlarmResDTO(
             Boolean newEvent,
             Boolean review_answer,
             Boolean inquiry

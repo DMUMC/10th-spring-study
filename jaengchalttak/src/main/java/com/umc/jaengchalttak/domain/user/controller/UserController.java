@@ -55,11 +55,11 @@ public class UserController {
 
     // ====== 알림 정보 수정  ======
     @PutMapping("/alarm")
-    public ApiResponse<UserAlarmDTO.AlarmResponseDTO> updateAlarm(
+    public ApiResponse<UserAlarmDTO.AlarmResDTO> updateAlarm(
             @RequestBody UserAlarmDTO request
     ) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        UserAlarmDTO.AlarmResponseDTO result = UserAlarmDTO.AlarmResponseDTO.builder()
+        UserAlarmDTO.AlarmResDTO result = UserAlarmDTO.AlarmResDTO.builder()
                 .newEvent(true)
                 .review_answer(true)
                 .inquiry(true)

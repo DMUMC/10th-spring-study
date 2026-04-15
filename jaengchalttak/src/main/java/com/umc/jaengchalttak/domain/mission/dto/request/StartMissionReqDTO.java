@@ -1,7 +1,6 @@
 package com.umc.jaengchalttak.domain.mission.dto.request;
 
-public record CompleteMissionRequestDTO(
+public record StartMissionReqDTO(
         Long userId,
-        Long missionId,
-        Long storeId
+        Long missionId
 ) { }

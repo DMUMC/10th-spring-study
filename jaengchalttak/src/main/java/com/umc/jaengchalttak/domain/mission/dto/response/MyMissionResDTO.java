@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.Date;
 
 @Builder
-public record MyMissionResponseDTO(
+public record MyMissionResDTO(
         String storeName,
         String missionName,
         Integer missionPoint,

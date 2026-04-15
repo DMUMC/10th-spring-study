@@ -1,9 +1,9 @@
 package com.umc.jaengchalttak.domain.mission.controller;
 
-import com.umc.jaengchalttak.domain.mission.dto.request.CompleteMissionRequestDTO;
-import com.umc.jaengchalttak.domain.mission.dto.request.StartMissionRequestDTO;
-import com.umc.jaengchalttak.domain.mission.dto.response.MissionsProgressResponseDTO;
-import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResponseDTO;
+import com.umc.jaengchalttak.domain.mission.dto.request.CompleteMissionReqDTO;
+import com.umc.jaengchalttak.domain.mission.dto.request.StartMissionReqDTO;
+import com.umc.jaengchalttak.domain.mission.dto.response.MissionsProgressResDTO;
+import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResDTO;
 import com.umc.jaengchalttak.domain.mission.payload.code.MissionSuccessCode;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
@@ -18,11 +18,11 @@ public class MissionController {
 
     // ====== 현재 가능한 내 미션 조회 ======
     @GetMapping
-    public ApiResponse<List<MyMissionResponseDTO>> getMyMissionList(@RequestParam("userId") Long userId,
-                                                                    @RequestParam("page") int page) {
+    public ApiResponse<List<MyMissionResDTO>> getMyMissionList(@RequestParam("userId") Long userId,
+                                                               @RequestParam("page") int page) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        List<MyMissionResponseDTO> result = List.of(
-                MyMissionResponseDTO.builder()
+        List<MyMissionResDTO> result = List.of(
+                MyMissionResDTO.builder()
                         .storeName("스타벅스 강남점")
                         .missionName("아메리카노 2잔 구매")
                         .missionPoint(500)
@@ -38,12 +38,12 @@ public class MissionController {
 
     // ====== 진행 중/진행 완료 미션 조회 ======
     @GetMapping("/me")
-    public ApiResponse<List<MissionsProgressResponseDTO>> getMissionsByProgress(@RequestParam("userId") Long userId,
-                                                                                @RequestParam("isProgress") boolean isProgress,
-                                                                                @RequestParam("page") int page) {
+    public ApiResponse<List<MissionsProgressResDTO>> getMissionsByProgress(@RequestParam("userId") Long userId,
+                                                                           @RequestParam("isProgress") boolean isProgress,
+                                                                           @RequestParam("page") int page) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        List<MissionsProgressResponseDTO> result = List.of(
-                MissionsProgressResponseDTO.builder()
+        List<MissionsProgressResDTO> result = List.of(
+                MissionsProgressResDTO.builder()
                         .storeName("스타벅스 강남점")
                         .missionName("아메리카노 2잔 구매")
                         .missionPoint(500)
@@ -59,7 +59,7 @@ public class MissionController {
 
     // ====== 미션 수행 ======
     @PostMapping
-    public ApiResponse<String> startMission(@RequestBody StartMissionRequestDTO request) {
+    public ApiResponse<String> startMission(@RequestBody StartMissionReqDTO request) {
         BaseSuccessCode code = MissionSuccessCode.START_MISSION_CREATED;
         return ApiResponse.onSuccess(code, "미션 진행 시작!");
     }
@@ -67,7 +67,7 @@ public class MissionController {
 
     // ====== 미션 성공 요청 ======
     @PostMapping("/success")
-    public ApiResponse<String> completeMission(@RequestBody CompleteMissionRequestDTO request) {
+    public ApiResponse<String> completeMission(@RequestBody CompleteMissionReqDTO request) {
         BaseSuccessCode code = MissionSuccessCode.COMPLETE_MISSION_CREATED;
         return ApiResponse.onSuccess(code, "미션 수행 완료!");
     }
