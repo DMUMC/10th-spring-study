@@ -1,7 +1,10 @@
-package com.umc.jaengchalttak.domain.inquiry.dto.response;
+package com.umc.jaengchalttak.domain.store.dto.response;
+
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record StoreReviewListResponseDTO(
         Long userId,
         String userName,

@@ -2,6 +2,7 @@ package com.umc.jaengchalttak.domain.user.controller;
 
 import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
 import com.umc.jaengchalttak.domain.user.dto.UserAlarmDTO;
+import com.umc.jaengchalttak.domain.user.enums.Gender;
 import com.umc.jaengchalttak.domain.user.enums.ServiceUseType;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
@@ -27,14 +28,14 @@ public class UserController {
         agreement.put(ServiceUseType.LOCATION_SERVICE, false);
         agreement.put(ServiceUseType.MARKETING, false);
 
-        UserInfoDTO result = new UserInfoDTO(
-                agreement,
-                "홍길동",
-                "MALE",
-                new Date(),
-                "서울특별시 강남구 테헤란로 123",
-                new String[]{"초밥", "치킨", "마라탕"}
-        );
+        UserInfoDTO result = UserInfoDTO.builder()
+                .serviceUseAllow(agreement)
+                .name("홍길동")
+                .gender(Gender.MALE)
+                .birthday(new Date())
+                .address("서울특별시 강남구 테헤란로 123")
+                .favoriteFood(new String[]{"초밥", "치킨", "마라탕"})
+                .build();
 
         BaseSuccessCode code = UserSuccessCode.USER_CHECK_OK;
         return ApiResponse.onSuccess(code, result);
@@ -58,11 +59,12 @@ public class UserController {
             @RequestBody UserAlarmDTO request
     ) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        UserAlarmDTO.AlarmResponseDTO result = new UserAlarmDTO.AlarmResponseDTO(
-                true,
-                true,
-                true
-        );
+        UserAlarmDTO.AlarmResponseDTO result = UserAlarmDTO.AlarmResponseDTO.builder()
+                .newEvent(true)
+                .review_answer(true)
+                .inquiry(true)
+                .build();
+
         BaseSuccessCode code = UserSuccessCode.ALARM_OK;
         return ApiResponse.onSuccess(code, result);
     }
@@ -74,10 +76,12 @@ public class UserController {
             @RequestBody UserInfoDTO.UserNameUpdateDTO name) {
         // 임시값 삽입, Service 완성 시 삭제 예정
         UserInfoDTO.UserNameUpdateDTO result =
-                new UserInfoDTO.UserNameUpdateDTO("홍길동");
+                UserInfoDTO.UserNameUpdateDTO.builder()
+                        .name("홍길동")
+                        .build();
 
         BaseSuccessCode code = UserSuccessCode.CHANGE_NAME_OK;
-        return ApiResponse.onSuccess(code,result);
+        return ApiResponse.onSuccess(code, result);
     }
 
 

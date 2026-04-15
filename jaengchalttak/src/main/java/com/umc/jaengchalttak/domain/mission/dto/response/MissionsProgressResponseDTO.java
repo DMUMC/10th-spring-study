@@ -1,5 +1,8 @@
 package com.umc.jaengchalttak.domain.mission.dto.response;
 
+import lombok.Builder;
+
+@Builder
 public record MissionsProgressResponseDTO(
         String storeName,
         String missionName,

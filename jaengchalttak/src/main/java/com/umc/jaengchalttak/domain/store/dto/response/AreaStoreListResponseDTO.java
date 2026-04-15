@@ -1,5 +1,8 @@
 package com.umc.jaengchalttak.domain.store.dto.response;
 
+import lombok.Builder;
+
+@Builder
 public record AreaStoreListResponseDTO(
         Long storeId,
         Integer missionPoint,
