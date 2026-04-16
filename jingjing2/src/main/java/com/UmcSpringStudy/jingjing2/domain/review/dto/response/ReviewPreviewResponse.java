@@ -2,7 +2,6 @@ package com.UmcSpringStudy.jingjing2.domain.review.dto.response;
 
 import lombok.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Builder
