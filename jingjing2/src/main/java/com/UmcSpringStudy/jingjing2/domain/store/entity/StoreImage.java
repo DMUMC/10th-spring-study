@@ -17,7 +17,7 @@ public class StoreImage {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "file_url", nullable = true, length = 255)
+    @Column(name = "file_url")
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

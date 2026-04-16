@@ -1,6 +1,5 @@
 package com.UmcSpringStudy.jingjing2.domain.mission.entity;
 
-import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 @lombok.Data

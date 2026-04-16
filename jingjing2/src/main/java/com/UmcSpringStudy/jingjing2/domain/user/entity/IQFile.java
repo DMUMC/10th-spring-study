@@ -14,7 +14,6 @@ public class IQFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255)
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
