@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<CommonResponse<Void>> handleCustomException(CustomException e) {
-        // 인터페이스(BaseErrorCode)를 통해 값을 가져오므로, 어떤 Enum이 들어와도 동일하게 처리됨
+        // 비즈니스 로직 처리
         BaseErrorCode errorCode = e.getErrorCode();
 
         ErrorDetail errorDetail = ErrorDetail.builder()
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<CommonResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        // 공통 에러 코드를 사용할 때도 CommonErrorCode에서 가져옴
+        // 유효성 검사 처리
         BaseErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
 
         List<FieldErrorDetail> fieldErrors = e.getBindingResult().getFieldErrors().stream()
@@ -47,6 +47,20 @@ public class GlobalExceptionHandler {
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .errors(fieldErrors)
+                .build();
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(CommonResponse.error(errorCode.getHttpStatus().value(), errorDetail));
+    }
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<CommonResponse<Void>> handleException(Exception ex) {
+        //기타
+        BaseErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
+
+        ErrorDetail errorDetail = ErrorDetail.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
                 .build();
 
         return ResponseEntity
