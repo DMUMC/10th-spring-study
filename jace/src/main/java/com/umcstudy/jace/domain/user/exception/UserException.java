@@ -1,7 +1,10 @@
 package com.umcstudy.jace.domain.user.exception;
 
-public class UserException extends RuntimeException {
-    public UserException(String message) {
-        super(message);
+import com.umcstudy.jace.global.apiPayload.code.BaseErrorCode;
+import com.umcstudy.jace.global.apiPayload.exception.ProjectException;
+
+public class UserException extends ProjectException {
+    public UserException(BaseErrorCode errorCode) {
+        super(errorCode);
     }
 }

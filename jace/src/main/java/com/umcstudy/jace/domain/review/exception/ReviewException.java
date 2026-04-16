@@ -1,7 +1,10 @@
 package com.umcstudy.jace.domain.review.exception;
 
-public class ReviewException extends RuntimeException {
-    public ReviewException(String message) {
-        super(message);
+import com.umcstudy.jace.global.apiPayload.code.BaseErrorCode;
+import com.umcstudy.jace.global.apiPayload.exception.ProjectException;
+
+public class ReviewException extends ProjectException {
+    public ReviewException(BaseErrorCode errorCode) {
+        super(errorCode);
     }
 }
