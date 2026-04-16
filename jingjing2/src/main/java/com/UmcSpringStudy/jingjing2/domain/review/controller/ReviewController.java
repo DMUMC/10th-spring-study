@@ -3,6 +3,7 @@ package com.UmcSpringStudy.jingjing2.domain.review.controller;
 import com.UmcSpringStudy.jingjing2.domain.review.dto.request.*;
 import com.UmcSpringStudy.jingjing2.domain.review.dto.response.*;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,9 +16,11 @@ import java.util.List;
 public class ReviewController {
 
     // 신규 리뷰 작성 (본문 및 첨부파일 관리 로직 포함)
+    // json 과 파일이 섞여 있음에 따라 그냥 요청 시 오류 뜨고,
+    // Content-Type 을 통해서 application/json, image/jpeg 명시해야 함
     @PostMapping("")
     public CommonResponse<ReviewDetailResponse> createReview(
-            @RequestPart("request") ReviewCreateRequest request,
+            @RequestPart(value = "request") @Valid ReviewCreateRequest request,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
         return CommonResponse.success("리뷰 작성 성공", null);
@@ -34,7 +37,7 @@ public class ReviewController {
     @PatchMapping("/{reviewId}")
     public CommonResponse<ReviewDetailResponse> updateReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewUpdateRequest request) {
+            @RequestBody @Valid ReviewUpdateRequest request) {
 
         return CommonResponse.success("리뷰 수정 성공", null);
     }
@@ -52,7 +55,7 @@ public class ReviewController {
     @PostMapping("/{reviewId}/comments")
     public CommonResponse<Void> createComment(
             @PathVariable Long reviewId,
-            @RequestBody CommentRequest request) {
+            @RequestBody @Valid CommentRequest request) {
 
         return CommonResponse.success("댓글 작성 성공", null);
     }
@@ -61,7 +64,7 @@ public class ReviewController {
     @PatchMapping("/comments/{commentId}")
     public CommonResponse<Void> updateComment(
             @PathVariable Long commentId,
-            @RequestBody CommentRequest request) {
+            @RequestBody @Valid CommentRequest request) {
 
         return CommonResponse.success("댓글 수정 성공", null);
     }

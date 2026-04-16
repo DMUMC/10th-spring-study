@@ -4,12 +4,15 @@ import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.request.UserMissionUp
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionPreviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionResponse;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequiredArgsConstructor
+@Validated // PathVariable이나 단순 파라미터 검증을 위해 추가
 @RequestMapping("/api/users/{userId}/missions")
 public class UserMissionController {
 
@@ -25,7 +28,7 @@ public class UserMissionController {
     @PostMapping
     public CommonResponse<UserMissionResponse> addMission(
             @PathVariable Long userId,
-            @RequestBody Long missionId) {
+            @RequestBody @NotNull(message = "도전할 미션 ID는 필수입니다.") Long missionId) {
         return CommonResponse.success("미션 도전 시작 성공", null);
     }
 
@@ -34,7 +37,7 @@ public class UserMissionController {
     public CommonResponse<UserMissionResponse> updateMission(
             @PathVariable Long userId,
             @PathVariable Long missionId,
-            @RequestBody UserMissionUpdateRequest request) {
+            @RequestBody @Valid UserMissionUpdateRequest request) { // @Valid 추가
         return CommonResponse.success("미션 상태 수정 성공", null);
     }
 

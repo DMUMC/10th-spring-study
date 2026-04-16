@@ -6,6 +6,7 @@ import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionDetailRes
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionPreviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionStoreInfoResponse;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class MissionController {
     //신규 미션 생성
     @PostMapping("/new")
     public CommonResponse<MissionDetailResponse> createMission(
-            @RequestBody MissionCreateRequest request) {
+            @RequestBody @Valid MissionCreateRequest request) {
 
         return CommonResponse.success("미션 생성 성공", null);
     }
@@ -42,7 +43,7 @@ public class MissionController {
     @PatchMapping("/update/{missionId}")
     public CommonResponse<MissionDetailResponse> updateMission(
             @PathVariable Long missionId,
-            @RequestBody MissionUpdateRequest request) {
+            @RequestBody @Valid MissionUpdateRequest request) {
 
         return CommonResponse.success("미션 수정 성공", null);
     }

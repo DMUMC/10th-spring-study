@@ -5,6 +5,7 @@ import com.UmcSpringStudy.jingjing2.domain.user.dto.point.request.UserPointUpdat
 import com.UmcSpringStudy.jingjing2.domain.user.dto.point.response.UserPointPreviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.point.response.UserPointResponse;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class UserPointController {
     @PostMapping
     public CommonResponse<UserPointResponse> addPointHistory(
             @PathVariable Long userId,
-            @RequestBody UserPointCreateRequest request) {
+            @RequestBody @Valid UserPointCreateRequest request) {
         return CommonResponse.success("유저 포인트 내역 추가 성공", null);
     }
 
@@ -34,7 +35,7 @@ public class UserPointController {
     public CommonResponse<UserPointResponse> updatePointHistory(
             @PathVariable Long userId,
             @PathVariable Long pointId,
-            @RequestBody UserPointUpdateRequest request) {
+            @RequestBody @Valid UserPointUpdateRequest request) {
         return CommonResponse.success("유저 포인트 내역 수정 성공", null);
     }
 

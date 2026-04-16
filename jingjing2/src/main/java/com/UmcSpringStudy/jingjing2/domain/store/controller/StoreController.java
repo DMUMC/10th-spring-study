@@ -7,6 +7,7 @@ import com.UmcSpringStudy.jingjing2.domain.store.dto.request.StoreUpdateRequest;
 import com.UmcSpringStudy.jingjing2.domain.store.dto.response.StoreDetailResponse;
 import com.UmcSpringStudy.jingjing2.domain.store.dto.response.StorePreviewResponse;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class StoreController {
 
     //가게 등록
     @PostMapping("")
-    public CommonResponse<StoreDetailResponse> createStore(@RequestBody StoreCreateRequest request) {
+    public CommonResponse<StoreDetailResponse> createStore(@RequestBody @Valid StoreCreateRequest request) {
         return CommonResponse.success("가게 등록 성공", null);
     }
 
@@ -54,7 +55,7 @@ public class StoreController {
     @PatchMapping("/{storeId}")
     public CommonResponse<StoreDetailResponse> updateStore(
             @PathVariable Long storeId,
-            @RequestBody StoreUpdateRequest request) {
+            @RequestBody @Valid StoreUpdateRequest request) {
         return CommonResponse.success("가게 정보 수정 성공", null);
     }
     //가게 삭제
