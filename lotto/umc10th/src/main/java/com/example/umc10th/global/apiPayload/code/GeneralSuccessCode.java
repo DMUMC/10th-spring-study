@@ -1,17 +1,16 @@
-package com.example.umc10th.domain.review.exception.code;
+package com.example.umc10th.global.apiPayload.code;
 
-import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+
 @Getter
 @RequiredArgsConstructor
-public enum ReviewSuccessCode implements BaseSuccessCode {
-
+public enum GeneralSuccessCode implements BaseSuccessCode {
     OK(HttpStatus.OK,
-            "REVIEW200_1",
-            "조회 요청을 성공했습니다.");
+            "COMMON200_1",
+            "요청에 성공하였습니다.");
 
     private final HttpStatus status;
     private final String code;
