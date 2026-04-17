@@ -2,7 +2,7 @@ package com.umc.jaengchalttak.domain.mission.dto.response;
 
 import lombok.Builder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
 public record MyMissionResDTO(
@@ -10,5 +10,5 @@ public record MyMissionResDTO(
         String missionName,
         Integer missionPoint,
         Integer missionAmount,
-        Date missionDate
+        LocalDateTime missionDate
 ) { }

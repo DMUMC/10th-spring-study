@@ -4,7 +4,8 @@ import com.umc.jaengchalttak.domain.user.enums.Gender;
 import com.umc.jaengchalttak.domain.user.enums.ServiceUseType;
 import lombok.Builder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Builder
@@ -12,12 +13,12 @@ public record UserInfoDTO(
         Map<ServiceUseType, Boolean> serviceUseAllow, // enum 기반 동의 여부
         String name,
         Gender gender,
-        Date birthday,
+        LocalDateTime birthday,
         String address,
-        String[] favoriteFood
+        List<String> favoriteFood
 ) {
     @Builder
-    public static record UserNameUpdateDTO(
+    public static record userNameUpdateDTO(
             String name
     ) {}
 }
