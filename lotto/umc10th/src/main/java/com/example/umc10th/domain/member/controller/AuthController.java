@@ -1,5 +1,7 @@
-package com.example.umc10th.domain.review.controller;
+package com.example.umc10th.domain.member.controller;
 
+import com.example.umc10th.domain.member.dto.MemberReqDTO;
+import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.domain.mission.dto.MemberMissionResDTO;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
@@ -11,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
-public class ReviewController {
+@RequestMapping("/auth")
+public class AuthController {
 
-    private final ReviewService reviewService;
+    private final MemberService memberService;
 
-    @GetMapping("/reviews")
-    public ApiResponse <MemberMissionResDTO.GetInfo> getInfo(
-            @RequestBody ReviewReqDTO.GetInfo dto
+    @PostMapping("/members/signup")
+    public ApiResponse<MemberMissionResDTO.GetInfo> getInfo(
+            @RequestBody MemberReqDTO.GetInfo dto
     ){
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return ApiResponse.onSuccess(code, reviewService.getInfo(dto));
+        return ApiResponse.onSuccess(code, memberService.getInfo(dto));
     }
 }

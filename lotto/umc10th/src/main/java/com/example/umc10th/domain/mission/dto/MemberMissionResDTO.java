@@ -1,12 +1,14 @@
 package com.example.umc10th.domain.mission.dto;
 
+import com.example.umc10th.domain.member.enums.Address;
+import com.example.umc10th.domain.member.enums.Gender;
+import com.example.umc10th.domain.member.enums.SocialType;
 import com.example.umc10th.domain.mission.entity.Mission;
-import com.example.umc10th.domain.mission.enums.Status;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-public class MissionResDTO {
+public class MemberMissionResDTO {
     @Builder
     public record GetInfo(
             Mission missionId,
@@ -14,7 +16,6 @@ public class MissionResDTO {
             Integer point,
             String storeName,
             String information,
-            LocalDateTime deadline,
-            Status status
-    ) {}
+            LocalDateTime deadline
+    ){}
 }
