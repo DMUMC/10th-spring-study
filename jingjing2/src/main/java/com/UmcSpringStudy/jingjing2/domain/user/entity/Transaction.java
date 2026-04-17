@@ -14,7 +14,7 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tsid;
+    private Long id;
 
     @Column(length = 30)
     private String title;
@@ -28,6 +28,6 @@ public class Transaction {
     private TransactionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "user_id")
     private User user;
 }

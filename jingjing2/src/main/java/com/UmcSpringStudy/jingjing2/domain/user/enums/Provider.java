@@ -5,5 +5,5 @@ package com.UmcSpringStudy.jingjing2.domain.user.enums;
  * ERD: naver, google
  */
 public enum Provider {
-    NAVER, GOOGLE
+    NAVER, GOOGLE, LOCAL
 }

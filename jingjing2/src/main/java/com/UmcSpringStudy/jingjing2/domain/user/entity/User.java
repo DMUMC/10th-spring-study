@@ -17,14 +17,21 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(nullable = false, length = 100)
-    private String sub;
+    private String sub; // 소셜 식별값 또는 로컬 유저 고유 식별값
+
+    @Column(length = 100, unique = true)
+    private String email; // 로컬 로그인 ID
+
+    @Column(length = 100)
+    private String password; // 암호화된 비밀번호
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private Provider provider;
+    private Provider provider; // LOCAL, NAVER, GOOGLE
 
     @Column(length = 1)
     private String sex;
@@ -37,21 +44,17 @@ public class User {
     @Column(length = 100)
     private String address;
 
-    @Column(length = 100)
-    private String email;
-
     @Column(length = 13)
     private String phone;
 
-    private Integer point;
+    @Builder.Default
+    private Integer point = 0;
 
+    @Builder.Default
     @Column(name = "CM_count")
-    private Integer cmCount;
+    private Integer cmCount = 0;
 
     private LocalDate created;
-
-    @Column(name = "Field")
-    private LocalDate field;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Setting setting;
@@ -59,6 +62,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Autorication autorication;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
 }

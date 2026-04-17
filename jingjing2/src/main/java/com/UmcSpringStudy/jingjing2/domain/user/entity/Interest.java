@@ -11,7 +11,8 @@ public class Interest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itid;
+    @Column(name = "interest_id")
+    private Long id;
 
     @Column(columnDefinition = "TEXT")
     private String context;

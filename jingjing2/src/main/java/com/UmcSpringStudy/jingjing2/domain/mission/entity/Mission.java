@@ -6,12 +6,15 @@ import java.time.LocalDate;
 @Entity
 public class Mission {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long msid;
+    @Column(name = "mission_id")
+    private Long id;
 
-    private String msname;
+    private String name;
     private String context;
-    private Double msrate;
+    private Double rate;
     private Integer taskCount;
     private String reward;
     private LocalDate expDate;
+    @Column(name = "store_id", nullable = false)
+    private Long storeId;
 }

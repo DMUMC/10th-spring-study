@@ -12,12 +12,11 @@ public class IQFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long iqfid;
+    private Long id;
 
-    @Column(length = 255)
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "iqid")
+    @JoinColumn(name = "inquiry_id")
     private Inquiry inquiry;
 }

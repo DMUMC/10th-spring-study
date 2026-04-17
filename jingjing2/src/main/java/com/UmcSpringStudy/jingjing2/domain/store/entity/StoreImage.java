@@ -14,13 +14,13 @@ public class StoreImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "siid")
-    private Long siid;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "file_url", nullable = false, length = 255)
+    @Column(name = "file_url")
     private String fileUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stid")
+    @JoinColumn(name = "store_id")
     private Store store;
 }

@@ -7,12 +7,12 @@ import java.time.LocalDate;
 @Entity
 public class ReviewComment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long smrid;
+    private Long id;
 
     private String context;
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "srid")
+    @JoinColumn(name = "review_id")
     private StoreReview review;
 }
