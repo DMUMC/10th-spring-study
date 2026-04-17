@@ -1,4 +1,16 @@
 package com.umcstudy.jace.domain.review.exception.code;
 
-public enum ReviewSuccessCode {
+import com.umcstudy.jace.global.apiPayload.code.BaseSuccessCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@RequiredArgsConstructor
+public enum ReviewSuccessCode implements BaseSuccessCode {
+    OK(HttpStatus.OK, "REVIEW200_1", "회원가입에 성공했습니다."),;
+
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
 }
