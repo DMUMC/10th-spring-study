@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MissionController {
 
     private final MissionService missionService;
 
-    @GetMapping("/v1/home")
+    @GetMapping("/home")
     public ApiResponse<MissionResDTO.GetHome> getHome(
-            @RequestBody MissionReqDTO.GetHome dto
+            @RequestParam MissionReqDTO.GetHome dto
     ){
         BaseSuccessCode code = MissionSuccessCode.HomeOK;
         return ApiResponse.onSuccess(code, missionService.getHome(dto));
     }
 
-    @GetMapping("/v1/users/me/missions")
+    @GetMapping("/users/me/missions")
     public ApiResponse<MissionResDTO.GetMyMission> getMyMission(
             @RequestParam MissionStatus missionCondition
     ){
@@ -33,7 +33,7 @@ public class MissionController {
         return ApiResponse.onSuccess(code, missionService.getMyMission(missionCondition));
     }
 
-    @PatchMapping("/v1/users/me/missions/{missionId}")
+    @PatchMapping("/users/me/missions/{missionId}")
     public ApiResponse<MissionResDTO.PatchMissionSuc> patchMissionSuc(
             @PathVariable Integer missionId
     ){

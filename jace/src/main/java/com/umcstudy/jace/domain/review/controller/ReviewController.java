@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/v1/shops/{shopId}/reviews")
+    @PostMapping("shops/{shopId}/reviews")
     public ApiResponse<ReviewResDTO.PostReviewWrite> postReviewWrite(
             @PathVariable Long shopId,
             @RequestBody ReviewReqDTO.PostReviewWrite dto

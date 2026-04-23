@@ -4,35 +4,27 @@ import com.umcstudy.jace.global.apiPayload.ApiResponse;
 import com.umcstudy.jace.global.apiPayload.code.BaseErrorCode;
 import com.umcstudy.jace.global.apiPayload.code.GeneralErrorCode;
 import com.umcstudy.jace.global.apiPayload.exception.ProjectException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GeneralExceptionAdvice {
 
-    // 프로젝트에서 발생한 예외 처리
     @ExceptionHandler(ProjectException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMemberException(
-            ProjectException e
-    ) {
+    public ResponseEntity<ApiResponse<Void>> handleMemberException(ProjectException e) {
         BaseErrorCode errorCode = e.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus())
                 .body(ApiResponse.onFailure(errorCode, null));
     }
 
-    // 그 외의 정의되지 않은 모든 예외 처리
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<String>> handleException(
-            Exception ex
-    ) {
-
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
+        log.error("Unhandled exception occurred", ex);
         BaseErrorCode code = GeneralErrorCode.INTERNAL_SERVER_ERROR;
         return ResponseEntity.status(code.getStatus())
-                .body(ApiResponse.onFailure(
-                                code,
-                                ex.getMessage()
-                        )
-                );
+                .body(ApiResponse.onFailure(code, null));
     }
 }

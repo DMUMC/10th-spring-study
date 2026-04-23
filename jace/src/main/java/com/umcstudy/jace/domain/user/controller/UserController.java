@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/v1/auth/signup")
+    @PostMapping("/auth/signup")
     public ApiResponse<UserResDTO.PostSignup> postSignup(
             @RequestBody UserReqDTO.PostSignup dto
     ){
@@ -24,13 +24,13 @@ public class UserController {
         return ApiResponse.onSuccess(code, userService.postSignup(dto));
     }
 
-    @GetMapping("/v1/terms")
+    @GetMapping("/terms")
     public ApiResponse<UserResDTO.GetTerms> getTerms(){
         BaseSuccessCode code = UserSuccessCode.TermsListOK;
         return ApiResponse.onSuccess(code, userService.getTerms());
     }
 
-    @GetMapping("/v1/foods")
+    @GetMapping("/foods")
     public ApiResponse<UserResDTO.GetFoods> getFoods(){
         BaseSuccessCode code = UserSuccessCode.FoodsListOK;
         return ApiResponse.onSuccess(code, userService.getFoods());
