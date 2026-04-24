@@ -1,6 +1,6 @@
 package com.umc.jaengchalttak.domain.user.enums;
 
-public enum ServiceUseType {
+public enum ServiceUseTitle {
     AGE_OVER_14,        // 만 14세 이상
     TERMS_OF_SERVICE,   // 서비스 이용약관
     PRIVACY_POLICY,     // 개인정보 처리방침

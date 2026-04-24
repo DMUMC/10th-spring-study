@@ -2,6 +2,7 @@ package com.umc.jaengchalttak.domain.store.controller;
 
 import com.umc.jaengchalttak.domain.store.dto.response.StoreInfoResDTO;
 import com.umc.jaengchalttak.domain.store.dto.response.AreaStoreListResDTO;
+import com.umc.jaengchalttak.domain.store.enums.StoreType;
 import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
@@ -25,7 +26,7 @@ public class StoreController {
                         .missionPoint(500)
                         .storeName("스타벅스 강남점")
                         .storeAddress("서울 강남구 테헤란로 123")
-                        .storeType("카페")
+                        .storeType(StoreType.CAFE)
                         .storeSavePath("경로")
                         .build()
         );
@@ -41,7 +42,7 @@ public class StoreController {
         // 임시값 삽입, Service 완성 시 삭제 예정
         StoreInfoResDTO result = StoreInfoResDTO.builder()
                 .storeName("스타벅스 강남점")
-                .storeType("카페")
+                .storeType(StoreType.CAFE)
                 .isOpen("OPEN")
                 .storeStar(4.5)
                 .storeAddress("서울 강남구 테헤란로 123")

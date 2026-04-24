@@ -3,7 +3,7 @@ package com.umc.jaengchalttak.domain.user.controller;
 import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
 import com.umc.jaengchalttak.domain.user.dto.UserAlarmDTO;
 import com.umc.jaengchalttak.domain.user.enums.Gender;
-import com.umc.jaengchalttak.domain.user.enums.ServiceUseType;
+import com.umc.jaengchalttak.domain.user.enums.ServiceUseTitle;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserSuccessCode;
@@ -23,12 +23,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ApiResponse<UserInfoDTO> getUserInfo(@PathVariable Long userId) {
         // 임시값 삽입, Service 완성 시 삭제 예정
-        Map<ServiceUseType, Boolean> agreement = new EnumMap<>(ServiceUseType.class);
-        agreement.put(ServiceUseType.AGE_OVER_14, true);
-        agreement.put(ServiceUseType.TERMS_OF_SERVICE, true);
-        agreement.put(ServiceUseType.PRIVACY_POLICY, true);
-        agreement.put(ServiceUseType.LOCATION_SERVICE, false);
-        agreement.put(ServiceUseType.MARKETING, false);
+        Map<ServiceUseTitle, Boolean> agreement = new EnumMap<>(ServiceUseTitle.class);
+        agreement.put(ServiceUseTitle.AGE_OVER_14, true);
+        agreement.put(ServiceUseTitle.TERMS_OF_SERVICE, true);
+        agreement.put(ServiceUseTitle.PRIVACY_POLICY, true);
+        agreement.put(ServiceUseTitle.LOCATION_SERVICE, false);
+        agreement.put(ServiceUseTitle.MARKETING, false);
 
         UserInfoDTO result = UserInfoDTO.builder()
                 .serviceUseAllow(agreement)
