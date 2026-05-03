@@ -1,5 +1,6 @@
 package com.UmcSpringStudy.jingjing2.domain.user.entity;
 
+import com.UmcSpringStudy.jingjing2.domain.review.entity.StoreReview;
 import com.UmcSpringStudy.jingjing2.domain.user.enums.Provider;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,8 +21,8 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String sub; // 소셜 식별값 또는 로컬 유저 고유 식별값
+    @Column(length = 100)
+    private String sub; // 소셜 식별값
 
     @Column(length = 100, unique = true)
     private String email; // 로컬 로그인 ID
@@ -65,4 +66,8 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<StoreReview> storeReviews = new ArrayList<>();
 }

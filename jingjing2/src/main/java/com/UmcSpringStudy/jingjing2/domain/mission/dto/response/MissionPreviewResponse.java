@@ -12,4 +12,6 @@ public class MissionPreviewResponse {
     private String name;
     private String reward;
     private LocalDate expDate;
+    private String storeName;
+    private String storeCategory;
 }

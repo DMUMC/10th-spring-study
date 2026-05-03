@@ -15,5 +15,6 @@ public class MissionDetailResponse {
     private Integer taskCount;
     private String reward;
     private LocalDate expDate;
-    private Long storeId; // ID 참조 방식 유지
+    private String storeName;
+    private String storeCategory;
 }
