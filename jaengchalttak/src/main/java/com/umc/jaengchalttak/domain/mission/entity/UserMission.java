@@ -3,7 +3,6 @@ package com.umc.jaengchalttak.domain.mission.entity;
 import com.umc.jaengchalttak.domain.mission.enums.CompleteStatus;
 import com.umc.jaengchalttak.domain.mission.enums.ProgressStatus;
 import com.umc.jaengchalttak.domain.user.entity.User;
-import com.umc.jaengchalttak.domain.user.entity.UserMissionId;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,7 +32,7 @@ public class UserMission {
     private Mission mission;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private CompleteStatus isComplete;
 
     @Enumerated(EnumType.STRING)
@@ -44,7 +43,7 @@ public class UserMission {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate missionCompleteTime;
 
 }

@@ -43,6 +43,7 @@ public class ReviewController {
     @Operation(summary = "가게 리뷰 작성", description = "유저가 방문한 가게에 대해 별점과 사진을 포함한 리뷰를 작성합니다.")
     @PostMapping
     public ApiResponse<String> writerReview(@RequestBody StoreReviewReqDTO request) {
+
         BaseSuccessCode code = StoreSuccessCode.REVIEW_CREATED;
         return ApiResponse.onSuccess(code, "리뷰 작성 완료!");
     }

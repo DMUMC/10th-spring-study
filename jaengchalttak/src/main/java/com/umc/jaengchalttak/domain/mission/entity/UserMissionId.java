@@ -1,4 +1,4 @@
-package com.umc.jaengchalttak.domain.user.entity;
+package com.umc.jaengchalttak.domain.mission.entity;
 
 import lombok.*;
 import java.io.Serializable;
