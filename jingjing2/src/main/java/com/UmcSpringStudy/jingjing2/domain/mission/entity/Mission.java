@@ -1,5 +1,6 @@
 package com.UmcSpringStudy.jingjing2.domain.mission.entity;
 
+import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 @lombok.Data
@@ -15,6 +16,8 @@ public class Mission {
     private Integer taskCount;
     private String reward;
     private LocalDate expDate;
-    @Column(name = "store_id", nullable = false)
-    private Long storeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 }

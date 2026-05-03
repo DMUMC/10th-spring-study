@@ -1,5 +1,6 @@
 package com.UmcSpringStudy.jingjing2.domain.user.entity;
 
+import com.UmcSpringStudy.jingjing2.domain.review.entity.StoreReview;
 import com.UmcSpringStudy.jingjing2.domain.user.enums.Provider;
 import jakarta.persistence.*;
 import lombok.*;
@@ -65,4 +66,8 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<StoreReview> storeReviews = new ArrayList<>();
 }
