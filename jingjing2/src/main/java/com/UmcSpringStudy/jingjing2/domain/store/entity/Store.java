@@ -25,6 +25,11 @@ public class Store {
     private Double rate;
     private String category;
 
+    //구역과 가게 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
+
     // 가게 이미지와의 양방향 연결
     @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
