@@ -3,7 +3,6 @@ package com.UmcSpringStudy.jingjing2.domain.store.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -21,15 +20,9 @@ public class StoreCreateRequest {
     @NotBlank(message = "카테고리를 지정해주세요.")
     private String category;
 
-    @Schema(description = "위도(Latitude)", example = "37.5665")
-    @NotNull(message = "위도(Latitude) 정보가 필요합니다.")
-    @DecimalMin(value = "-90.0", message = "위도는 -90.0에서 90.0 사이여야 합니다.")
-    @DecimalMax(value = "90.0", message = "위도는 -90.0에서 90.0 사이여야 합니다.")
-    private BigDecimal lat;
+    @Schema(description = "구역id", example = "1234")
+    @NotNull(message = "가게의 구역 id를 입력 해 주세요.")
+    private Long regionId;
 
-    @Schema(description = "경도(Longitude)", example = "126.9780")
-    @NotNull(message = "경도(Longitude) 정보가 필요합니다.")
-    @DecimalMin(value = "-180.0", message = "경도는 -180.0에서 180.0 사이여야 합니다.")
-    @DecimalMax(value = "180.0", message = "경도는 -180.0에서 180.0 사이여야 합니다.")
-    private BigDecimal lng;
+
 }

@@ -4,7 +4,6 @@ import com.UmcSpringStudy.jingjing2.domain.mission.entity.Mission;
 import com.UmcSpringStudy.jingjing2.domain.review.entity.StoreReview;
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +19,6 @@ public class Store {
     private Long id;
 
     private String name;
-    private BigDecimal lat;
-    private BigDecimal lng;
     private Double rate;
     private String category;
 

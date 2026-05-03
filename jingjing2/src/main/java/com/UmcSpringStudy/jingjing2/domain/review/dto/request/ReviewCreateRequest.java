@@ -30,7 +30,7 @@ public class ReviewCreateRequest {
     @NotNull(message = "작성자 ID는 필수입니다.")
     private Long userId;
 
-    @Schema(description = "가게 ID", example = "10")
+    @Schema(description = "가게 ID", example = "1")
     @NotNull(message = "가게 ID는 필수입니다.")
     private Long storeId;
 }

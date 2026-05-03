@@ -16,5 +16,6 @@ public class RegionResponseDTO {
     @Getter
     public static class RegionListDTO {
         private java.util.List<RegionPreviewDTO> regionList;
+        private Boolean hasNext;
     }
 }

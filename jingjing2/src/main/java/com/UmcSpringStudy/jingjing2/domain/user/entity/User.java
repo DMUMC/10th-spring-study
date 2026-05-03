@@ -21,8 +21,8 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String sub; // 소셜 식별값 또는 로컬 유저 고유 식별값
+    @Column(length = 100)
+    private String sub; // 소셜 식별값
 
     @Column(length = 100, unique = true)
     private String email; // 로컬 로그인 ID
