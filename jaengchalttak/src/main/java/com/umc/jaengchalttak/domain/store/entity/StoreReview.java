@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class StoreReview {
 
@@ -29,7 +28,7 @@ public class StoreReview {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private Float reviewStar;
+    private Double reviewStar;
 
     @Column(nullable = false, length = 500)
     private String reviewContent;
@@ -42,11 +41,19 @@ public class StoreReview {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @Builder.Default
     @OneToMany(mappedBy = "storeReview", cascade = CascadeType.REMOVE)
     private List<ReviewPhoto> reviewPhotos = new ArrayList<>();
 
     @OneToOne(mappedBy = "storeReview", cascade = CascadeType.REMOVE)
     private OwnerComment ownerComment;
+
+    @Builder
+    private StoreReview(User user, Store store, Double reviewStar, String reviewContent) {
+        this.user = user;
+        this.store = store;
+        this.reviewStar = reviewStar;
+        this.reviewContent = reviewContent;
+    }
+
 
 }
