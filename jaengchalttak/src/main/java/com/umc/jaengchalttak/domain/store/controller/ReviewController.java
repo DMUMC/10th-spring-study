@@ -8,6 +8,7 @@ import com.umc.jaengchalttak.domain.store.service.ReviewService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class ReviewController {
 
     @Operation(summary = "가게 리뷰 작성", description = "유저가 방문한 가게에 대해 별점과 사진을 포함한 리뷰를 작성합니다.")
     @PostMapping
-    public ApiResponse<String> writerReview(@RequestBody StoreReviewReqDTO request) {
+    public ApiResponse<String> writerReview(@Valid @RequestBody StoreReviewReqDTO request) {
         reviewService.createReview(request); // 리뷰 생성
 
         BaseSuccessCode code = StoreSuccessCode.REVIEW_CREATED;
