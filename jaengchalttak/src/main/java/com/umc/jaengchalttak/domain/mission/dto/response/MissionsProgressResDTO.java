@@ -4,9 +4,10 @@ import lombok.Builder;
 
 @Builder
 public record MissionsProgressResDTO(
+        Long storeId,
         String storeName,
         String missionName,
         Integer missionPoint,
         Integer missionAmount,
-        Boolean isComplete
+        Boolean isMissionSuccess
 ) { }

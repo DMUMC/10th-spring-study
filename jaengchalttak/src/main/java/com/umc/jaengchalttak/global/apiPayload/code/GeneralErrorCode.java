@@ -10,6 +10,9 @@ public enum GeneralErrorCode implements BaseErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST,
             "COMMON400_1",
             "잘못된 요청입니다."),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST,
+            "COMMON400_2",
+            "입력값이 올바르지 않습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,
             "COMMON401_1",
             "인증되지 않았습니다."),
@@ -21,7 +24,10 @@ public enum GeneralErrorCode implements BaseErrorCode {
             "해당 리소스를 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,
             "COMMON500_1",
-            "서버에서 에러가 발생했습니다.");
+            "서버에서 에러가 발생했습니다."),
+    UTILITY_CLASS_INSTANTIATION(HttpStatus.INTERNAL_SERVER_ERROR,
+            "COMMON500_2",
+            "유틸리티 클래스는 인스턴스화 하면 안됩니다.");
 
     private final HttpStatus status;
     private final String code;

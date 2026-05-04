@@ -1,13 +1,17 @@
 package com.umc.jaengchalttak.domain.store.dto.response;
 
+import com.umc.jaengchalttak.domain.store.enums.StoreType;
+import com.umc.jaengchalttak.domain.user.enums.Address;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record StoreInfoResDTO(
     String storeName,
-    String storeType,
+    StoreType storeType,
     String isOpen,
     Double storeStar,
-    String storeAddress,
-    String[] storeSavePath
+    Address storeAddress,
+    List<String> storeSavePath
 ) { }

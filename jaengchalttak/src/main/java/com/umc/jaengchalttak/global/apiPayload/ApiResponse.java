@@ -22,18 +22,13 @@ public class ApiResponse<T> {
     private final String message;
 
     @JsonProperty("result")
-    private T result;
+    private final T result;
 
     public static <T> ApiResponse<T> onSuccess(BaseSuccessCode code, T result) {
         return new ApiResponse<>(true, code.getCode(), code.getMessage(), result);
     }
 
-    // 반환 객체가 없는 경우
-    public static <T> ApiResponse<T> onSuccess(BaseSuccessCode code) {
-        return new ApiResponse<>(true, code.getCode(), code.getMessage(), null);
-    }
-
     public static <T> ApiResponse<T> onFailure(BaseErrorCode code, T result) {
-        return new ApiResponse<>(false, code.getCode(), code.getMessage(), result);
+        return new ApiResponse<>(false, code.getCode(), "요청 처리 중 오류가 발생했습니다.", result);
     }
 }
