@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.umc.jaengchalttak.domain.user.enums.Address.TEHERAN_RO;
+
 @RestController
 @RequestMapping("/api/store")
 public class StoreController {
@@ -25,7 +27,7 @@ public class StoreController {
                         .storeId(1L)
                         .missionPoint(500)
                         .storeName("스타벅스 강남점")
-                        .storeAddress("서울 강남구 테헤란로 123")
+                        .storeAddress(TEHERAN_RO)
                         .storeType(StoreType.CAFE)
                         .storeSavePath("경로")
                         .build()
@@ -45,7 +47,7 @@ public class StoreController {
                 .storeType(StoreType.CAFE)
                 .isOpen("OPEN")
                 .storeStar(4.5)
-                .storeAddress("서울 강남구 테헤란로 123")
+                .storeAddress(TEHERAN_RO)
                 .storeSavePath(List.of("경로", "경로2"))
                 .build();
 

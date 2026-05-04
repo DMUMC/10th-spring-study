@@ -4,8 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Address {
-    ANAM_DONG("안암동"),
-    CHANG_DONG("창동");
+    ANAM_DONG("서울특별시 성북구 안암동"),
+    CHANG_DONG("서울특별시 도봉구 창동"),
+    TEHERAN_RO("서울특별시 강남구 테헤란로");
 
     private final String value;
 

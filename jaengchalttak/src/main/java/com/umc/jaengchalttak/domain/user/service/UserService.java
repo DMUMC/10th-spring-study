@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ServiceUseAllowRepository serviceUseAllowRepository;
 
     public UserInfoDTO findUserInfo(Long userId) {
         // 사용자 약관 동의 여부도 같이

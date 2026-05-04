@@ -2,6 +2,8 @@ package com.umc.jaengchalttak.domain.store.entity;
 
 import com.umc.jaengchalttak.domain.user.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,6 +29,8 @@ public class StoreReview {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @DecimalMin(value = "1.0")
+    @DecimalMax(value = "5.0")
     @Column(nullable = false)
     private Double reviewStar;
 

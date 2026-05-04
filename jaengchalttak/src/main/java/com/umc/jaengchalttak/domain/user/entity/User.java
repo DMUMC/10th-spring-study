@@ -49,7 +49,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SocialProvider socialProvider;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String socialUid;
 
     @Column(nullable = false)

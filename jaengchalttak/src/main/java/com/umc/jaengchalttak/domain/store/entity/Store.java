@@ -2,6 +2,7 @@ package com.umc.jaengchalttak.domain.store.entity;
 
 import com.umc.jaengchalttak.domain.mission.entity.Mission;
 import com.umc.jaengchalttak.domain.store.enums.StoreType;
+import com.umc.jaengchalttak.domain.user.enums.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -38,8 +39,9 @@ public class Store {
     @Column(nullable = false)
     private Double storeStar;
 
-    @Column(nullable = false, length = 300)
-    private String storeAddress;
+    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private Address storeAddress;
 
     // ====== 연관관계 매핑 ======
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)

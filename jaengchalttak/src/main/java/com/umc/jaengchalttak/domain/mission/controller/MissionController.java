@@ -7,6 +7,7 @@ import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResDTO;
 import com.umc.jaengchalttak.domain.mission.payload.code.MissionSuccessCode;
 import com.umc.jaengchalttak.domain.mission.service.MissionService;
 import com.umc.jaengchalttak.domain.mission.service.UserMissionService;
+import com.umc.jaengchalttak.domain.user.enums.Address;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,20 +25,16 @@ public class MissionController {
 
     private final UserMissionService userMissionService;
 
-    @Operation(summary = "현재 가능한 내 미션 목록 조회", description = "유저가 현재 도전할 수 있는 새로운 미션 목록을 조회합니다.")
+    @Operation(summary = "현재 가능한 내 미션 목록 조회",
+            description = "사용자 지역에서 현재 도전할 수 있는 새로운 미션 목록을 조회합니다. (홈 화면)")
     @GetMapping
-    public ApiResponse<List<MyMissionResDTO>> getMyMissionList(@RequestParam("userId") Long userId,
-                                                               @RequestParam("page") int page) {
-        // 임시값 삽입, Service 완성 시 삭제 예정
-        List<MyMissionResDTO> result = List.of(
-                MyMissionResDTO.builder()
-                        .storeName("스타벅스 강남점")
-                        .missionName("아메리카노 2잔 구매")
-                        .missionPoint(500)
-                        .missionAmount(2)
-                        .missionDate(LocalDateTime.now())
-                        .build()
-        );
+    public ApiResponse<MyMissionResDTO> getMyMissionList(@RequestParam("userId") Long userId,
+                                                         @RequestParam("address") Address address,
+                                                         @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+                                                         @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        MyMissionResDTO result = userMissionService
+                .getAvailableMissionsByAddress(userId, address, page);
 
         BaseSuccessCode code = MissionSuccessCode.MY_MISSION_OK;
         return ApiResponse.onSuccess(code, result);

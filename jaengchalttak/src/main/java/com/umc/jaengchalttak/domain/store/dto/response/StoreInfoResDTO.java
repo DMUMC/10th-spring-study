@@ -1,6 +1,7 @@
 package com.umc.jaengchalttak.domain.store.dto.response;
 
 import com.umc.jaengchalttak.domain.store.enums.StoreType;
+import com.umc.jaengchalttak.domain.user.enums.Address;
 import lombok.Builder;
 
 import java.util.List;
@@ -11,6 +12,6 @@ public record StoreInfoResDTO(
     StoreType storeType,
     String isOpen,
     Double storeStar,
-    String storeAddress,
+    Address storeAddress,
     List<String> storeSavePath
 ) { }
