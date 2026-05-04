@@ -2,42 +2,26 @@ package com.umc.jaengchalttak.domain.user.controller;
 
 import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
 import com.umc.jaengchalttak.domain.user.dto.UserAlarmDTO;
-import com.umc.jaengchalttak.domain.user.enums.Gender;
-import com.umc.jaengchalttak.domain.user.enums.ServiceUseTitle;
+import com.umc.jaengchalttak.domain.user.service.UserService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
+
+    private final UserService userService;
 
     @Operation(summary = "마이페이지 유저 정보 조회", description = "유저의 기본 인적 사항 및 약관 동의 현황을 조회합니다.")
     @GetMapping("/{userId}")
     public ApiResponse<UserInfoDTO> getUserInfo(@PathVariable Long userId) {
-        // 임시값 삽입, Service 완성 시 삭제 예정
-        Map<ServiceUseTitle, Boolean> agreement = new EnumMap<>(ServiceUseTitle.class);
-        agreement.put(ServiceUseTitle.AGE_OVER_14, true);
-        agreement.put(ServiceUseTitle.TERMS_OF_SERVICE, true);
-        agreement.put(ServiceUseTitle.PRIVACY_POLICY, true);
-        agreement.put(ServiceUseTitle.LOCATION_SERVICE, false);
-        agreement.put(ServiceUseTitle.MARKETING, false);
-
-        UserInfoDTO result = UserInfoDTO.builder()
-                .serviceUseAllow(agreement)
-                .name("홍길동")
-                .gender(Gender.MALE)
-                .birthday(LocalDateTime.now())
-                .address("서울특별시 강남구 테헤란로 123")
-                .favoriteFood(List.of("초밥", "치킨", "마라탕"))
-                .build();
+        UserInfoDTO result = userService.findUserInfo(userId);
 
         BaseSuccessCode code = UserSuccessCode.USER_CHECK_OK;
         return ApiResponse.onSuccess(code, result);

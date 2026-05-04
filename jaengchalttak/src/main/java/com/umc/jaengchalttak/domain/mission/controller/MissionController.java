@@ -5,17 +5,24 @@ import com.umc.jaengchalttak.domain.mission.dto.request.StartMissionReqDTO;
 import com.umc.jaengchalttak.domain.mission.dto.response.MissionsProgressResDTO;
 import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResDTO;
 import com.umc.jaengchalttak.domain.mission.payload.code.MissionSuccessCode;
+import com.umc.jaengchalttak.domain.mission.service.MissionService;
+import com.umc.jaengchalttak.domain.mission.service.UserMissionService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/mission")
 public class MissionController {
+
+    private final UserMissionService userMissionService;
 
     @Operation(summary = "현재 가능한 내 미션 목록 조회", description = "유저가 현재 도전할 수 있는 새로운 미션 목록을 조회합니다.")
     @GetMapping
@@ -39,19 +46,11 @@ public class MissionController {
 
     @Operation(summary = "진행 상태별 내 미션 조회", description = "유저가 진행 중이거나 이미 완료한 미션 목록을 필터링하여 조회합니다.")
     @GetMapping("/me")
-    public ApiResponse<List<MissionsProgressResDTO>> getMissionsByProgress(@RequestParam("userId") Long userId,
+    public ApiResponse<List<MissionsProgressResDTO>> getMyMissionsByProgress(@RequestParam("userId") Long userId,
                                                                            @RequestParam("isProgress") boolean isProgress,
-                                                                           @RequestParam("page") int page) {
-        // 임시값 삽입, Service 완성 시 삭제 예정
-        List<MissionsProgressResDTO> result = List.of(
-                MissionsProgressResDTO.builder()
-                        .storeName("스타벅스 강남점")
-                        .missionName("아메리카노 2잔 구매")
-                        .missionPoint(500)
-                        .missionAmount(2)
-                        .isComplete(true)
-                        .build()
-        );
+                                                                           @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+                                                                           @RequestParam(value = "page", defaultValue = "1") int page) {
+        List<MissionsProgressResDTO> result = userMissionService.getUserMissionsByProgress(userId, isProgress, page);
 
         BaseSuccessCode code = MissionSuccessCode.MISSION_BY_PROGRESS_OK;
         return ApiResponse.onSuccess(code, result);

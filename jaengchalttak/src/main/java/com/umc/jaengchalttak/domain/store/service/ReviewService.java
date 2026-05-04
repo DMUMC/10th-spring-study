@@ -1,5 +1,6 @@
 package com.umc.jaengchalttak.domain.store.service;
 
+import com.umc.jaengchalttak.domain.store.converter.StoreReviewConverter;
 import com.umc.jaengchalttak.domain.store.dto.request.StoreReviewReqDTO;
 import com.umc.jaengchalttak.domain.store.entity.Store;
 import com.umc.jaengchalttak.domain.store.entity.StoreReview;
@@ -25,20 +26,16 @@ public class ReviewService {
 
     @Transactional
     public void createReview(StoreReviewReqDTO request) {
-        // 사용자와 가게 찾음
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         Store store = storeRepository.findById(request.storeId())
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
-        StoreReview review = StoreReview.builder()
-                .user(user)
-                .store(store)
-                .reviewStar(request.reviewStar())
-                .reviewContent(request.reviewContent())
-                .build();
+        // Converter를 통해 entity로 변환
+        StoreReview review = StoreReviewConverter.toEntity(request, user, store);
 
         storeReviewRepository.save(review);
     }
+
 
 }

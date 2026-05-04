@@ -5,7 +5,6 @@ import com.umc.jaengchalttak.domain.store.enums.StoreType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -43,15 +42,12 @@ public class Store {
     private String storeAddress;
 
     // ====== 연관관계 매핑 ======
-    @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     private List<Mission> missionList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     private List<StorePhoto> storePhotos = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     private List<StoreReview> storeReviews = new ArrayList<>();
 

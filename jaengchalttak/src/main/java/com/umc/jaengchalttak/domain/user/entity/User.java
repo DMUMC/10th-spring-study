@@ -57,23 +57,18 @@ public class User extends BaseEntity {
     private Integer point = 0;
 
     // ====== 연관관계 매핑 ======
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserMission> userMissionList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<FavoriteFood> favoriteFoodList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Inquiry> inquiryList = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<ServiceUseAllow> termList = new ArrayList<>();
+    private List<ServiceUseAllow> serviceUseAllows = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<StoreReview> storeReviewList = new ArrayList<>();
 

@@ -12,8 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_mission")
-@Getter
+// 사용자의 미션 상태 (진행 중, 진행 완료) 조회를 위한 index
+@Table(
+        name = "user_mission",
+        indexes = {
+                @Index(name = "idx_user_mission_user_progress", columnList = "user_id, is_progress")
+        }
+)@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
