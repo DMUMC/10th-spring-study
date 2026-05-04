@@ -27,7 +27,7 @@ public enum GeneralErrorCode implements BaseErrorCode {
             "서버에서 에러가 발생했습니다."),
     UTILITY_CLASS_INSTANTIATION(HttpStatus.INTERNAL_SERVER_ERROR,
             "COMMON500_2",
-            "유틸리티 클래스는 인스턴스화할 수 없습니다.");
+            "유틸리티 클래스는 인스턴스화 하면 안됩니다.");
 
     private final HttpStatus status;
     private final String code;

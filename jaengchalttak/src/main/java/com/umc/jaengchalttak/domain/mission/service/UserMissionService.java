@@ -30,6 +30,32 @@ public class UserMissionService {
 
     private static final int PAGE_SIZE = 3;
 
+
+    // 사용자 지역에서 현재 도전할 수 있는 새로운 미션 목록을 조회 (홈 화면)
+    @Transactional(readOnly = true)
+    public MyMissionResDTO getAvailableMissionsByAddress(Long userId, Address address, int page) {
+        User user = userRepository.findByIdWithServiceUseAllow(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                PAGE_SIZE,
+                Sort.by(Sort.Direction.DESC, "mission.id")
+        );
+
+        // 시작 전인 지역 내의 미션 목록 조회
+        Page<UserMission> userMissionList = userMissionRepository.
+                findMissionsByAddressAndProgress(user.getId(),
+                        address,
+                        ProgressStatus.BEFORE_START,
+                        pageable);
+
+        Integer userTotalPoint = user.getPoint();
+
+        return MissionConverter.toMyMissionResDTO(userMissionList, userTotalPoint);
+    }
+
+
     // 진행 중/진행 완료 상태인 내 미션 조회
     @Transactional(readOnly = true)
     public List<MissionsProgressResDTO> getUserMissionsByProgress (Long userId, boolean isProgress, int page) {
@@ -57,31 +83,6 @@ public class UserMissionService {
                 .map(MissionConverter::toMissionsProgressResDTO)
                 .toList();
 
-    }
-
-
-    // 사용자 지역에서 현재 도전할 수 있는 새로운 미션 목록을 조회 (홈 화면)
-    @Transactional(readOnly = true)
-    public MyMissionResDTO getAvailableMissionsByAddress(Long userId, Address address, int page) {
-        User user = userRepository.findByIdWithServiceUseAllow(userId)
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
-
-        Pageable pageable = PageRequest.of(
-                page - 1,
-                PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, "mission.id")
-        );
-
-        // 시작 전인 지역 내의 미션 목록 조회
-        Page<UserMission> userMissionList = userMissionRepository.
-                findMissionsByAddressAndProgress(user.getId(),
-                        address,
-                        ProgressStatus.BEFORE_START,
-                        pageable);
-
-        Integer userTotalPoint = user.getPoint();
-
-        return MissionConverter.toMyMissionResDTO(userMissionList, userTotalPoint);
     }
 
 }
