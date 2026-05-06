@@ -1,5 +1,6 @@
 package com.umcstudy.jace.domain.user.entity;
 
+import com.umcstudy.jace.domain.point.entity.Point;
 import com.umcstudy.jace.domain.user.entity.mapping.UserFood;
 import com.umcstudy.jace.domain.user.entity.mapping.UserSocial;
 import com.umcstudy.jace.domain.user.entity.mapping.UserTerm;
