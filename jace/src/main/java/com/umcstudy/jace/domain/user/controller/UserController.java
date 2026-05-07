@@ -33,6 +33,12 @@ public class UserController {
         return ApiResponse.onSuccess(code, userService.postSignup(dto));
     }
 
+    @GetMapping("/myPage")
+    public ApiResponse<UserResDTO.GetTerms> getMyPage(){
+        BaseSuccessCode code = UserSuccessCode.TermsListOK;
+        return ApiResponse.onSuccess(code, userService.getTerms());
+    }
+
     @GetMapping("/terms")
     public ApiResponse<UserResDTO.GetTerms> getTerms(){
         BaseSuccessCode code = UserSuccessCode.TermsListOK;

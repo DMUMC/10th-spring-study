@@ -33,9 +33,6 @@ public class Review {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "review_title", nullable = false, length = 40)
-    private String reviewTitle;
-
     @Column(name = "review_content", nullable = false, length = 500)
     private String reviewContent;
 

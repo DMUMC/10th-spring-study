@@ -1,7 +1,5 @@
 package com.umcstudy.jace.domain.review.controller;
 
-import com.umcstudy.jace.domain.mission.dto.MissionReqDTO;
-import com.umcstudy.jace.domain.mission.exception.code.MissionSuccessCode;
 import com.umcstudy.jace.domain.review.dto.ReviewReqDTO;
 import com.umcstudy.jace.domain.review.dto.ReviewResDTO;
 import com.umcstudy.jace.domain.review.exception.code.ReviewSuccessCode;
@@ -17,6 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    @GetMapping("shops/{shopId}/reviews")
+    public ApiResponse<ReviewResDTO.GetReviews> getReviews(
+            @PathVariable Long shopId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        BaseSuccessCode code = ReviewSuccessCode.GET_OK;
+        return ApiResponse.onSuccess(code, reviewService.getReviews(shopId, cursorId, size));
+    }
 
     @PostMapping("shops/{shopId}/reviews")
     public ApiResponse<ReviewResDTO.PostReviewWrite> postReviewWrite(
