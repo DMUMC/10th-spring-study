@@ -21,7 +21,8 @@ public class MissionResDTO {
     @Builder
     public record GetHome(
             Integer clearMissionCnt,
-            List<MissionItem> missionList
+            List<MissionItem> missionList,
+            Boolean hasNext
     ){}
 
     public record MyMissionItem(

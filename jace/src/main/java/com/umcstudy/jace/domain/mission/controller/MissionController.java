@@ -1,6 +1,5 @@
 package com.umcstudy.jace.domain.mission.controller;
 
-import com.umcstudy.jace.domain.mission.dto.MissionReqDTO;
 import com.umcstudy.jace.domain.mission.dto.MissionResDTO;
 import com.umcstudy.jace.domain.mission.enums.MissionStatus;
 import com.umcstudy.jace.domain.mission.exception.code.MissionSuccessCode;
@@ -19,10 +18,12 @@ public class MissionController {
 
     @GetMapping("/home")
     public ApiResponse<MissionResDTO.GetHome> getHome(
-            @RequestParam MissionReqDTO.GetHome dto
+            @RequestParam String region,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") int size
     ){
         BaseSuccessCode code = MissionSuccessCode.HomeOK;
-        return ApiResponse.onSuccess(code, missionService.getHome(dto));
+        return ApiResponse.onSuccess(code, missionService.getHome(region, cursorId, size));
     }
 
     @GetMapping("/users/me/missions")
