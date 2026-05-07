@@ -1,6 +1,7 @@
 package com.example.umc10th_week04.domain.user.controller;
 
 import com.example.umc10th_week04.domain.user.dto.UserResDTO;
+import com.example.umc10th_week04.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th_week04.domain.user.service.UserService;
 import com.example.umc10th_week04.global.apiPayload.ApiResponse;
 import com.example.umc10th_week04.global.apiPayload.code.BaseSuccessCode;

@@ -1,4 +1,4 @@
-package com.example.umc10th_week04.domain.review.exception.code;
+package com.example.umc10th_week04.domain.user.exception.code;
 
 import com.example.umc10th_week04.global.apiPayload.code.BaseSuccessCode;
 import lombok.Getter;
@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ReviewSuccessCode implements BaseSuccessCode {
+public enum UserSuccessCode implements BaseSuccessCode {
 
     OK(HttpStatus.OK,
-            "REVIEW200_1",
-            "성공적으로 리뷰 요청을 처리했습니다."),
+            "USER200_1",
+            "성공적으로 사용자 요청을 처리했습니다."),
     CREATED(HttpStatus.CREATED,
-            "REVIEW201_1",
-            "리뷰가 성공적으로 작성되었습니다."),
+            "USER201_1",
+            "회원가입이 성공적으로 완료되었습니다."),
     ;
 
     private final HttpStatus status;
