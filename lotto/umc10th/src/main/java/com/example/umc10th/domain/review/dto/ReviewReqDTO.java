@@ -4,7 +4,7 @@ import com.example.umc10th.domain.member.entity.Member;
 
 public class ReviewReqDTO {
     public record GetInfo(
-            Member memberId
+            Long id
     ) {}
 
 }

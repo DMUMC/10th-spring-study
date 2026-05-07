@@ -2,6 +2,7 @@ package com.example.umc10th.domain.review.controller;
 
 import com.example.umc10th.domain.mission.dto.MemberMissionResDTO;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
+import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
@@ -17,7 +18,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/reviews")
-    public ApiResponse <MemberMissionResDTO.GetInfo> getInfo(
+    public ApiResponse <ReviewResDTO.GetInfo> getInfo(
             @RequestBody ReviewReqDTO.GetInfo dto
     ){
         BaseSuccessCode code = ReviewSuccessCode.OK;
