@@ -34,9 +34,8 @@ public class UserController {
     }
 
     @GetMapping("/myPage")
-    public ApiResponse<UserResDTO.GetTerms> getMyPage(){
-        BaseSuccessCode code = UserSuccessCode.TermsListOK;
-        return ApiResponse.onSuccess(code, userService.getTerms());
+    public ApiResponse<UserResDTO.GetMyPage> getMyPage(){
+        return ApiResponse.onSuccess(UserSuccessCode.MyPageOK, userService.getMyPage());
     }
 
     @GetMapping("/terms")

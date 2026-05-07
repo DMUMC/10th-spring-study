@@ -17,6 +17,13 @@ public class UserResDTO {
             String tokenType
     ){}
 
+    @Builder
+    public record GetMyPage(
+            String name,
+            String email,
+            Integer pointBalance
+    ){}
+
     public record TermsItem(
             Integer termsId,
             String termsName,

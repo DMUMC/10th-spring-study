@@ -10,6 +10,7 @@ import com.umcstudy.jace.domain.user.exception.code.UserErrorCode;
 import com.umcstudy.jace.domain.user.repository.*;
 import com.umcstudy.jace.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,20 @@ public class UserService {
 
         String token = jwtTokenProvider.generateToken(user.getId());
         return UserConverter.toPostSignupRes(user, token);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResDTO.GetMyPage getMyPage() {
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        int pointBalance = pointRepository.findById(userId)
+                .map(point -> point.getPointBalance())
+                .orElse(0);
+
+        return UserConverter.toGetMyPage(user, pointBalance);
     }
 
     public UserResDTO.GetTerms getTerms() {

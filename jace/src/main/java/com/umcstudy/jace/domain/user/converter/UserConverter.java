@@ -77,4 +77,12 @@ public class UserConverter {
                 .tokenType("Bearer")
                 .build();
     }
+
+    public static UserResDTO.GetMyPage toGetMyPage(User user, int pointBalance) {
+        return UserResDTO.GetMyPage.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .pointBalance(pointBalance)
+                .build();
+    }
 }
