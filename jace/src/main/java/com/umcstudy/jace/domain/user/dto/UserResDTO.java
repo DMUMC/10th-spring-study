@@ -12,7 +12,9 @@ public class UserResDTO {
     public record PostSignup(
             Integer userId,
             String name,
-            LocalDate createdAt
+            LocalDate createdAt,
+            String accessToken,
+            String tokenType
     ){}
 
     public record TermsItem(

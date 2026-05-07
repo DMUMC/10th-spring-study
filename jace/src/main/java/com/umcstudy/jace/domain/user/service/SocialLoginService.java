@@ -30,7 +30,7 @@ public class SocialLoginService {
                 .findFirst()
                 .orElseThrow(() -> new UserException(UserErrorCode.UNSUPPORTED_SOCIAL_PROVIDER));
 
-        SocialUserInfo userInfo = oAuthClient.getUserInfo(dto.accessToken());
+        SocialUserInfo userInfo = oAuthClient.getUserInfo(dto.socialAccessToken());
 
         return userSocialRepository
                 .findByProviderAndProviderUserId(dto.provider(), userInfo.providerUserId())
