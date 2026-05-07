@@ -18,9 +18,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/reviews")
-    public ApiResponse<ReviewResDTO.GetReview> getReview(
-            @RequestBody UserReqDTO.GetInfo dto
-        ) {
+    public ApiResponse<ReviewResDTO.GetReview> getReview() {
         BaseSuccessCode code = ReviewSuccessCode.OK;
 
         return ApiResponse.onSuccess(code, reviewService.getReview(dto));

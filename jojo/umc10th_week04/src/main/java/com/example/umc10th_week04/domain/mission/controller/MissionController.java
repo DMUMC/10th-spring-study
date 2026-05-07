@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/mission/")
+@RequestMapping("/api/mission")
 @RequiredArgsConstructor
 public class MissionController {
 
@@ -26,7 +26,7 @@ public class MissionController {
 
     @PatchMapping("/{missionId}/success")
     public ApiResponse<Void> successMission(
-            @RequestBody MissionReqDTO.GetMissionId dto
+            @PathVariable Long missionId
             ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
         return ApiResponse.onSuccess(code, null);
