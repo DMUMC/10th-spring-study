@@ -3,6 +3,7 @@ package com.umcstudy.jace.domain.mission.service;
 import com.umcstudy.jace.domain.mission.converter.MissionConverter;
 import com.umcstudy.jace.domain.mission.dto.MissionResDTO;
 import com.umcstudy.jace.domain.mission.entity.Mission;
+import com.umcstudy.jace.domain.mission.entity.mapping.MissionUser;
 import com.umcstudy.jace.domain.mission.enums.MissionStatus;
 import com.umcstudy.jace.domain.mission.repository.MissionRepository;
 import com.umcstudy.jace.domain.mission.repository.MissionUserRepository;
@@ -41,8 +42,22 @@ public class MissionService {
         return MissionConverter.toGetHome(clearMissionCnt, missionList, hasNext);
     }
 
-    public MissionResDTO.GetMyMission getMyMission(MissionStatus missionCondition) {
-        return null;
+    @Transactional(readOnly = true)
+    public MissionResDTO.GetMyMission getMyMission(MissionStatus missionCondition, Long cursorId, int size) {
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        List<MissionUser> missionUsers = missionUserRepository.findByUserIdAndConditionWithCursor(
+                userId, missionCondition, cursorId, PageRequest.of(0, size + 1));
+        boolean hasNext = missionUsers.size() > size;
+        if (hasNext) {
+            missionUsers = missionUsers.subList(0, size);
+        }
+
+        List<MissionResDTO.MyMissionItem> missionList = missionUsers.stream()
+                .map(MissionConverter::toMyMissionItem)
+                .collect(Collectors.toList());
+
+        return MissionConverter.toGetMyMission(missionList, hasNext);
     }
 
     public MissionResDTO.PatchMissionSuc patchMissionSuc(Integer missionId) {

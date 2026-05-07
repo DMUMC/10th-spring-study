@@ -26,6 +26,7 @@ public class MissionResDTO {
     ){}
 
     public record MyMissionItem(
+            Long userMissionId,
             Integer missionId,
             Integer shopId,
             String shopName,
@@ -37,7 +38,8 @@ public class MissionResDTO {
 
     @Builder
     public record GetMyMission(
-            List<MyMissionItem> missionList
+            List<MyMissionItem> missionList,
+            Boolean hasNext
     ){}
 
     @Builder
