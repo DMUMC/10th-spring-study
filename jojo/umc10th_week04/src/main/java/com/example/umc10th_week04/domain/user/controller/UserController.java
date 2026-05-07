@@ -20,6 +20,6 @@ public class UserController {
             @RequestBody UserResDTO.SignupInfo dto
     ){
         BaseSuccessCode code = UserSuccessCode.OK;
-        return ApiResponse.onSuccess(code, userService.signupInfo(dto))
+        return ApiResponse.onSuccess(code, userService.signupInfo(dto));
     }
 }
