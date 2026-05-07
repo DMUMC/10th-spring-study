@@ -25,4 +25,9 @@ public class UserReqDTO {
             Long termsId,
             Boolean isAgree
     ){}
+
+    public record SocialLogin(
+            SocialProvider provider,
+            String accessToken
+    ) {}
 }

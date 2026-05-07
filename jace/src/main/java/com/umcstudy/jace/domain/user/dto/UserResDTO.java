@@ -1,5 +1,6 @@
 package com.umcstudy.jace.domain.user.dto;
 
+import com.umcstudy.jace.domain.user.enums.SocialProvider;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -35,4 +36,14 @@ public class UserResDTO {
     public record GetFoods(
             List<FoodsItem> foodsList
     ){}
+
+    public record SocialLogin(
+            Boolean isNewUser,
+            String accessToken,
+            String tokenType,
+            String email,
+            String name,
+            SocialProvider provider,
+            String providerUserId
+    ) {}
 }

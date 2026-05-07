@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum UserSuccessCode implements BaseSuccessCode {
+    LoginOK(HttpStatus.OK, "USER200_1", "로그인에 성공했습니다."),
     SignupOK(HttpStatus.OK, "MEMBER200_1", "회원가입에 성공했습니다."),
     TermsListOK(HttpStatus.OK, "MEMBER200_1", "회원가입에 성공했습니다."),
     FoodsListOK(HttpStatus.OK, "MEMBER200_1", "회원가입에 성공했습니다."),;

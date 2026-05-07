@@ -3,6 +3,7 @@ package com.umcstudy.jace.domain.user.controller;
 import com.umcstudy.jace.domain.user.dto.UserReqDTO;
 import com.umcstudy.jace.domain.user.dto.UserResDTO;
 import com.umcstudy.jace.domain.user.exception.code.UserSuccessCode;
+import com.umcstudy.jace.domain.user.service.SocialLoginService;
 import com.umcstudy.jace.domain.user.service.UserService;
 import com.umcstudy.jace.global.apiPayload.ApiResponse;
 import com.umcstudy.jace.global.apiPayload.code.BaseSuccessCode;
@@ -15,6 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final SocialLoginService socialLoginService;
+
+    @PostMapping("/auth/login")
+    public ApiResponse<UserResDTO.SocialLogin> socialLogin(
+            @RequestBody UserReqDTO.SocialLogin dto
+    ) {
+        return ApiResponse.onSuccess(UserSuccessCode.LoginOK, socialLoginService.login(dto));
+    }
 
     @PostMapping("/auth/signup")
     public ApiResponse<UserResDTO.PostSignup> postSignup(
