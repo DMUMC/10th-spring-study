@@ -11,6 +11,7 @@ public class UserReqDTO {
     public record PostSignup(
             List<TermsDTO> termsList,
             String name,
+            String email,
             Gender gender,
             LocalDate birth,
             Integer zipcode,
@@ -25,4 +26,9 @@ public class UserReqDTO {
             Long termsId,
             Boolean isAgree
     ){}
+
+    public record SocialLogin(
+            SocialProvider provider,
+            String socialAccessToken
+    ) {}
 }
