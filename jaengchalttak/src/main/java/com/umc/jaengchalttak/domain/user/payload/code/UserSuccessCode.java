@@ -35,7 +35,7 @@ public enum UserSuccessCode implements BaseSuccessCode {
             "성공적으로 회원 가입이 되었습니다."),
 
     // ====== 204 ======
-    DELECT_ACCOUNT_NO_CONTENT(
+    DELETE_ACCOUNT_NO_CONTENT(
             HttpStatus.NO_CONTENT,
             "USER204_1",
             "성공적으로 회원 탈퇴가 되었습니다."),
