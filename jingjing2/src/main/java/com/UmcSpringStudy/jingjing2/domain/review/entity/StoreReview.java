@@ -1,5 +1,7 @@
 package com.UmcSpringStudy.jingjing2.domain.review.entity;
 
+import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
+import com.UmcSpringStudy.jingjing2.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 @lombok.Data
@@ -16,8 +18,11 @@ public class StoreReview {
     private LocalDate createdDate;
 
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-    @Column(name = "store_id", nullable = false)
-    private Long storeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 }

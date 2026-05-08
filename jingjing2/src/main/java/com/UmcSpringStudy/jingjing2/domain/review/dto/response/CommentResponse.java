@@ -12,6 +12,6 @@ public class CommentResponse {
     private Long commentId;
     private String context;
     private LocalDate date;
-    private String writerName; // userId로 조회한 결과
+    private String writerName;
     private List<CommentResponse> childComments; // 대댓글(자식 노드) 목록
 }

@@ -4,7 +4,7 @@ import com.UmcSpringStudy.jingjing2.domain.mission.dto.request.MissionCreateRequ
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.request.MissionUpdateRequest;
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionDetailResponse;
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionPreviewResponse;
-import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionStoreInfoResponse;
+import com.UmcSpringStudy.jingjing2.domain.mission.service.MissionService;
 import com.UmcSpringStudy.jingjing2.global.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/missions")
 public class MissionController {
-
+    private final MissionService missionService;
     //전체 미션 목록 조회
     @GetMapping("/all")
     public CommonResponse<List<MissionPreviewResponse>> getMissionList() {
@@ -35,8 +35,7 @@ public class MissionController {
     @PostMapping("/new")
     public CommonResponse<MissionDetailResponse> createMission(
             @RequestBody @Valid MissionCreateRequest request) {
-
-        return CommonResponse.success("미션 생성 성공", null);
+        return CommonResponse.success("미션 생성 성공", missionService.createMission(request));
     }
 
     //미션 수정 (부분 수정)
@@ -55,11 +54,4 @@ public class MissionController {
         return CommonResponse.success("미션 삭제 성공", null);
     }
 
-    //특정 미션의 가게 정보 출력
-    //(ID 참조 방식에 따라 서비스에서 별도 조회 후 응답)
-    @GetMapping("/{missionId}/store")
-    public CommonResponse<MissionStoreInfoResponse> getMissionStoreInfo(@PathVariable Long missionId) {
-
-        return CommonResponse.success("미션 소속 가게 정보 조회 성공", null);
-    }
 }
