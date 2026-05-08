@@ -7,16 +7,15 @@ import java.util.List;
 public class MissionResDTO {
 
     @Builder
-    public record GetMission(
-            List<MissionInfo> progresses,
-            List<MissionInfo> completions
+    public record MyMission(
+            List<MissionInfo> myMissionList
     ){}
 
     @Builder
     public record MissionInfo(
             Long missionId,
             String storeName,
-            String content,
-            Double reward
+            int cost,
+            int reward
     ){}
 }

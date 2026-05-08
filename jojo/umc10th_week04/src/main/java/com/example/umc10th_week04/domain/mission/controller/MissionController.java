@@ -1,10 +1,8 @@
 package com.example.umc10th_week04.domain.mission.controller;
 
-import com.example.umc10th_week04.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th_week04.domain.mission.dto.MissionResDTO;
 import com.example.umc10th_week04.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th_week04.domain.mission.service.MissionService;
-import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.global.apiPayload.ApiResponse;
 import com.example.umc10th_week04.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +15,20 @@ public class MissionController {
 
     private final MissionService missionService;
 
-    @GetMapping("/list")
-    public ApiResponse<MissionResDTO.GetMission> getMission(
-            @RequestBody UserReqDTO.GetInfo dto
+    // 아직 토큰을 다루는 기능을 익히지 못하여서 임의로 request URL에 User ID 를 받습니다.
+    @GetMapping("/list/{userId}")
+    public ApiResponse<MissionResDTO.MyMission> getMyMission(
+            @PathVariable Long userId
     ) {
-        BaseSuccessCode code = MissionSuccessCode.OK;
-        return ApiResponse.onSuccess(code, missionService.getMission(dto));
+        BaseSuccessCode code = MissionSuccessCode.READ_SUCCESS;
+        return ApiResponse.onSuccess(code, missionService.getMyMissions(userId));
     }
 
     @PatchMapping("/{missionId}/success")
     public ApiResponse<Void> successMission(
             @PathVariable Long missionId
             ) {
-        BaseSuccessCode code = MissionSuccessCode.OK;
+        BaseSuccessCode code = MissionSuccessCode.READ_SUCCESS;
         return ApiResponse.onSuccess(code, null);
     }
 }

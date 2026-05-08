@@ -8,26 +8,18 @@ public class HomeResDTO {
 
     @Builder
     public record GetInfo(
+            String currentLocation,
             Integer point,
-            MissionCurrent missionCurrent,
-            List<MissionInfo> missions
-    ){}
-
-    @Builder
-    public record MissionCurrent(
-            Integer current,
-            Integer total,
-            Integer reward
+            List<MissionInfo> availableMissions,
+            List<MissionInfo> completedMissions
     ){}
 
     @Builder
     public record MissionInfo(
             Long missionId,
             String storeName,
-            String category,
             Integer missionContent,
-            Integer rewardPoint,
-            String duration
+            Integer rewardPoint
     ){}
 
 }

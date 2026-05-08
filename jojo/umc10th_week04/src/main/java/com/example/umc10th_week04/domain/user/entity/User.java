@@ -25,6 +25,9 @@ public class User extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
@@ -35,6 +38,9 @@ public class User extends BaseEntity {
 
     @Column(name = "detail_address", nullable = false)
     private String detailAddress;
+
+    @Column(name = "point", nullable = false)
+    private int point;
 
     // 연관 관계
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

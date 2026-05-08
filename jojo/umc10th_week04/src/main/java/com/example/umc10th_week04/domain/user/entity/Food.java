@@ -22,7 +22,6 @@ public class Food {
     private Long id;
 
     @Column(name = "name")
-    @Enumerated(EnumType.STRING)
     private String name;
 
     // 연관 관계
