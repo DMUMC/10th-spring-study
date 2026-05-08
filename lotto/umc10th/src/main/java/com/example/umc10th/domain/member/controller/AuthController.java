@@ -18,11 +18,11 @@ public class AuthController {
 
     private final MemberService memberService;
 
-    @PostMapping("/members/signup")
-    public ApiResponse<MemberMissionResDTO.GetInfo> getInfo(
-            @RequestBody MemberReqDTO.GetInfo dto
-    ){
-        BaseSuccessCode code = ReviewSuccessCode.OK;
-        return ApiResponse.onSuccess(code, memberService.getInfo(dto));
-    }
+//    @PostMapping("/members/signup")
+//    public ApiResponse<MemberMissionResDTO.GetInfo> getInfo(
+//            @RequestBody MemberReqDTO.GetInfo dto
+//    ){
+//        BaseSuccessCode code = ReviewSuccessCode.OK;
+//        return ApiResponse.onSuccess(code, memberService.getInfo(dto));
+//    }
 }

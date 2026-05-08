@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "store")
 public class Store {
 
     @Id
@@ -20,6 +21,10 @@ public class Store {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @Column(name = "address")
     @Enumerated(EnumType.STRING)
@@ -30,6 +35,4 @@ public class Store {
 
     @Column(name = "information")
     private String information;
-
-
 }

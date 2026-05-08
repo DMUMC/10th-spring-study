@@ -9,6 +9,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 public class MemberMissionResDTO {
+
     @Builder
     public record GetInfo(
             Mission missionId,
@@ -17,5 +18,5 @@ public class MemberMissionResDTO {
             String storeName,
             String information,
             LocalDateTime deadline
-    ){}
+    ) {}
 }

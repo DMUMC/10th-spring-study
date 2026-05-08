@@ -7,12 +7,13 @@ import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
 
 public class MemberConverter {
 
-    public static MemberResDTO.GetInfo toGetInfo(
-            Member member
-    ){
+    public static MemberResDTO.GetInfo toGetInfo(Member member) {
         return MemberResDTO.GetInfo.builder()
-                .Id(member.getId())
                 .name(member.getName())
+                .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
+                .profileUrl(member.getProfileUrl())
+                .point(member.getPoint())
                 .build();
     }
 }

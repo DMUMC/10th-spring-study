@@ -9,7 +9,10 @@ public class MemberResDTO {
 
     @Builder
     public record GetInfo(
-            Long Id,
-            String name
-    ){}
+            String name,
+            String email,
+            String phoneNumber,
+            String profileUrl,
+            Integer point
+    ) {}
 }
