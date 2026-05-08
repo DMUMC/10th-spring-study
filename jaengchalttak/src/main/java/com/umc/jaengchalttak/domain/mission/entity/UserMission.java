@@ -18,20 +18,23 @@ import java.time.LocalDateTime;
         indexes = {
                 @Index(name = "idx_user_mission_user_progress", columnList = "user_id, is_progress")
         }
-)@Getter
+)
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@IdClass(UserMissionId.class) // 복합 키 매핑
 @EntityListeners(AuditingEntityListener.class)
 public class UserMission {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_mission_id")
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id", nullable = false)
     private Mission mission;

@@ -59,11 +59,6 @@ public class UserMissionService {
     // 진행 중/진행 완료 상태인 내 미션 조회
     @Transactional(readOnly = true)
     public List<MissionsProgressResDTO> getUserMissionsByProgress (Long userId, boolean isProgress, int page) {
-        // userId 존재하는지 확인
-        if (!userRepository.existsById(userId)) {
-            throw new UserException(UserErrorCode.USER_NOT_FOUND);
-        }
-
         // true면 진행 완료, false면 진행 중
         ProgressStatus status = isProgress ? ProgressStatus.COMPLETED : ProgressStatus.IN_PROGRESS;
 

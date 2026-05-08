@@ -1,7 +1,6 @@
 package com.umc.jaengchalttak.domain.mission.repository;
 
 import com.umc.jaengchalttak.domain.mission.entity.UserMission;
-import com.umc.jaengchalttak.domain.mission.entity.UserMissionId;
 import com.umc.jaengchalttak.domain.mission.enums.ProgressStatus;
 import com.umc.jaengchalttak.domain.user.enums.Address;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserMissionRepository extends JpaRepository<UserMission, UserMissionId> {
+public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
     // 특정 사용자의 상태별(진행 중/완료 등) 미션 내역을 페이징하여 조회
     // 사용자 미션, 미션, 가게를 가져옴
