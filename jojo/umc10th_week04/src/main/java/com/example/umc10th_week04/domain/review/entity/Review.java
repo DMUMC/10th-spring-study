@@ -2,6 +2,7 @@ package com.example.umc10th_week04.domain.review.entity;
 
 import com.example.umc10th_week04.domain.mission.entity.Store;
 import com.example.umc10th_week04.domain.user.entity.User;
+import com.example.umc10th_week04.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "review")
-public class Review {
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -2,6 +2,7 @@ package com.example.umc10th_week04.domain.view.home.controller;
 
 import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.domain.view.home.dto.HomeResDTO;
+import com.example.umc10th_week04.domain.view.home.service.HomeService;
 import com.example.umc10th_week04.global.apiPayload.ApiResponse;
 import com.example.umc10th_week04.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class HomeController {
 
     private final HomeService homeService;
 
-    @GetMapping("/home")
+    @GetMapping
     public ApiResponse<HomeResDTO.GetInfo> getHome(
         @RequestBody UserReqDTO.GetInfo dto
     ){
