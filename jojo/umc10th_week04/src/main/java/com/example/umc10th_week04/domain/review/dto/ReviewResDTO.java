@@ -12,10 +12,19 @@ public class ReviewResDTO {
     ){}
 
     @Builder
+    public record CreateReview(
+            Long reviewId,
+            Long userId,
+            Long storeId,
+            int score,
+            String contents
+    ){}
+
+    @Builder
     public record ReviewInfo(
             Long reviewId,
             String storeName,
-            Double score,
+            int score,
             String reviewContent,
             List<PictureInfo> pictures,
             String createDate
