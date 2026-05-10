@@ -20,7 +20,8 @@ public class UserResDTO {
     @Builder
     public record GetMyPage(
             String name,
-            String email,
+            String email,        // Apple 이메일 숨기기 선택 시 null
+            Boolean isRelayEmail, // Apple 중계 이메일 여부 (xxx@privaterelay.appleid.com)
             Integer pointBalance
     ){}
 

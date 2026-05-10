@@ -6,6 +6,7 @@ import com.umcstudy.jace.domain.review.entity.mapping.ReviewReply;
 import com.umcstudy.jace.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ public class Review {
     @Column(name = "is_disabled", nullable = false)
     private Boolean isDisabled;
 
+    @BatchSize(size = 10)
     @Builder.Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewImage> reviewImages = new ArrayList<>();

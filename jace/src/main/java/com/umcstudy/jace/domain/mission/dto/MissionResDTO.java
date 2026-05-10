@@ -8,6 +8,7 @@ import java.util.List;
 
 public class MissionResDTO {
 
+    @Builder
     public record MissionItem(
             Integer missionId,
             Integer shopId,
@@ -25,6 +26,7 @@ public class MissionResDTO {
             Boolean hasNext
     ){}
 
+    @Builder
     public record MyMissionItem(
             Long userMissionId,
             Integer missionId,

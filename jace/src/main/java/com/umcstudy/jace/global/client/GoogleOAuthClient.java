@@ -2,12 +2,10 @@ package com.umcstudy.jace.global.client;
 
 import com.umcstudy.jace.domain.user.enums.SocialProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
@@ -16,17 +14,18 @@ import java.util.Map;
 public class GoogleOAuthClient implements OAuthClient {
 
     private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     @Override
-    @SuppressWarnings("unchecked")
     public SocialUserInfo getUserInfo(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        ResponseEntity<Map> response = restTemplate.exchange(
-                USER_INFO_URL, HttpMethod.GET, new HttpEntity<>(headers), Map.class);
+        Map<String, Object> body = restClient.get()
+                .uri(USER_INFO_URL)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .body(new ParameterizedTypeReference<Map<String, Object>>() {});
 
-        Map<String, Object> body = response.getBody();
+        if (body == null) throw new IllegalStateException("Google API returned null body");
+
         String id = (String) body.get("sub");
         String email = (String) body.getOrDefault("email", "");
         String name = (String) body.getOrDefault("name", "");

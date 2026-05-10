@@ -13,6 +13,7 @@ public class ReviewResDTO {
             Integer reviewId
     ) {}
 
+    @Builder
     public record ReviewItem(
             Long reviewId,
             String userName,

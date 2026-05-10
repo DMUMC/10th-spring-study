@@ -2,12 +2,10 @@ package com.umcstudy.jace.global.client;
 
 import com.umcstudy.jace.domain.user.enums.SocialProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.Map;
 
@@ -16,18 +14,22 @@ import java.util.Map;
 public class NaverOAuthClient implements OAuthClient {
 
     private static final String USER_INFO_URL = "https://openapi.naver.com/v1/nid/me";
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     @Override
     @SuppressWarnings("unchecked")
     public SocialUserInfo getUserInfo(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        ResponseEntity<Map> response = restTemplate.exchange(
-                USER_INFO_URL, HttpMethod.GET, new HttpEntity<>(headers), Map.class);
+        Map<String, Object> body = restClient.get()
+                .uri(USER_INFO_URL)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .body(new ParameterizedTypeReference<Map<String, Object>>() {});
 
-        Map<String, Object> body = response.getBody();
+        if (body == null) throw new IllegalStateException("Naver API returned null body");
+
         Map<String, Object> responseData = (Map<String, Object>) body.get("response");
+        if (responseData == null) throw new IllegalStateException("Naver API response missing 'response' field");
+
         String id = (String) responseData.get("id");
         String email = (String) responseData.getOrDefault("email", "");
         String name = (String) responseData.getOrDefault("name", "");

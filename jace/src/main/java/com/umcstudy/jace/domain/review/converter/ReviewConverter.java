@@ -10,7 +10,6 @@ import com.umcstudy.jace.domain.user.entity.User;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReviewConverter {
 
@@ -40,17 +39,17 @@ public class ReviewConverter {
 
     public static ReviewResDTO.ReviewItem toReviewItem(Review review) {
         List<String> imageUrls = review.getReviewImages().stream()
-                .map(image -> image.getReviewImageUrl())
-                .collect(Collectors.toList());
+                .map(ReviewImage::getReviewImageUrl)
+                .toList();
 
-        return new ReviewResDTO.ReviewItem(
-                review.getId(),
-                review.getUser().getName(),
-                review.getReviewContent(),
-                review.getReviewScore(),
-                review.getReviewContentTime(),
-                imageUrls
-        );
+        return ReviewResDTO.ReviewItem.builder()
+                .reviewId(review.getId())
+                .userName(review.getUser().getName())
+                .reviewContent(review.getReviewContent())
+                .reviewScore(review.getReviewScore())
+                .reviewContentTime(review.getReviewContentTime())
+                .reviewImageUrls(imageUrls)
+                .build();
     }
 
     public static ReviewResDTO.GetReviews toGetReviews(List<ReviewResDTO.ReviewItem> reviewList, boolean hasNext) {

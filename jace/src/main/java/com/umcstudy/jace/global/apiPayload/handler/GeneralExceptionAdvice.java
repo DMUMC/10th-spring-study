@@ -16,6 +16,7 @@ public class GeneralExceptionAdvice {
     @ExceptionHandler(ProjectException.class)
     public ResponseEntity<ApiResponse<Void>> handleMemberException(ProjectException e) {
         BaseErrorCode errorCode = e.getErrorCode();
+        log.warn("Business exception: code={}, message={}", errorCode.getCode(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatus())
                 .body(ApiResponse.onFailure(errorCode, null));
     }

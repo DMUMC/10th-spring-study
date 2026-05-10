@@ -7,14 +7,13 @@ import com.umcstudy.jace.domain.mission.entity.mapping.MissionUser;
 import com.umcstudy.jace.domain.mission.enums.MissionStatus;
 import com.umcstudy.jace.domain.mission.repository.MissionRepository;
 import com.umcstudy.jace.domain.mission.repository.MissionUserRepository;
+import com.umcstudy.jace.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public MissionResDTO.GetHome getHome(String region, Long cursorId, int size) {
-        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long userId = SecurityUtils.getCurrentUserId();
 
         long clearMissionCnt = missionUserRepository.countByUser_IdAndMissionCondition(userId, MissionStatus.SUCCESS);
 
@@ -37,14 +36,14 @@ public class MissionService {
 
         List<MissionResDTO.MissionItem> missionList = missions.stream()
                 .map(MissionConverter::toMissionItem)
-                .collect(Collectors.toList());
+                .toList();
 
         return MissionConverter.toGetHome(clearMissionCnt, missionList, hasNext);
     }
 
     @Transactional(readOnly = true)
     public MissionResDTO.GetMyMission getMyMission(MissionStatus missionCondition, Long cursorId, int size) {
-        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long userId = SecurityUtils.getCurrentUserId();
 
         List<MissionUser> missionUsers = missionUserRepository.findByUserIdAndConditionWithCursor(
                 userId, missionCondition, cursorId, PageRequest.of(0, size + 1));
@@ -55,7 +54,7 @@ public class MissionService {
 
         List<MissionResDTO.MyMissionItem> missionList = missionUsers.stream()
                 .map(MissionConverter::toMyMissionItem)
-                .collect(Collectors.toList());
+                .toList();
 
         return MissionConverter.toGetMyMission(missionList, hasNext);
     }

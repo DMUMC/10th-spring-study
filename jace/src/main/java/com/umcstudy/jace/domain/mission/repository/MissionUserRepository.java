@@ -14,6 +14,9 @@ public interface MissionUserRepository extends JpaRepository<MissionUser, Long> 
     long countByUser_IdAndMissionCondition(Long userId, MissionStatus missionCondition);
 
     @Query("SELECT mu FROM MissionUser mu " +
+           "JOIN FETCH mu.mission m " +
+           "JOIN FETCH m.shop s " +
+           "JOIN FETCH s.shopCategory " +
            "WHERE mu.user.id = :userId " +
            "AND mu.missionCondition = :missionCondition " +
            "AND (:cursorId IS NULL OR mu.id < :cursorId) " +
