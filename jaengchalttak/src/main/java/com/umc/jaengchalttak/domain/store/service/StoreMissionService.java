@@ -10,7 +10,8 @@ import com.umc.jaengchalttak.domain.store.payload.StoreException;
 import com.umc.jaengchalttak.domain.store.payload.code.StoreErrorCode;
 import com.umc.jaengchalttak.domain.store.repository.StoreRepository;
 import com.umc.jaengchalttak.global.converter.GlobalConverter;
-import com.umc.jaengchalttak.global.dto.Pagination;
+import com.umc.jaengchalttak.global.dto.CursorPagination;
+import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +36,7 @@ public class StoreMissionService {
     }
 
     @Transactional(readOnly = true)
-    public Pagination<GetStoreMissionResDTO> getMissions(
+    public OffsetPagination<GetStoreMissionResDTO> getMissions(
             Long storeId,
             Integer pageSize,
             Integer pageNumber,
@@ -49,11 +50,12 @@ public class StoreMissionService {
 
         Page<Mission> missionList = missionRepository.findAllByStoreId(storeId, pageRequest);
 
-        return GlobalConverter.toPagination(
+        return GlobalConverter.toOffsetPagination(
                 missionList.map(StoreMissionConverter::toGetStoreMissionResDTO).toList(),
                 missionList.getNumber(),
                 missionList.getSize()
         );
     }
+
 
 }

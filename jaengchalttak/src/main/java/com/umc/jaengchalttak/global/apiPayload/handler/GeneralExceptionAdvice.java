@@ -7,7 +7,9 @@ import com.umc.jaengchalttak.global.apiPayload.exception.ProjectException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -47,21 +49,43 @@ public class GeneralExceptionAdvice {
                 );
     }
 
-    // 유효성 검증 관련 예외
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<String>> handleConstraintViolationException(ConstraintViolationException e) {
-        String errorMessage = e.getConstraintViolations().stream()
-                .map(ConstraintViolation::getMessage)
+    // 요청 본문 검증 실패
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<String>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e
+    ) {
+
+        String errorMessage = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
                 .findFirst()
-                .orElse("유효성 검증에 실패했습니다.");
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .orElse("요청 본문 값이 올바르지 않습니다.");
 
-        BaseErrorCode errorCode = GeneralErrorCode.INVALID_INPUT_VALUE;
-
-        return ResponseEntity.status(errorCode.getStatus())
+        return ResponseEntity.badRequest()
                 .body(ApiResponse.onFailure(
-                        errorCode,
+                        GeneralErrorCode.INVALID_REQUEST_BODY,
                         errorMessage
                 ));
     }
-    
+
+    // 파라미터 검증 실패
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<String>> handleConstraintViolationException(
+            ConstraintViolationException e
+    ) {
+
+        String errorMessage = e.getConstraintViolations()
+                .stream()
+                .findFirst()
+                .map(ConstraintViolation::getMessage)
+                .orElse("요청 파라미터 값이 올바르지 않습니다.");
+
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.onFailure(
+                        GeneralErrorCode.INVALID_REQUEST_PARAMETER,
+                        errorMessage
+                ));
+    }
+
 }

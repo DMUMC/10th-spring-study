@@ -6,10 +6,12 @@ import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.domain.store.service.StoreMissionService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
-import com.umc.jaengchalttak.global.dto.Pagination;
+import com.umc.jaengchalttak.global.dto.CursorPagination;
+import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +34,11 @@ public class StoreMissionController {
 
     @Operation(summary = "가게 미션 조회", description = "가게 내의 미션들을 페이징하여 조회합니다.")
     @GetMapping
-    public ApiResponse<Pagination<GetStoreMissionResDTO>> getStoreMissions(@RequestParam Long storeId,
+    public ApiResponse<OffsetPagination<GetStoreMissionResDTO>> getStoreMissions(@RequestParam Long storeId,
                                                                            @RequestParam Integer pageSize,
                                                                            @RequestParam Integer pageNumber,
                                                                            @RequestParam(required = false) String sort) {
-        Pagination<GetStoreMissionResDTO> result =
+        OffsetPagination<GetStoreMissionResDTO> result =
                 storeMissionService.getMissions(storeId, pageSize, pageNumber, sort);
         BaseSuccessCode code = StoreSuccessCode.STORE_MISSION_OK;
         return ApiResponse.onSuccess(code, result);

@@ -5,20 +5,17 @@ import com.umc.jaengchalttak.domain.mission.dto.request.StartMissionReqDTO;
 import com.umc.jaengchalttak.domain.mission.dto.response.MissionsProgressResDTO;
 import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResDTO;
 import com.umc.jaengchalttak.domain.mission.payload.code.MissionSuccessCode;
-import com.umc.jaengchalttak.domain.mission.service.MissionService;
 import com.umc.jaengchalttak.domain.mission.service.UserMissionService;
 import com.umc.jaengchalttak.domain.user.enums.Address;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
+import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Tag(name = "미션 API", description = "미션 관련 API입니다.")
 @RestController
@@ -46,11 +43,23 @@ public class MissionController {
 
     @Operation(summary = "진행 상태별 내 미션 조회", description = "유저가 진행 중이거나 이미 완료한 미션 목록을 필터링하여 조회합니다.")
     @GetMapping("/me")
-    public ApiResponse<List<MissionsProgressResDTO>> getMyMissionsByProgress(@RequestParam("userId") Long userId,
-                                                                           @RequestParam("isProgress") boolean isProgress,
-                                                                           @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
-                                                                           @RequestParam(value = "page", defaultValue = "1") int page) {
-        List<MissionsProgressResDTO> result = userMissionService.getUserMissionsByProgress(userId, isProgress, page);
+    public ApiResponse<OffsetPagination<MissionsProgressResDTO>> getMyMissionsByProgress(
+            @RequestParam Long userId,
+            @RequestParam boolean isProgress,
+
+            @RequestParam(defaultValue = "3")
+            @Min(value = 1, message = "페이지 크기는 1 이상이어야 합니다.")
+            Integer pageSize,
+
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0, message = "페이지 번호는 0 이상이어야 합니다.")
+            Integer pageNumber,
+
+            @RequestParam(required = false)
+            String sort
+    ) {
+        OffsetPagination<MissionsProgressResDTO> result =
+                userMissionService.getUserMissionsByProgress(userId, isProgress, pageSize, pageNumber, sort);
 
         BaseSuccessCode code = MissionSuccessCode.MISSION_BY_PROGRESS_OK;
         return ApiResponse.onSuccess(code, result);
