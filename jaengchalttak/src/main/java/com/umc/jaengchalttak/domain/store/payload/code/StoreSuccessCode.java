@@ -19,6 +19,12 @@ public enum StoreSuccessCode implements BaseSuccessCode {
     REVIEW_LIST_OK(HttpStatus.OK,
             "STORE200_3",
             "성공적으로 가게의 리뷰 목록을 조회했습니다."),
+    STORE_MISSION_CREATED_OK(HttpStatus.OK,
+            "STORE200_4",
+            "성공적으로 가게 미션을 생성했습니다."),
+    STORE_MISSION_OK(HttpStatus.OK,
+            "STORE200_5",
+            "성공적으로 가게 미션을 조회했습니다."),
 
     // ====== 201 ======
     REVIEW_CREATED(HttpStatus.CREATED,

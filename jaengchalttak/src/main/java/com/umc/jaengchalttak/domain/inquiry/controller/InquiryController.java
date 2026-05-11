@@ -7,11 +7,14 @@ import com.umc.jaengchalttak.domain.inquiry.payload.code.InquirySuccessCode;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Tag(name = "1:1 문의 API", description = "1:1 문의 관련 API입니다.")
 @RestController
 @RequestMapping("/api/inquiry")
 public class InquiryController {
@@ -56,7 +59,7 @@ public class InquiryController {
 
     @Operation(summary = "1대1 문의 제출", description = "유저가 새로운 1대1 문의를 작성합니다.")
     @PostMapping
-    public ApiResponse<String> submitInquiry(@RequestBody SubmitInquiryReqDTO request) {
+    public ApiResponse<String> submitInquiry(@Valid @RequestBody SubmitInquiryReqDTO request) {
         BaseSuccessCode code = InquirySuccessCode.SUBMIT_INQUIRY_CREATED;
         return ApiResponse.onSuccess(code, "1대1 문의 제출 성공!");
     }

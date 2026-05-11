@@ -32,7 +32,7 @@ public class ReviewService {
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         // Converter를 통해 entity로 변환
-        StoreReview review = StoreReviewConverter.toEntity(request, user, store);
+        StoreReview review = StoreReviewConverter.toStoreReview(request, user, store);
 
         storeReviewRepository.save(review);
     }

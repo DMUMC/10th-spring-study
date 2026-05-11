@@ -8,9 +8,11 @@ import com.umc.jaengchalttak.domain.user.payload.code.UserErrorCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserSuccessCode;
 import com.umc.jaengchalttak.domain.user.payload.UserException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "인증 API", description = "로그인, 회원가입 등 인증 관련 API입니다.")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -23,7 +25,7 @@ public class AuthController {
 
     @Operation(summary = "일반 회원가입", description = "새로운 유저 정보를 등록하여 회원가입을 진행합니다.")
     @PostMapping("/signup")
-    public ApiResponse<String> signUpUser(@RequestBody UserInfoDTO request) {
+    public ApiResponse<String> signUpUser(@Valid @RequestBody UserInfoDTO request) {
         BaseSuccessCode code = UserSuccessCode.USER_CREATED;
         return ApiResponse.onSuccess(code, "회원가입 성공!");
     }

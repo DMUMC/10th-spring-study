@@ -14,7 +14,7 @@ public class StoreReviewConverter {
         throw new ProjectException(GeneralErrorCode.UTILITY_CLASS_INSTANTIATION);
     }
 
-    public static StoreReview toEntity(StoreReviewReqDTO request, User user, Store store) {
+    public static StoreReview toStoreReview(StoreReviewReqDTO request, User user, Store store) {
         return StoreReview.builder()
                 .user(user)
                 .store(store)

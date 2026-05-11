@@ -7,12 +7,14 @@ import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.umc.jaengchalttak.domain.user.enums.Address.TEHERAN_RO;
 
+@Tag(name = "가게 API", description = "가게 관련 API입니다.")
 @RestController
 @RequestMapping("/api/store")
 public class StoreController {

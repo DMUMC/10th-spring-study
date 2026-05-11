@@ -8,6 +8,7 @@ import com.umc.jaengchalttak.domain.store.service.ReviewService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Tag(name = "가게 리뷰 API", description = "가게 리뷰 및 사장님 답글 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/store/review")
@@ -58,7 +60,7 @@ public class ReviewController {
 
     @Operation(summary = "사장님 댓글 작성", description = "가게 주인이 유저의 리뷰에 대해 답글(댓글)을 작성합니다.")
     @PostMapping("/comment")
-    public ApiResponse<String> writerComment(@RequestBody CommentReqDTO request) {
+    public ApiResponse<String> writerComment(@Valid @RequestBody CommentReqDTO request) {
         BaseSuccessCode code = StoreSuccessCode.COMMENT_CREATED;
         return ApiResponse.onSuccess(code, "댓글 작성 완료!");
     }

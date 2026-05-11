@@ -2,6 +2,7 @@ package com.umc.jaengchalttak.domain.mission.entity;
 
 import com.umc.jaengchalttak.domain.store.entity.Store;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,9 +24,11 @@ public class Mission {
     @Column(nullable = false, length = 50)
     private String missionName;
 
+    @Min(value = 1, message = "미션 포인트는 1점 이상이어야 합니다.")
     @Column(nullable = false)
     private Integer missionPoint;
 
+    @Min(value = 1, message = "미션 금액은 1원 이상이어야 합니다.")
     @Column(nullable = false)
     private Integer missionAmount;
 
@@ -40,5 +43,7 @@ public class Mission {
     @Builder.Default
     @OneToMany(mappedBy = "mission", cascade = CascadeType.REMOVE)
     private List<UserMission> userMissionList = new ArrayList<>();
+
+
 
 }

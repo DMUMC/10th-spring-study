@@ -11,6 +11,8 @@ import com.umc.jaengchalttak.domain.user.enums.Address;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Tag(name = "미션 API", description = "미션 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/mission")
@@ -56,7 +59,7 @@ public class MissionController {
 
     @Operation(summary = "미션 도전하기", description = "특정 미션을 수행 목록에 추가하고 진행 상태로 변경합니다.")
     @PostMapping
-    public ApiResponse<String> startMission(@RequestBody StartMissionReqDTO request) {
+    public ApiResponse<String> startMission(@Valid @RequestBody StartMissionReqDTO request) {
         BaseSuccessCode code = MissionSuccessCode.START_MISSION_CREATED;
         return ApiResponse.onSuccess(code, "미션 진행 시작!");
     }
@@ -64,7 +67,7 @@ public class MissionController {
 
     @Operation(summary = "미션 완료 인증", description = "진행 중인 미션에 대해 완료 증빙을 제출하고 성공 처리를 요청합니다.")
     @PostMapping("/success")
-    public ApiResponse<String> completeMission(@RequestBody CompleteMissionReqDTO request) {
+    public ApiResponse<String> completeMission(@Valid @RequestBody CompleteMissionReqDTO request) {
         BaseSuccessCode code = MissionSuccessCode.COMPLETE_MISSION_CREATED;
         return ApiResponse.onSuccess(code, "미션 수행 완료!");
     }
