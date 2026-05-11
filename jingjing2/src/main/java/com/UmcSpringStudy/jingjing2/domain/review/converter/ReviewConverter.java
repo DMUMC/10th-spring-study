@@ -18,15 +18,15 @@ public class ReviewConverter {
 
     //Request DTO -> StoreReview 엔티티 변환
     public static StoreReview toStoreReview(ReviewCreateRequest request, User user, Store store) {
-        StoreReview review = new StoreReview();
-        review.setTitle(request.getTitle());
-        review.setContext(request.getContext());
-        review.setRate(request.getRate());
-        review.setUser(user);
-        review.setStore(store);
-        review.setPopularity(0); // 초기 인기도
-        review.setCreatedDate(java.time.LocalDate.now()); // 현재 날짜 설정
-        return review;
+        return StoreReview.builder()
+                .title(request.getTitle())
+                .context(request.getContext())
+                .rate(request.getRate())
+                .user(user)
+                .store(store)
+                .popularity(0) // 초기 인기도 직접 주입
+                .createdDate(java.time.LocalDate.now())
+                .build();
     }
 
     //StoreReview 엔티티 -> ReviewResponse 변환
