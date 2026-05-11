@@ -75,4 +75,11 @@ public class ReviewController {
 
         return CommonResponse.success("댓글 삭제 성공", null);
     }
+    //특정 유저가 작성한 게시글
+    @PostMapping("/my-reviews")
+    public CommonResponse<ReviewPreviewListResponse> getMyReviews(
+            @RequestBody @Valid MyReviewTargetRequest request) {
+
+        return CommonResponse.success("내 리뷰 목록 조회 성공", reviewservice.getMyReviewList(request));
+    }
 }

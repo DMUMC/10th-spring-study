@@ -1,6 +1,7 @@
 package com.UmcSpringStudy.jingjing2.domain.user.controller;
 
 import com.UmcSpringStudy.jingjing2.domain.mission.dto.response.MissionPreviewResponse;
+import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.request.UserMissionQueryRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.request.UserMissionUpdateRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionPreviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionResponse;
@@ -21,19 +22,17 @@ public class UserMissionController {
     private final UserMissionService userMissionService;
 
     // 특정 유저 진행 중인 미션 출력
-    @GetMapping
+    @PostMapping("/list") // GET에서 POST로 변경
     public CommonResponse<UserMissionPreviewResponse> getMissions(
-            @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "All") String option) {
-        return CommonResponse.success("미션 목록 조회 성공", userMissionService.getUserMissions(userId, page, option));
+            @RequestBody @Valid UserMissionQueryRequest request){
+        return CommonResponse.success("미션 목록 조회 성공", userMissionService.getUserMissions(request));
     }
 
     // 미션 추가
     @PostMapping
     public CommonResponse<UserMissionResponse> addMission(
             @PathVariable Long userId,
-            @RequestBody Long missionId) {
+            @RequestBody @Valid Long missionId) {
         return CommonResponse.success("미션 도전 시작 성공", userMissionService.addMission(userId, missionId));
     }
 

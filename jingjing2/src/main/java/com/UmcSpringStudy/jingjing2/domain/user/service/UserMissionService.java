@@ -6,6 +6,7 @@ import com.UmcSpringStudy.jingjing2.domain.mission.entity.Mission;
 import com.UmcSpringStudy.jingjing2.domain.mission.repository.MissionRepository;
 import com.UmcSpringStudy.jingjing2.domain.store.repository.RegionRepository;
 import com.UmcSpringStudy.jingjing2.domain.user.converter.UserMissionConverter;
+import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.request.UserMissionQueryRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.request.UserMissionUpdateRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionPreviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.misson.response.UserMissionResponse;
@@ -58,7 +59,11 @@ public class UserMissionService {
         return MissionConverter.toPreviewResponseList(availableMissions);
     }
 
-    public UserMissionPreviewResponse getUserMissions(Long userId, int page, String option) {
+    public UserMissionPreviewResponse getUserMissions(UserMissionQueryRequest request) {
+        int page = request.getPage();
+        String option = request.getOption();
+        Long userId = request.getUserId();
+
         PageRequest pageRequest = PageRequest.of(page, 10);
         Page<UserMission> userMissionPage;
 
@@ -72,6 +77,7 @@ public class UserMissionService {
                 throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
             }
         }
+
         return MissionConverter.toUserMissionPreviewResponse(userMissionPage);
     }
 
