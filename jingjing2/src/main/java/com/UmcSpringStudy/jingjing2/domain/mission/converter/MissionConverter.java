@@ -30,7 +30,7 @@ public class MissionConverter {
     public static List<MissionPreviewResponse> toPreviewResponseList(List<Mission> missions) {
         return missions.stream()
                 .map(MissionConverter::toPreviewResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // 3. UserMission 리스트 -> MissionPreviewResponse 리스트

@@ -4,8 +4,13 @@ import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-@lombok.Data
+import lombok.*;
+
 @Entity
+@Getter // @Data 대신 가급적 @Getter 사용 권장 (Setter 남용 방지)
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA를 위한 기본 생성자
+@AllArgsConstructor
 public class StoreReview {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")

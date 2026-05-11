@@ -12,6 +12,6 @@ import java.util.List;
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     //특정 구역 ID를 기반으로 모든 미션을 한 번에 조회
-    @Query("SELECT m FROM Mission m JOIN m.store s WHERE s.region.id = :regionId")
+    @Query("SELECT m FROM Mission m JOIN FETCH m.store s WHERE s.region.id = :regionId")
     List<Mission> findAllByRegionId(@Param("regionId") Long regionId);
 }
