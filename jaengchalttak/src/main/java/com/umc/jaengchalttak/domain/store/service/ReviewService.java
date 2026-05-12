@@ -16,7 +16,6 @@ import com.umc.jaengchalttak.domain.user.payload.code.UserErrorCode;
 import com.umc.jaengchalttak.domain.user.repository.UserRepository;
 import com.umc.jaengchalttak.global.converter.GlobalConverter;
 import com.umc.jaengchalttak.global.dto.CursorPagination;
-import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

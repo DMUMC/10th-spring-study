@@ -10,7 +10,6 @@ import com.umc.jaengchalttak.domain.store.payload.StoreException;
 import com.umc.jaengchalttak.domain.store.payload.code.StoreErrorCode;
 import com.umc.jaengchalttak.domain.store.repository.StoreRepository;
 import com.umc.jaengchalttak.global.converter.GlobalConverter;
-import com.umc.jaengchalttak.global.dto.CursorPagination;
 import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

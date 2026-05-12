@@ -6,12 +6,10 @@ import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.domain.store.service.StoreMissionService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
-import com.umc.jaengchalttak.global.dto.CursorPagination;
 import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
