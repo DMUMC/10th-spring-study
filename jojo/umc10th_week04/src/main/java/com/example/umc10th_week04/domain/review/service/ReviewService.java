@@ -30,8 +30,6 @@ public class ReviewService {
 
     @Transactional
     public ReviewResDTO.CreateReview createReview(Long storeId, ReviewReqDTO.CreateReview request) {
-        validateReviewScore(request.score());
-
         Long targetStoreId = resolveStoreId(storeId, request.storeId());
 
         User user = userRepository.findById(request.userId())
@@ -48,12 +46,6 @@ public class ReviewService {
 
     public ReviewResDTO.GetReview getReview() {
         return ReviewConverter.toGetReview();
-    }
-
-    private void validateReviewScore(int score) {
-        if (score < 1 || score > 5) {
-            throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_SCORE);
-        }
     }
 
     private Long resolveStoreId(Long pathStoreId, Long requestStoreId) {

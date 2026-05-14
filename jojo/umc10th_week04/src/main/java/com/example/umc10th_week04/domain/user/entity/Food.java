@@ -25,6 +25,7 @@ public class Food {
     private String name;
 
     // 연관 관계
-    @OneToMany(mappedBy = "food")
+    @Builder.Default
+    @OneToMany(mappedBy = "food", cascade = CascadeType.REMOVE)
     private List<UserFood> userFoodList = new ArrayList<>();
 }
