@@ -6,6 +6,7 @@ import com.umcstudy.jace.domain.review.converter.ReviewConverter;
 import com.umcstudy.jace.domain.review.dto.ReviewReqDTO;
 import com.umcstudy.jace.domain.review.dto.ReviewResDTO;
 import com.umcstudy.jace.domain.review.entity.Review;
+import com.umcstudy.jace.domain.review.enums.ReviewSortType;
 import com.umcstudy.jace.domain.review.exception.ReviewException;
 import com.umcstudy.jace.domain.review.exception.code.ReviewErrorCode;
 import com.umcstudy.jace.domain.review.repository.ReviewImageRepository;
@@ -50,6 +51,26 @@ public class ReviewService {
         }
 
         return ReviewConverter.toPostReviewWrite(review);
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewResDTO.GetMyReviews getMyReviews(ReviewSortType sortBy, Long cursorId, int size) {
+        Long userId = SecurityUtils.getCurrentUserId();
+
+        List<Review> reviews = sortBy == ReviewSortType.SCORE
+                ? reviewRepository.findByUserIdOrderByScoreWithCursor(userId, cursorId, PageRequest.of(0, size + 1))
+                : reviewRepository.findByUserIdOrderByIdWithCursor(userId, cursorId, PageRequest.of(0, size + 1));
+
+        boolean hasNext = reviews.size() > size;
+        if (hasNext) {
+            reviews = reviews.subList(0, size);
+        }
+
+        List<ReviewResDTO.ReviewItem> reviewList = reviews.stream()
+                .map(ReviewConverter::toReviewItem)
+                .toList();
+
+        return ReviewConverter.toGetMyReviews(reviewList, hasNext);
     }
 
     @Transactional(readOnly = true)

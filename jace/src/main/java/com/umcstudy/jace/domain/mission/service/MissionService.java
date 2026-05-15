@@ -9,6 +9,7 @@ import com.umcstudy.jace.domain.mission.repository.MissionRepository;
 import com.umcstudy.jace.domain.mission.repository.MissionUserRepository;
 import com.umcstudy.jace.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,21 +43,13 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public MissionResDTO.GetMyMission getMyMission(MissionStatus missionCondition, Long cursorId, int size) {
+    public MissionResDTO.GetMyMission getMyMission(MissionStatus missionCondition, int page, int size) {
         Long userId = SecurityUtils.getCurrentUserId();
 
-        List<MissionUser> missionUsers = missionUserRepository.findByUserIdAndConditionWithCursor(
-                userId, missionCondition, cursorId, PageRequest.of(0, size + 1));
-        boolean hasNext = missionUsers.size() > size;
-        if (hasNext) {
-            missionUsers = missionUsers.subList(0, size);
-        }
+        Page<MissionUser> missionUsers = missionUserRepository.findByUserIdAndCondition(
+                userId, missionCondition, PageRequest.of(page, size));
 
-        List<MissionResDTO.MyMissionItem> missionList = missionUsers.stream()
-                .map(MissionConverter::toMyMissionItem)
-                .toList();
-
-        return MissionConverter.toGetMyMission(missionList, hasNext);
+        return MissionConverter.toGetMyMission(missionUsers);
     }
 
     public MissionResDTO.PatchMissionSuc patchMissionSuc(Integer missionId) {

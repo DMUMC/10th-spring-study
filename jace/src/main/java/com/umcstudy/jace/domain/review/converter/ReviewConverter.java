@@ -58,4 +58,11 @@ public class ReviewConverter {
                 .hasNext(hasNext)
                 .build();
     }
+
+    public static ReviewResDTO.GetMyReviews toGetMyReviews(List<ReviewResDTO.ReviewItem> reviewList, boolean hasNext) {
+        return ReviewResDTO.GetMyReviews.builder()
+                .reviewList(reviewList)
+                .hasNext(hasNext)
+                .build();
+    }
 }

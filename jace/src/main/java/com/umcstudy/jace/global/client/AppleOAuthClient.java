@@ -23,9 +23,9 @@ import java.util.Map;
 public class AppleOAuthClient implements OAuthClient {
 
     private static final String APPLE_KEYS_URL = "https://appleid.apple.com/auth/keys";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final RestClient restClient;
-    private final ObjectMapper objectMapper;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ public class AppleOAuthClient implements OAuthClient {
             // 1. JWT 헤더에서 kid 추출 (어떤 공개키로 서명됐는지 식별)
             String[] parts = idToken.split("\\.");
             String headerJson = new String(Base64.getUrlDecoder().decode(parts[0]), StandardCharsets.UTF_8);
-            Map<String, String> header = objectMapper.readValue(headerJson, Map.class);
+            Map<String, String> header = OBJECT_MAPPER.readValue(headerJson, Map.class);
             String kid = header.get("kid");
 
             // 2. Apple 공개키 목록 가져오기

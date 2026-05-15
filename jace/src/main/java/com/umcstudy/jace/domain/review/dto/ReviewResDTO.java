@@ -28,4 +28,10 @@ public class ReviewResDTO {
             List<ReviewItem> reviewList,
             Boolean hasNext
     ) {}
+
+    @Builder
+    public record GetMyReviews(
+            List<ReviewItem> reviewList,
+            Boolean hasNext
+    ) {}
 }

@@ -3,6 +3,7 @@ package com.umcstudy.jace.domain.mission.converter;
 import com.umcstudy.jace.domain.mission.dto.MissionResDTO;
 import com.umcstudy.jace.domain.mission.entity.Mission;
 import com.umcstudy.jace.domain.mission.entity.mapping.MissionUser;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -42,10 +43,16 @@ public class MissionConverter {
                 .build();
     }
 
-    public static MissionResDTO.GetMyMission toGetMyMission(List<MissionResDTO.MyMissionItem> missionList, boolean hasNext) {
+    public static MissionResDTO.GetMyMission toGetMyMission(Page<MissionUser> page) {
+        List<MissionResDTO.MyMissionItem> missionList = page.getContent().stream()
+                .map(MissionConverter::toMyMissionItem)
+                .toList();
         return MissionResDTO.GetMyMission.builder()
                 .missionList(missionList)
-                .hasNext(hasNext)
+                .currentPage(page.getNumber())
+                .totalPage(page.getTotalPages())
+                .totalCount(page.getTotalElements())
+                .hasNext(page.hasNext())
                 .build();
     }
 }

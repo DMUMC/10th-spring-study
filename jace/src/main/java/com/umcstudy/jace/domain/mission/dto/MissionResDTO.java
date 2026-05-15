@@ -41,6 +41,9 @@ public class MissionResDTO {
     @Builder
     public record GetMyMission(
             List<MyMissionItem> missionList,
+            Integer currentPage,
+            Integer totalPage,
+            Long totalCount,
             Boolean hasNext
     ){}
 
