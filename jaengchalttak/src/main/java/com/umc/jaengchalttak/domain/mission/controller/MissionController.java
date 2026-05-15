@@ -1,0 +1,71 @@
+package com.umc.jaengchalttak.domain.mission.controller;
+
+import com.umc.jaengchalttak.domain.mission.dto.request.CompleteMissionReqDTO;
+import com.umc.jaengchalttak.domain.mission.dto.request.StartMissionReqDTO;
+import com.umc.jaengchalttak.domain.mission.dto.response.MissionsProgressResDTO;
+import com.umc.jaengchalttak.domain.mission.dto.response.MyMissionResDTO;
+import com.umc.jaengchalttak.domain.mission.payload.code.MissionSuccessCode;
+import com.umc.jaengchalttak.domain.mission.service.MissionService;
+import com.umc.jaengchalttak.domain.mission.service.UserMissionService;
+import com.umc.jaengchalttak.domain.user.enums.Address;
+import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
+import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/mission")
+public class MissionController {
+
+    private final UserMissionService userMissionService;
+
+    @Operation(summary = "현재 가능한 내 미션 목록 조회",
+            description = "사용자 지역에서 현재 도전할 수 있는 새로운 미션 목록을 조회합니다. (홈 화면)")
+    @GetMapping
+    public ApiResponse<MyMissionResDTO> getMyMissionList(@RequestParam("userId") Long userId,
+                                                         @RequestParam("address") Address address,
+                                                         @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+                                                         @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        MyMissionResDTO result = userMissionService
+                .getAvailableMissionsByAddress(userId, address, page);
+
+        BaseSuccessCode code = MissionSuccessCode.MY_MISSION_OK;
+        return ApiResponse.onSuccess(code, result);
+    }
+
+
+    @Operation(summary = "진행 상태별 내 미션 조회", description = "유저가 진행 중이거나 이미 완료한 미션 목록을 필터링하여 조회합니다.")
+    @GetMapping("/me")
+    public ApiResponse<List<MissionsProgressResDTO>> getMyMissionsByProgress(@RequestParam("userId") Long userId,
+                                                                           @RequestParam("isProgress") boolean isProgress,
+                                                                           @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
+                                                                           @RequestParam(value = "page", defaultValue = "1") int page) {
+        List<MissionsProgressResDTO> result = userMissionService.getUserMissionsByProgress(userId, isProgress, page);
+
+        BaseSuccessCode code = MissionSuccessCode.MISSION_BY_PROGRESS_OK;
+        return ApiResponse.onSuccess(code, result);
+    }
+
+
+    @Operation(summary = "미션 도전하기", description = "특정 미션을 수행 목록에 추가하고 진행 상태로 변경합니다.")
+    @PostMapping
+    public ApiResponse<String> startMission(@RequestBody StartMissionReqDTO request) {
+        BaseSuccessCode code = MissionSuccessCode.START_MISSION_CREATED;
+        return ApiResponse.onSuccess(code, "미션 진행 시작!");
+    }
+
+
+    @Operation(summary = "미션 완료 인증", description = "진행 중인 미션에 대해 완료 증빙을 제출하고 성공 처리를 요청합니다.")
+    @PostMapping("/success")
+    public ApiResponse<String> completeMission(@RequestBody CompleteMissionReqDTO request) {
+        BaseSuccessCode code = MissionSuccessCode.COMPLETE_MISSION_CREATED;
+        return ApiResponse.onSuccess(code, "미션 수행 완료!");
+    }
+}

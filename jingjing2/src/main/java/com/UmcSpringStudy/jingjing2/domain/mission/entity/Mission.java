@@ -1,0 +1,23 @@
+package com.UmcSpringStudy.jingjing2.domain.mission.entity;
+
+import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
+import jakarta.persistence.*;
+import java.time.LocalDate;
+@lombok.Data
+@Entity
+public class Mission {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_id")
+    private Long id;
+
+    private String name;
+    private String context;
+    private Double rate;
+    private Integer taskCount;
+    private String reward;
+    private LocalDate expDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+}

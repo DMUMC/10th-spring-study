@@ -1,0 +1,20 @@
+package com.umcstudy.jace.domain.user.exception.code;
+
+import com.umcstudy.jace.global.apiPayload.code.BaseSuccessCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@RequiredArgsConstructor
+public enum UserSuccessCode implements BaseSuccessCode {
+    LoginOK(HttpStatus.OK, "USER200_1", "로그인에 성공했습니다."),
+    SignupOK(HttpStatus.OK, "USER200_2", "회원가입에 성공했습니다."),
+    MyPageOK(HttpStatus.OK, "USER200_3", "마이페이지 조회에 성공했습니다."),
+    TermsListOK(HttpStatus.OK, "USER200_4", "약관 목록 조회에 성공했습니다."),
+    FoodsListOK(HttpStatus.OK, "USER200_5", "음식 목록 조회에 성공했습니다."),;
+
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
+}
