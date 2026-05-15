@@ -32,7 +32,7 @@ public class HomeConverter {
                 .missionId(mission.getId())
                 .storeName(mission.getStore().getName())
                 .missionContent(mission.getCost())
-                .rewardPoint(mission.getPoint())
+                .rewardPoint(mission.getReward())
                 .build();
     }
 

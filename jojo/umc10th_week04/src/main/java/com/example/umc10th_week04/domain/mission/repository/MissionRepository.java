@@ -1,7 +1,10 @@
 package com.example.umc10th_week04.domain.mission.repository;
 
 import com.example.umc10th_week04.domain.mission.entity.Mission;
+import com.example.umc10th_week04.domain.mission.entity.Store;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +18,11 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             JOIN FETCH m.store s
             WHERE s.location = :location
             """)
-    List<Mission> findAvailableMissionsByLocation(String location, Pageable pageable);
+    List<Mission> findAvailableMissionsByLocation(String location);
+
+    Slice<Mission> findMissionsByStore_IdAndIdLessThanOrderByIdDesc(Long storeId, long idCursor, Pageable pageRequest);
+
+    Slice<Mission> findMissionsByStore_IdOrderByIdDesc(Long storeId, Pageable pageRequest);
+
+    Page<Mission> findAllByStore_Id(Long storeId, Pageable pageable);
 }

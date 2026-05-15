@@ -35,7 +35,7 @@ public class HomeService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        List<Mission> availableMissions = missionRepository.findAvailableMissionsByLocation(location, pageable);
+        List<Mission> availableMissions = missionRepository.findAvailableMissionsByLocation(location);
         List<UserMission> completedMissions = userMissionRepository.findCompletedMissionsByUserIdAndLocation(
                 userId,
                 location,
