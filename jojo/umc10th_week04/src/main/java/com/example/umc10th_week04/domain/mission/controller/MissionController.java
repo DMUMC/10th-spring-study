@@ -11,20 +11,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/mission")
+@RequestMapping("/api/missions")
 @RequiredArgsConstructor
 public class MissionController {
 
     private final MissionService missionService;
 
-    // 아직 토큰을 다루는 기능을 익히지 못하여서 임의로 request URL에 User ID 를 받습니다.
-    @GetMapping("/list/{userId}")
-    public ApiResponse<MissionResDTO.MyMission> getMyMission(
-            @PathVariable Long userId
+    // 유저 미션 조회
+    @GetMapping("/v1/users/missions")
+    public ApiResponse<Page<MissionResDTO.MyMissionInfo>> getMyMission(
+            @RequestBody MissionReqDTO.UserMission dto,
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam(required = false) String sort
     ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return ApiResponse.onSuccess(code, missionService.getMyMissions(userId));
+        return ApiResponse.onSuccess(code, missionService.getMyMissions(dto.userId(), pageSize, pageNumber, sort));
     }
 
     //가게 내 미션 생성

@@ -7,15 +7,12 @@ import com.example.umc10th_week04.domain.mission.entity.Mission;
 import com.example.umc10th_week04.domain.mission.entity.Store;
 import com.example.umc10th_week04.domain.mission.entity.UserMission;
 import com.example.umc10th_week04.domain.mission.exception.MissionException;
-import com.example.umc10th_week04.domain.mission.exception.StoreException;
 import com.example.umc10th_week04.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th_week04.domain.mission.exception.code.StoreErrorCode;
 import com.example.umc10th_week04.domain.mission.repository.MissionRepository;
 import com.example.umc10th_week04.domain.mission.repository.StoreRepository;
 import com.example.umc10th_week04.domain.mission.repository.UserMissionRepository;
 import com.example.umc10th_week04.domain.review.exception.ReviewException;
-import com.example.umc10th_week04.domain.user.exception.UserException;
-import com.example.umc10th_week04.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th_week04.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -111,20 +108,28 @@ public class MissionService {
         return null;
     }
 
-    public MissionResDTO.MyMission getMyMissions(Long userId) {
-        return getMyMissions(userId, PageRequest.of(0, DEFAULT_PAGE_SIZE));
-    }
+    // 유저 미션 조회
+    public Page<MissionResDTO.MyMissionInfo> getMyMissions(
+            Long userId,
+            Integer pageSize,
+            Integer pageNumber,
+            String sort
+    ) {
 
-    public MissionResDTO.MyMission getMyMissions(Long userId, Pageable pageable) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserException(UserErrorCode.USER_NOT_FOUND);
+        // 정렬 정보 생성
+        Sort sortInfo;
+        if(sort != null) {
+            sortInfo = Sort.by(sort);
+        } else {
+            sortInfo = Sort.by("id").descending();
         }
 
-        List<UserMission> userMissions = userMissionRepository.findUserMissionsByUserId(
-                userId,
-                pageable
-        );
+        // 페이지 정보들을 PageRequest로 만들기
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortInfo);
 
-        return MissionConverter.toGetMission(userMissions);
+        // 유저 미션 조회
+        Page<UserMission> missionList = userMissionRepository.findUserMissionsByUserId(userId, pageRequest);
+
+        return missionList.map(MissionConverter::toGetMyMission);
     }
 }

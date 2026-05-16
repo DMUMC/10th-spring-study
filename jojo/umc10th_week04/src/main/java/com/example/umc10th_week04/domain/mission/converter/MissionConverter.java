@@ -25,7 +25,7 @@ public class MissionConverter {
                 .build();
     }
 
-    //가게 내 미션 조회
+    // 가게 내 미션 조회
     public static MissionResDTO.MissionInfo toGetMission(
             Mission mission
     ) {
@@ -47,22 +47,14 @@ public class MissionConverter {
                 .build();
     }
 
-    public static MissionResDTO.MyMission toGetMission(List<UserMission> userMissions) {
-        return MissionResDTO.MyMission.builder()
-                .myMissionList(userMissions.stream()
-                        .map(MissionConverter::toMissionInfo)
-                        .toList())
-                .build();
-    }
-
-    public static MissionResDTO.MissionInfo toMissionInfo(UserMission userMission) {
-        Mission mission = userMission.getMission();
-
-        return MissionResDTO.MissionInfo.builder()
-                .missionId(mission.getId())
-                .storeName(mission.getStore().getName())
-                .cost(mission.getCost())
-                .reward(mission.getReward())
+    // 유저 미션 조회
+    public static MissionResDTO.MyMissionInfo toGetMyMission(
+            UserMission userMission
+    ) {
+        return MissionResDTO.MyMissionInfo.builder()
+                .missionId(userMission.getId())
+                .period(userMission.getPeriod())
+                .completed(userMission.getCompleted())
                 .build();
     }
 }

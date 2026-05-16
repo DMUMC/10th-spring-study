@@ -17,4 +17,10 @@ public class MissionReqDTO {
             @NotNull(message = "조건은 빈칸일 수 없습니다.")
             Integer cost
     ){}
+
+    @Builder
+    public record UserMission(
+            @NotNull(message = "유저 ID는 필수 입니다.")
+            Long userId
+    ){}
 }
