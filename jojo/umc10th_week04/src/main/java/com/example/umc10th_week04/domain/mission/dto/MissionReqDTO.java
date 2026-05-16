@@ -19,8 +19,9 @@ public class MissionReqDTO {
     ){}
 
     @Builder
-    public record UserMission(
+    public record UserId(
             @NotNull(message = "유저 ID는 필수 입니다.")
             Long userId
+
     ){}
 }

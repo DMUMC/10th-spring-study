@@ -13,7 +13,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findById(Long id);
 
-    Slice<Review> findReviewsByUser_IdAAndIdLessThanOrderByIdDesc(Long userId, long idCursor, PageRequest pageRequest);
+    Slice<Review> findReviewsByUser_IdAndIdLessThanOrderByIdDesc(Long userId, long idCursor, PageRequest pageRequest);
 
-    Slice<Review> findReviewsByUser_IdOrderByDesc(Long userId, PageRequest pageRequest);
+    Slice<Review> findReviewsByUser_IdOrderByIdDesc(Long userId, PageRequest pageRequest);
 }

@@ -22,8 +22,8 @@ public class MissionController {
 
     // 유저 미션 조회
     @GetMapping("/v1/users/missions")
-    public ApiResponse<Page<MissionResDTO.MyMissionInfo>> getMyMission(
-            @RequestBody MissionReqDTO.UserMission dto,
+    public ApiResponse<MissionResDTO.OffsetPagination<MissionResDTO.MyMissionInfo>> getMyMission(
+            @Valid @RequestBody MissionReqDTO.UserId dto,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
             @RequestParam(required = false) String sort

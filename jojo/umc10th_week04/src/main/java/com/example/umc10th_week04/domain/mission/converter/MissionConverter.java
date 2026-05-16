@@ -5,6 +5,7 @@ import com.example.umc10th_week04.domain.mission.dto.MissionResDTO;
 import com.example.umc10th_week04.domain.mission.entity.Mission;
 import com.example.umc10th_week04.domain.mission.entity.Store;
 import com.example.umc10th_week04.domain.mission.entity.UserMission;
+import com.example.umc10th_week04.domain.user.entity.User;
 
 import java.util.List;
 
@@ -48,13 +49,25 @@ public class MissionConverter {
     }
 
     // 유저 미션 조회
+    public static <T> MissionResDTO.OffsetPagination<T> toOffsetPagination(
+            List<T> data,
+            Integer pageNumber,
+            Integer pageSize
+    ) {
+        return MissionResDTO.OffsetPagination.<T>builder()
+                .data(data)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .build();
+    }
+
     public static MissionResDTO.MyMissionInfo toGetMyMission(
             UserMission userMission
     ) {
         return MissionResDTO.MyMissionInfo.builder()
-                .missionId(userMission.getId())
                 .period(userMission.getPeriod())
                 .completed(userMission.getCompleted())
+                .missionId(userMission.getMission().getId())
                 .build();
     }
 }

@@ -85,7 +85,7 @@ public class ReviewService {
                     idCursor = Long.parseLong(cursorSplit[1]);
 
                     // 내 리뷰 조회 & where절에 cursor 값 기입
-                    reviewList = reviewRepository.findReviewsByUser_IdAAndIdLessThanOrderByIdDesc(
+                    reviewList = reviewRepository.findReviewsByUser_IdAndIdLessThanOrderByIdDesc(
                             userId,
                             idCursor,
                             pageRequest
@@ -95,7 +95,7 @@ public class ReviewService {
                     throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_REQUEST);
             }
         } else {
-            reviewList = reviewRepository.findReviewsByUser_IdOrderByDesc(userId, pageRequest);
+            reviewList = reviewRepository.findReviewsByUser_IdOrderByIdDesc(userId, pageRequest);
         }
 
         // 다음 커서 계산

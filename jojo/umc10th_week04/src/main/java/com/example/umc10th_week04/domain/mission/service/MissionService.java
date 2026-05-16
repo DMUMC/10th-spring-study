@@ -109,7 +109,7 @@ public class MissionService {
     }
 
     // 유저 미션 조회
-    public Page<MissionResDTO.MyMissionInfo> getMyMissions(
+    public MissionResDTO.OffsetPagination<MissionResDTO.MyMissionInfo> getMyMissions(
             Long userId,
             Integer pageSize,
             Integer pageNumber,
@@ -130,6 +130,10 @@ public class MissionService {
         // 유저 미션 조회
         Page<UserMission> missionList = userMissionRepository.findUserMissionsByUserId(userId, pageRequest);
 
-        return missionList.map(MissionConverter::toGetMyMission);
+        return MissionConverter.toOffsetPagination(
+                missionList.map(MissionConverter::toGetMyMission).toList(),
+                missionList.getNumber(),
+                missionList.getSize()
+        );
     }
 }
