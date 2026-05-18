@@ -22,6 +22,8 @@ public class CustomAccessDenied implements AccessDeniedHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         BaseErrorCode code = GeneralErrorCode.FORBIDDEN;
 
+        response.sendRedirect("/login");
+
         // 응답 Content-Type, HTTP 상태코드 정의
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(code.getStatus().value());

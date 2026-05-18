@@ -49,6 +49,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Address address;
 
+    @Column
     private Integer phoneNumber;
 
     @Column(nullable = false)
