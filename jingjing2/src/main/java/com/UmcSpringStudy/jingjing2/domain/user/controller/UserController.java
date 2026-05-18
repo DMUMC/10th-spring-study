@@ -71,7 +71,7 @@ public class UserController {
     @PostMapping("/{userId}/interests")
     public CommonResponse<Void> addUserInterests(
             @PathVariable Long userId,
-            @RequestBody @NotEmpty(message = "최소 하나 이상의 관심사 ID가 필요합니다.") List<Long> request) {
+            @RequestBody @Valid @NotEmpty(message = "최소 하나 이상의 관심사 ID가 필요합니다.") List<Long> request) {
         return CommonResponse.success("유저 관심사 설정 성공", null);
     }
 

@@ -1,5 +1,6 @@
 package com.UmcSpringStudy.jingjing2.domain.review.converter;
 
+import com.UmcSpringStudy.jingjing2.domain.review.dto.response.ReviewPreviewListResponse;
 import com.UmcSpringStudy.jingjing2.domain.review.entity.ReviewComment;
 import com.UmcSpringStudy.jingjing2.domain.review.entity.StoreReview;
 import com.UmcSpringStudy.jingjing2.domain.review.dto.request.ReviewCreateRequest;
@@ -7,6 +8,7 @@ import com.UmcSpringStudy.jingjing2.domain.review.dto.response.ReviewResponse;
 import com.UmcSpringStudy.jingjing2.domain.review.dto.response.CommentResponse;
 import com.UmcSpringStudy.jingjing2.domain.store.entity.Store;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.User;
+import org.springframework.data.domain.Slice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +18,15 @@ public class ReviewConverter {
 
     //Request DTO -> StoreReview 엔티티 변환
     public static StoreReview toStoreReview(ReviewCreateRequest request, User user, Store store) {
-        StoreReview review = new StoreReview();
-        review.setTitle(request.getTitle());
-        review.setContext(request.getContext());
-        review.setRate(request.getRate());
-        review.setUser(user);
-        review.setStore(store);
-        review.setPopularity(0); // 초기 인기도
-        review.setCreatedDate(java.time.LocalDate.now()); // 현재 날짜 설정
-        return review;
+        return StoreReview.builder()
+                .title(request.getTitle())
+                .context(request.getContext())
+                .rate(request.getRate())
+                .user(user)
+                .store(store)
+                .popularity(0) // 초기 인기도 직접 주입
+                .createdDate(java.time.LocalDate.now())
+                .build();
     }
 
     //StoreReview 엔티티 -> ReviewResponse 변환
@@ -56,5 +58,21 @@ public class ReviewConverter {
                         .childComments(new ArrayList<>()) // 현재 구조상 대댓글은 빈 리스트
                         .build())
                 .collect(Collectors.toList());
+    }
+    // Slice<StoreReview>를 목록 응답 DTO로 변환
+    public static ReviewPreviewListResponse toReviewPreviewListResponse(Slice<StoreReview> reviewSlice) {
+        List<ReviewResponse> reviewResponseList = reviewSlice.getContent().stream()
+                .map(review -> toReviewResponse(review, new ArrayList<>()))
+                .collect(Collectors.toList());
+
+        // 마지막 요소의 ID를 다음 커서로 지정
+        Long nextCursor = reviewSlice.isEmpty() ? null :
+                reviewSlice.getContent().getLast().getId();
+
+        return ReviewPreviewListResponse.builder()
+                .reviewList(reviewResponseList)
+                .nextCursor(nextCursor)
+                .hasNext(reviewSlice.hasNext())
+                .build();
     }
 }
