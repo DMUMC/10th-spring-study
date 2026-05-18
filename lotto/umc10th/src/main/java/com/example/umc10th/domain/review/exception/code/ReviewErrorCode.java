@@ -11,7 +11,11 @@ public enum ReviewErrorCode implements BaseErrorCode {
 
     NOT_FOUND(HttpStatus.NOT_FOUND,
             "REVIEW404_1",
-            "해당 리뷰를 찾을 수 없습니다.");
+            "해당 리뷰를 찾을 수 없습니다."),
+
+    QUERY_NOT_VALID(HttpStatus.NOT_FOUND,
+                    "REVIEW404_2",
+                    "해당 쿼리를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
