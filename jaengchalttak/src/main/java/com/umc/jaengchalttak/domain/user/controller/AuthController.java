@@ -2,6 +2,7 @@ package com.umc.jaengchalttak.domain.user.controller;
 
 import com.umc.jaengchalttak.domain.user.dto.request.LoginReqDTO;
 import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
+import com.umc.jaengchalttak.domain.user.repository.UserRepository;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserErrorCode;
@@ -10,11 +11,13 @@ import com.umc.jaengchalttak.domain.user.payload.UserException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "인증 API", description = "로그인, 회원가입 등 인증 관련 API입니다.")
+@RequiredArgsConstructor
 public class AuthController {
 
     @Operation(summary = "예외 처리 테스트용 API", description = "USER_NOT_FOUND 예외를 강제로 발생시켜 GlobalExceptionAdvice 작동을 확인합니다.")
