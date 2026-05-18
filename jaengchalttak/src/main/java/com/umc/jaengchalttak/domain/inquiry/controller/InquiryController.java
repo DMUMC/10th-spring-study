@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Tag(name = "1:1 문의 API", description = "1:1 문의 관련 API입니다.")
 @RestController
 @RequestMapping("/api/inquiry")
+@Tag(name = "1:1 문의 API", description = "1:1 문의 관련 API입니다.")
 public class InquiryController {
 
     @Operation(summary = "유저 1대1 문의 목록 조회", description = "특정 유저의 1대1 문의 내역을 페이징하여 조회합니다.")

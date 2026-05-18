@@ -9,21 +9,22 @@ import com.umc.jaengchalttak.domain.store.service.ReviewService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.global.dto.CursorPagination;
-import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Tag(name = "가게 리뷰 API", description = "가게 리뷰 및 사장님 답글 관련 API입니다.")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/store/review")
+@Tag(name = "가게 리뷰 API", description = "가게 리뷰 및 사장님 답글 관련 API입니다.")
 public class ReviewController {
 
     private final ReviewService reviewService;

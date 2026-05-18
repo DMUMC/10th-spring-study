@@ -10,11 +10,15 @@ import org.springframework.data.repository.query.Param;
 public interface StoreReviewRepository extends JpaRepository<StoreReview, Long> {
 
     // ID 기준 페이징
-    @Query("SELECT r FROM StoreReview r " +
-            "JOIN FETCH r.user u JOIN FETCH r.store s " +
-            "WHERE r.user.id = :userId AND r.store.id = :storeId " +
-            "AND (:cursorId IS NULL OR r.id < :cursorId) " +
-            "ORDER BY r.id DESC")
+    @Query("""
+        SELECT r FROM StoreReview r
+        JOIN FETCH r.user
+        JOIN FETCH r.store
+        WHERE r.user.id = :userId
+        AND r.store.id = :storeId
+        AND (:cursorId IS NULL OR r.id < :cursorId)
+        ORDER BY r.id DESC
+    """)
     Slice<StoreReview> findReviewsByIdCursor(
             @Param("userId") Long userId,
             @Param("storeId") Long storeId,
@@ -24,7 +28,8 @@ public interface StoreReviewRepository extends JpaRepository<StoreReview, Long> 
 
     // 별점 기준 페이징 (별점이 같을 경우 ID를 비교)
     @Query("SELECT r FROM StoreReview r " +
-            "JOIN FETCH r.user u JOIN FETCH r.store s " +
+            "JOIN FETCH r.user " +
+            "JOIN FETCH r.store " +
             "WHERE r.user.id = :userId AND r.store.id = :storeId " +
             "AND (:cursorStar IS NULL OR " +
             "     r.reviewStar < :cursorStar OR " +

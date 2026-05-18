@@ -27,11 +27,7 @@ public class GeneralExceptionAdvice {
         log.error("[ProjectException] Code: {}, Message: {}",
                 errorCode.getCode(), errorCode.getMessage(), e);
 
-        return ResponseEntity.status(errorCode.getStatus())
-                .body(ApiResponse.onFailure(
-                        errorCode,
-                        null
-                ));
+        return errorResponse(errorCode, null);
     }
 
     // 그 외의 정의되지 않은 모든 예외 처리
@@ -39,14 +35,12 @@ public class GeneralExceptionAdvice {
     public ResponseEntity<ApiResponse<String>> handleException(
             Exception ex
     ) {
+        log.error("[Exception]", ex);
 
-        BaseErrorCode code = GeneralErrorCode.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(code.getStatus())
-                .body(ApiResponse.onFailure(
-                                code,
-                                ex.getMessage()
-                        )
-                );
+        return errorResponse(
+                GeneralErrorCode.INTERNAL_SERVER_ERROR,
+                ex.getMessage()
+        );
     }
 
     // 요청 본문 검증 실패
@@ -62,11 +56,10 @@ public class GeneralExceptionAdvice {
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse("요청 본문 값이 올바르지 않습니다.");
 
-        return ResponseEntity.badRequest()
-                .body(ApiResponse.onFailure(
-                        GeneralErrorCode.INVALID_REQUEST_BODY,
-                        errorMessage
-                ));
+        return errorResponse(
+                GeneralErrorCode.INVALID_REQUEST_BODY,
+                errorMessage
+        );
     }
 
     // 파라미터 검증 실패
@@ -81,10 +74,17 @@ public class GeneralExceptionAdvice {
                 .map(ConstraintViolation::getMessage)
                 .orElse("요청 파라미터 값이 올바르지 않습니다.");
 
-        return ResponseEntity.badRequest()
+        return errorResponse(
+                GeneralErrorCode.INVALID_REQUEST_PARAMETER,
+                errorMessage
+        );
+    }
+
+    private <T> ResponseEntity<ApiResponse<T>> errorResponse(BaseErrorCode errorCode, T data) {
+        return ResponseEntity.status(errorCode.getStatus())
                 .body(ApiResponse.onFailure(
-                        GeneralErrorCode.INVALID_REQUEST_PARAMETER,
-                        errorMessage
+                        errorCode,
+                        data
                 ));
     }
 

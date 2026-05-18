@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "사용자 API", description = "마이페이지, 알림 설정 등 사용자 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@Tag(name = "사용자 API", description = "마이페이지, 알림 설정 등 사용자 관련 API입니다.")
 public class UserController {
 
     private final UserService userService;
