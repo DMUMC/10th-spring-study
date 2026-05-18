@@ -29,11 +29,11 @@ public class MissionController {
     @GetMapping("/users/me/missions")
     public ApiResponse<MissionResDTO.GetMyMission> getMyMission(
             @RequestParam MissionStatus missionCondition,
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
         BaseSuccessCode code = MissionSuccessCode.MyMissionOK;
-        return ApiResponse.onSuccess(code, missionService.getMyMission(missionCondition, cursorId, size));
+        return ApiResponse.onSuccess(code, missionService.getMyMission(missionCondition, page, size));
     }
 
     @PatchMapping("/users/me/missions/{missionId}")

@@ -36,7 +36,7 @@ public class User {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String email;
 
     @Column(name = "zip_code", nullable = false, length = 10)

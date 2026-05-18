@@ -3,21 +3,22 @@ package com.umcstudy.jace.domain.mission.converter;
 import com.umcstudy.jace.domain.mission.dto.MissionResDTO;
 import com.umcstudy.jace.domain.mission.entity.Mission;
 import com.umcstudy.jace.domain.mission.entity.mapping.MissionUser;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public class MissionConverter {
 
     public static MissionResDTO.MissionItem toMissionItem(Mission mission) {
-        return new MissionResDTO.MissionItem(
-                mission.getId().intValue(),
-                mission.getShop().getId().intValue(),
-                mission.getShop().getShopName(),
-                mission.getShop().getShopCategory().getShopCategoryName(),
-                mission.getMissionPay(),
-                mission.getMissionPoint(),
-                mission.getMissionCreateTime() != null ? mission.getMissionCreateTime().toLocalDate() : null
-        );
+        return MissionResDTO.MissionItem.builder()
+                .missionId(mission.getId().intValue())
+                .shopId(mission.getShop().getId().intValue())
+                .shopName(mission.getShop().getShopName())
+                .shopCategory(mission.getShop().getShopCategory().getShopCategoryName())
+                .missionPay(mission.getMissionPay())
+                .missionPoint(mission.getMissionPoint())
+                .createDate(mission.getMissionCreateTime() != null ? mission.getMissionCreateTime().toLocalDate() : null)
+                .build();
     }
 
     public static MissionResDTO.GetHome toGetHome(long clearMissionCnt, List<MissionResDTO.MissionItem> missionList, boolean hasNext) {
@@ -30,22 +31,28 @@ public class MissionConverter {
 
     public static MissionResDTO.MyMissionItem toMyMissionItem(MissionUser missionUser) {
         Mission mission = missionUser.getMission();
-        return new MissionResDTO.MyMissionItem(
-                missionUser.getId(),
-                mission.getId().intValue(),
-                mission.getShop().getId().intValue(),
-                mission.getShop().getShopName(),
-                mission.getShop().getShopCategory().getShopCategoryName(),
-                mission.getMissionPay(),
-                mission.getMissionPoint(),
-                missionUser.getMissionCondition()
-        );
+        return MissionResDTO.MyMissionItem.builder()
+                .userMissionId(missionUser.getId())
+                .missionId(mission.getId().intValue())
+                .shopId(mission.getShop().getId().intValue())
+                .shopName(mission.getShop().getShopName())
+                .shopCategory(mission.getShop().getShopCategory().getShopCategoryName())
+                .missionPay(mission.getMissionPay())
+                .missionPoint(mission.getMissionPoint())
+                .missionCondition(missionUser.getMissionCondition())
+                .build();
     }
 
-    public static MissionResDTO.GetMyMission toGetMyMission(List<MissionResDTO.MyMissionItem> missionList, boolean hasNext) {
+    public static MissionResDTO.GetMyMission toGetMyMission(Page<MissionUser> page) {
+        List<MissionResDTO.MyMissionItem> missionList = page.getContent().stream()
+                .map(MissionConverter::toMyMissionItem)
+                .toList();
         return MissionResDTO.GetMyMission.builder()
                 .missionList(missionList)
-                .hasNext(hasNext)
+                .currentPage(page.getNumber())
+                .totalPage(page.getTotalPages())
+                .totalCount(page.getTotalElements())
+                .hasNext(page.hasNext())
                 .build();
     }
 }

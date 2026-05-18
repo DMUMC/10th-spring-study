@@ -4,15 +4,21 @@ import com.umcstudy.jace.domain.point.repository.PointRepository;
 import com.umcstudy.jace.domain.user.converter.UserConverter;
 import com.umcstudy.jace.domain.user.dto.UserReqDTO;
 import com.umcstudy.jace.domain.user.dto.UserResDTO;
+import com.umcstudy.jace.domain.user.entity.Food;
+import com.umcstudy.jace.domain.user.entity.Term;
 import com.umcstudy.jace.domain.user.entity.User;
 import com.umcstudy.jace.domain.user.exception.UserException;
 import com.umcstudy.jace.domain.user.exception.code.UserErrorCode;
 import com.umcstudy.jace.domain.user.repository.*;
 import com.umcstudy.jace.global.security.JwtTokenProvider;
+import com.umcstudy.jace.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,17 +40,31 @@ public class UserService {
 
         userSocialRepository.save(UserConverter.toUserSocial(user, dto));
 
-        dto.termsList().forEach(termsDto -> {
-            var term = termRepository.findById(termsDto.termsId())
-                    .orElseThrow(() -> new UserException(UserErrorCode.TERMS_NOT_FOUND));
-            userTermRepository.save(UserConverter.toUserTerm(user, term, termsDto.isAgree()));
-        });
+        // 약관: 1번 조회 + 1번 일괄 저장
+        List<Long> termIds = dto.termsList().stream()
+                .map(UserReqDTO.TermsDTO::termsId)
+                .toList();
+        Map<Long, Term> termMap = termRepository.findAllById(termIds).stream()
+                .collect(Collectors.toMap(Term::getId, t -> t));
+        if (termMap.size() != termIds.size()) {
+            throw new UserException(UserErrorCode.TERMS_NOT_FOUND);
+        }
+        userTermRepository.saveAll(
+                dto.termsList().stream()
+                        .map(termsDto -> UserConverter.toUserTerm(user, termMap.get(termsDto.termsId()), termsDto.isAgree()))
+                        .toList()
+        );
 
-        dto.favoriteFoodList().forEach(foodId -> {
-            var food = foodRepository.findById(foodId)
-                    .orElseThrow(() -> new UserException(UserErrorCode.FOOD_NOT_FOUND));
-            userFoodRepository.save(UserConverter.toUserFood(user, food));
-        });
+        // 음식: 1번 조회 + 1번 일괄 저장
+        List<Food> foods = foodRepository.findAllById(dto.favoriteFoodList());
+        if (foods.size() != dto.favoriteFoodList().size()) {
+            throw new UserException(UserErrorCode.FOOD_NOT_FOUND);
+        }
+        userFoodRepository.saveAll(
+                foods.stream()
+                        .map(food -> UserConverter.toUserFood(user, food))
+                        .toList()
+        );
 
         pointRepository.save(UserConverter.toPoint(user));
         userSettingRepository.save(UserConverter.toUserSetting(user));
@@ -55,7 +75,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResDTO.GetMyPage getMyPage() {
-        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long userId = SecurityUtils.getCurrentUserId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));

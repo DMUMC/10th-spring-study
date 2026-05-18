@@ -8,6 +8,7 @@ import com.umcstudy.jace.domain.user.service.UserService;
 import com.umcstudy.jace.global.apiPayload.ApiResponse;
 import com.umcstudy.jace.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,14 +21,14 @@ public class UserController {
 
     @PostMapping("/auth/login")
     public ApiResponse<UserResDTO.SocialLogin> socialLogin(
-            @RequestBody UserReqDTO.SocialLogin dto
+            @Valid @RequestBody UserReqDTO.SocialLogin dto
     ) {
         return ApiResponse.onSuccess(UserSuccessCode.LoginOK, socialLoginService.login(dto));
     }
 
     @PostMapping("/auth/signup")
     public ApiResponse<UserResDTO.PostSignup> postSignup(
-            @RequestBody UserReqDTO.PostSignup dto
+            @Valid @RequestBody UserReqDTO.PostSignup dto
     ){
         BaseSuccessCode code = UserSuccessCode.SignupOK;
         return ApiResponse.onSuccess(code, userService.postSignup(dto));

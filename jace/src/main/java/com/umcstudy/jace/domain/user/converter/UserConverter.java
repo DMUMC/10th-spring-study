@@ -16,9 +16,10 @@ import java.time.LocalDate;
 public class UserConverter {
 
     public static User toUser(UserReqDTO.PostSignup dto) {
+        String email = (dto.email() != null && !dto.email().isBlank()) ? dto.email() : null;
         return User.builder()
                 .name(dto.name())
-                .email(dto.email())
+                .email(email)
                 .gender(dto.gender())
                 .birth(dto.birth())
                 .zipCode(String.valueOf(dto.zipcode()))
@@ -79,9 +80,12 @@ public class UserConverter {
     }
 
     public static UserResDTO.GetMyPage toGetMyPage(User user, int pointBalance) {
+        String email = user.getEmail();
+        boolean isRelayEmail = email != null && email.endsWith("@privaterelay.appleid.com");
         return UserResDTO.GetMyPage.builder()
                 .name(user.getName())
-                .email(user.getEmail())
+                .email(email)
+                .isRelayEmail(isRelayEmail)
                 .pointBalance(pointBalance)
                 .build();
     }

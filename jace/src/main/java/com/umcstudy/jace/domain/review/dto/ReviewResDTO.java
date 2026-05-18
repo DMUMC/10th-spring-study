@@ -13,6 +13,7 @@ public class ReviewResDTO {
             Integer reviewId
     ) {}
 
+    @Builder
     public record ReviewItem(
             Long reviewId,
             String userName,
@@ -24,6 +25,12 @@ public class ReviewResDTO {
 
     @Builder
     public record GetReviews(
+            List<ReviewItem> reviewList,
+            Boolean hasNext
+    ) {}
+
+    @Builder
+    public record GetMyReviews(
             List<ReviewItem> reviewList,
             Boolean hasNext
     ) {}

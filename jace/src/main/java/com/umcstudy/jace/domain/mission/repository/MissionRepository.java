@@ -11,7 +11,9 @@ import java.util.List;
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     @Query("SELECT m FROM Mission m " +
-           "WHERE m.shop.shopAddress LIKE %:region% " +
+           "JOIN FETCH m.shop s " +
+           "JOIN FETCH s.shopCategory " +
+           "WHERE s.shopAddress LIKE %:region% " +
            "AND (:cursorId IS NULL OR m.id < :cursorId) " +
            "ORDER BY m.id DESC")
     List<Mission> findByRegionWithCursor(
