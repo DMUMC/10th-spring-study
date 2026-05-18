@@ -21,13 +21,16 @@ public class Mission {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "point", nullable = false)
-    private int point;
+    @Column(name = "reward", nullable = false)
+    private Integer reward;
 
     @Column(name = "cost", nullable = false)
-    private int cost;
+    private Integer cost;
+
+    @Column(name = "")
 
     // 연관 관계
+    @Builder.Default
     @OneToMany(mappedBy = "mission")
     private List<UserMission> userMissionList = new ArrayList<>();
 

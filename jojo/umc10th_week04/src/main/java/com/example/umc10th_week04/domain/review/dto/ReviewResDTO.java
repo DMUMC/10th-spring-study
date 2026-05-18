@@ -16,7 +16,7 @@ public class ReviewResDTO {
             Long reviewId,
             Long userId,
             Long storeId,
-            int score,
+            Integer score,
             String contents
     ){}
 
@@ -24,7 +24,7 @@ public class ReviewResDTO {
     public record ReviewInfo(
             Long reviewId,
             String storeName,
-            int score,
+            Integer score,
             String reviewContent,
             List<PictureInfo> pictures,
             String createDate
@@ -34,4 +34,12 @@ public class ReviewResDTO {
     public record PictureInfo(
             String pictureUrl
     ){}
+
+    @Builder
+    public record Pagenation<T>(
+            List<T> data,
+            Boolean hasNext,
+            String nextCursor,
+            Integer pageSize
+    ) {}
 }

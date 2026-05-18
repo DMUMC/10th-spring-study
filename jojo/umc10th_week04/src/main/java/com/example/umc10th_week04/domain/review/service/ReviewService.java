@@ -16,6 +16,8 @@ import com.example.umc10th_week04.domain.user.exception.UserException;
 import com.example.umc10th_week04.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th_week04.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +32,6 @@ public class ReviewService {
 
     @Transactional
     public ReviewResDTO.CreateReview createReview(Long storeId, ReviewReqDTO.CreateReview request) {
-        validateReviewScore(request.score());
-
         Long targetStoreId = resolveStoreId(storeId, request.storeId());
 
         User user = userRepository.findById(request.userId())
@@ -50,17 +50,63 @@ public class ReviewService {
         return ReviewConverter.toGetReview();
     }
 
-    private void validateReviewScore(int score) {
-        if (score < 1 || score > 5) {
-            throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_SCORE);
-        }
-    }
-
     private Long resolveStoreId(Long pathStoreId, Long requestStoreId) {
         if (requestStoreId == null || pathStoreId.equals(requestStoreId)) {
             return pathStoreId;
         }
 
         throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_REQUEST);
+    }
+
+    // 유저 리뷰 조회
+    public ReviewResDTO.Pagenation<ReviewResDTO.ReviewInfo> getMyReviews(
+            Long userId,
+            Integer pageSize,
+            String cursor,
+            String query
+    ) {
+        // 페이지 정보들을 PageRequest로 만들기
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+
+        long idCursor;
+        Slice<Review> reviewList;
+        String nextCursor;
+
+        // 커서가 있는 경우
+        if(!cursor.equals("-1")){
+
+            // 커서 분리
+            String[] cursorSplit = cursor.split(":");
+            switch (query.toLowerCase()) {
+                case "id":
+
+                    // 커서 타입 변환
+                    Long prevCursor = Long.parseLong(cursorSplit[0]);
+                    idCursor = Long.parseLong(cursorSplit[1]);
+
+                    // 내 리뷰 조회 & where절에 cursor 값 기입
+                    reviewList = reviewRepository.findReviewsByUser_IdAndIdLessThanOrderByIdDesc(
+                            userId,
+                            idCursor,
+                            pageRequest
+                    );
+                    break;
+                default:
+                    throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_REQUEST);
+            }
+        } else {
+            reviewList = reviewRepository.findReviewsByUser_IdOrderByIdDesc(userId, pageRequest);
+        }
+
+        // 다음 커서 계산
+        nextCursor = reviewList.getContent().getLast().getId() + ":" + reviewList.getContent().getLast().getId();
+
+        // 리뷰들 응답 DTO로 포장하기
+        return ReviewConverter.toPagination(
+                reviewList.map(ReviewConverter::toReviewInfo).toList(),
+                reviewList.hasNext(),
+                nextCursor,
+                reviewList.getSize()
+        );
     }
 }

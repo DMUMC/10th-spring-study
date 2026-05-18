@@ -64,4 +64,19 @@ public class ReviewConverter {
 
         return review.getCreateAt().format(java.time.format.DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
+
+    // 페이지네이션 틀 생성
+    public static <T> ReviewResDTO.Pagenation<T> toPagination(
+            List<T> data,
+            Boolean hasNext,
+            String nextCursor,
+            Integer pageSize
+    ) {
+        return ReviewResDTO.Pagenation.<T>builder()
+                .data(data)
+                .hasNext(hasNext)
+                .nextCursor(nextCursor)
+                .pageSize(pageSize)
+                .build();
+    }
 }

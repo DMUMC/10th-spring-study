@@ -40,15 +40,18 @@ public class User extends BaseEntity {
     private String detailAddress;
 
     @Column(name = "point", nullable = false)
-    private int point;
+    private Integer point;
 
     // 연관 관계
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserFood> userFoodList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserMission> userMissionList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Review> reviewList = new ArrayList<>();
 }

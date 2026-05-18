@@ -28,9 +28,11 @@ public class Store {
     @Column(name = "location", nullable = false)
     private String location;
 
+    @Builder.Default
     @OneToMany(mappedBy = "store")
     private List<Mission> missionList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "store",  cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
 }
