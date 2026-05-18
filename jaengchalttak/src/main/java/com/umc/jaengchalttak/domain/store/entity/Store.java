@@ -45,12 +45,15 @@ public class Store {
 
     // ====== 연관관계 매핑 ======
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<StorePhoto> storePhotos = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<StoreReview> storeReviews = new ArrayList<>();
 
 }

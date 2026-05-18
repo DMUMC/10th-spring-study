@@ -3,18 +3,24 @@ package com.umc.jaengchalttak.domain.store.controller;
 import com.umc.jaengchalttak.domain.store.dto.request.CommentReqDTO;
 import com.umc.jaengchalttak.domain.store.dto.request.StoreReviewReqDTO;
 import com.umc.jaengchalttak.domain.store.dto.response.StoreReviewListResDTO;
+import com.umc.jaengchalttak.domain.store.enums.QueryType;
 import com.umc.jaengchalttak.domain.store.payload.code.StoreSuccessCode;
 import com.umc.jaengchalttak.domain.store.service.ReviewService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
+import com.umc.jaengchalttak.global.dto.CursorPagination;
+import com.umc.jaengchalttak.global.dto.OffsetPagination;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Tag(name = "가게 리뷰 API", description = "가게 리뷰 및 사장님 답글 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/store/review")
@@ -31,10 +37,10 @@ public class ReviewController {
                 StoreReviewListResDTO.builder()
                         .userId(1L)
                         .userName("홍길동")
-                        .reviewStar(5)
+                        .reviewId(101L)
+                        .reviewStar(5.0)
                         .reviewContent("커피가 정말 맛있어요!")
                         .reviewCreatedAt(LocalDateTime.now())
-                        .reviewSavePath(List.of("경로1", "경로2"))
                         .commentId(101L)
                         .commentContent("감사합니다 😊")
                         .commentCreateAt(LocalDateTime.now())
@@ -44,6 +50,33 @@ public class ReviewController {
         BaseSuccessCode code = StoreSuccessCode.REVIEW_LIST_OK;
         return ApiResponse.onSuccess(code, result);
     }
+
+
+    @Operation(
+            summary = "내 리뷰 목록 보기",
+            description = "특정 가게에 작성된 리뷰와 사장님 답글 목록 중 내 리뷰를 페이징하여 조회합니다.")
+    @GetMapping("/me")
+    public ApiResponse<CursorPagination<StoreReviewListResDTO>> getMyStoreReview(
+            @RequestParam Long userId,
+            @RequestParam Long storeId,
+
+            @RequestParam(defaultValue = "3")
+            @Min(value = 1, message = "페이지 크기는 1 이상이어야 합니다.")
+            Integer pageSize,
+
+            @RequestParam(required = false)
+            String cursor,
+
+            @RequestParam
+            QueryType query
+    ) {
+        CursorPagination<StoreReviewListResDTO> result =
+                reviewService.getMyReviewList(userId, storeId, pageSize, cursor, query);
+
+        BaseSuccessCode code = StoreSuccessCode.MY_REVIEW_LIST_OK;
+        return ApiResponse.onSuccess(code, result);
+    }
+
 
 
     @Operation(summary = "가게 리뷰 작성", description = "유저가 방문한 가게에 대해 별점과 사진을 포함한 리뷰를 작성합니다.")
@@ -58,7 +91,7 @@ public class ReviewController {
 
     @Operation(summary = "사장님 댓글 작성", description = "가게 주인이 유저의 리뷰에 대해 답글(댓글)을 작성합니다.")
     @PostMapping("/comment")
-    public ApiResponse<String> writerComment(@RequestBody CommentReqDTO request) {
+    public ApiResponse<String> writerComment(@Valid @RequestBody CommentReqDTO request) {
         BaseSuccessCode code = StoreSuccessCode.COMMENT_CREATED;
         return ApiResponse.onSuccess(code, "댓글 작성 완료!");
     }

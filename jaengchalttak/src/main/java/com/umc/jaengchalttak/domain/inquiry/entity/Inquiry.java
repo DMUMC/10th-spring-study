@@ -46,6 +46,7 @@ public class Inquiry {
 
     // ====== 연관관계 매핑 ======
     @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<InquiryPhoto> inquiryPhotos = new ArrayList<>();
 
 }

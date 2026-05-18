@@ -23,6 +23,7 @@ public class MissionConverter {
         return MissionsProgressResDTO.builder()
                 .storeId(userMission.getMission().getStore().getId())
                 .storeName(userMission.getMission().getStore().getStoreName())
+                .userMissionId(userMission.getId())
                 .missionName(userMission.getMission().getMissionName())
                 .missionPoint(userMission.getMission().getMissionPoint())
                 .missionAmount(userMission.getMission().getMissionAmount())

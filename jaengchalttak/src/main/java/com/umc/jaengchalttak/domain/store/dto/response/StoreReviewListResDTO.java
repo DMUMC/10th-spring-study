@@ -10,10 +10,10 @@ public record StoreReviewListResDTO(
         Long userId,
         String userName,
 
-        Integer reviewStar,
+        Long reviewId,
+        Double reviewStar,
         String reviewContent,
         LocalDateTime reviewCreatedAt,
-        List<String> reviewSavePath,
 
         Long commentId,
         String commentContent,

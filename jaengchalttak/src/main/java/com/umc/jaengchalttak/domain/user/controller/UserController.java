@@ -7,10 +7,13 @@ import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserSuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
+@Tag(name = "사용자 API", description = "마이페이지, 알림 설정 등 사용자 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -42,7 +45,7 @@ public class UserController {
     @Operation(summary = "알림 설정 업데이트", description = "개별 알림 수신 여부를 수정합니다.")
     @PutMapping("/alarm")
     public ApiResponse<UserAlarmDTO.alarmResDTO> updateAlarm(
-            @RequestBody UserAlarmDTO request
+            @Valid @RequestBody UserAlarmDTO request
     ) {
         // 임시값 삽입, Service 완성 시 삭제 예정
         UserAlarmDTO.alarmResDTO result = UserAlarmDTO.alarmResDTO.builder()
@@ -59,7 +62,7 @@ public class UserController {
     @Operation(summary = "유저 닉네임 변경", description = "유저의 서비스 내 활동명을 변경합니다.")
     @PatchMapping("/name")
     public ApiResponse<UserInfoDTO.userNameUpdateDTO> changeUserName(
-            @RequestBody UserInfoDTO.userNameUpdateDTO name) {
+            @Valid @RequestBody UserInfoDTO.userNameUpdateDTO name) {
         // 임시값 삽입, Service 완성 시 삭제 예정
         UserInfoDTO.userNameUpdateDTO result =
                 UserInfoDTO.userNameUpdateDTO.builder()

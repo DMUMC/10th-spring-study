@@ -6,6 +6,7 @@ import lombok.Builder;
 public record MissionsProgressResDTO(
         Long storeId,
         String storeName,
+        Long userMissionId,
         String missionName,
         Integer missionPoint,
         Integer missionAmount,
