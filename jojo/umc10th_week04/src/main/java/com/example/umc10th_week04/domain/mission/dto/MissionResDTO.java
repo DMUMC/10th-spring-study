@@ -33,20 +33,4 @@ public class MissionResDTO {
             Boolean completed
     ) {}
 
-    // 페이지네이션 틀(Slice)
-    @Builder
-    public record Pagination<T>(
-            List<T> data,
-            Boolean hasNext,
-            String nextCursor,
-            Integer pageSize
-    ) {}
-
-    // 페이지네이션 틀(Offset)
-    @Builder
-    public record OffsetPagination<T>(
-            List<T> data,
-            Integer pageNumber,
-            Integer pageSize
-    ) {}
 }

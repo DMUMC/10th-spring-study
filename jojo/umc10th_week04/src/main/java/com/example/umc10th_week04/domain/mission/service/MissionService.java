@@ -14,12 +14,12 @@ import com.example.umc10th_week04.domain.mission.repository.StoreRepository;
 import com.example.umc10th_week04.domain.mission.repository.UserMissionRepository;
 import com.example.umc10th_week04.domain.review.exception.ReviewException;
 import com.example.umc10th_week04.domain.user.repository.UserRepository;
+import com.example.umc10th_week04.global.common.dto.CursorPaginationResDTO;
+import com.example.umc10th_week04.global.common.dto.OffsetPaginationResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class MissionService {
 
 
     //가게 내 미션들 조회
-    public MissionResDTO.Pagination<MissionResDTO.MissionInfo> getMissions(
+    public CursorPaginationResDTO<MissionResDTO.MissionInfo> getMissions(
             Long storeId,
             Integer pageSize,
             String cursor,
@@ -62,7 +62,7 @@ public class MissionService {
                     idCursor = Long.parseLong(cursorSplit[1]);
 
                     // 가게 내 미션들 조회 & where절에 커서값 기입
-                    missionList = missionRepository.findMissionsByStore_IdAndIdLessThanOrderByIdDesc(
+                    missionList = missionRepository.findMissionsByStoreIdAndIdLessThanOrderByIdDesc(
                             storeId,
                             idCursor,
                             pageRequest
@@ -74,7 +74,7 @@ public class MissionService {
         } else {
 
             // 커서 없이 조회
-            missionList = missionRepository.findMissionsByStore_IdOrderByIdDesc(storeId, pageRequest);
+            missionList = missionRepository.findMissionsByStoreIdOrderByIdDesc(storeId, pageRequest);
         }
 
         // 다음 커서 계산
@@ -109,7 +109,7 @@ public class MissionService {
     }
 
     // 유저 미션 조회
-    public MissionResDTO.OffsetPagination<MissionResDTO.MyMissionInfo> getMyMissions(
+    public OffsetPaginationResDTO<MissionResDTO.MyMissionInfo> getMyMissions(
             Long userId,
             Integer pageSize,
             Integer pageNumber,

@@ -6,12 +6,11 @@ import com.example.umc10th_week04.domain.mission.exception.code.MissionSuccessCo
 import com.example.umc10th_week04.domain.mission.service.MissionService;
 import com.example.umc10th_week04.global.apiPayload.ApiResponse;
 import com.example.umc10th_week04.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th_week04.global.common.dto.CursorPaginationResDTO;
+import com.example.umc10th_week04.global.common.dto.OffsetPaginationResDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/missions")
@@ -22,7 +21,7 @@ public class MissionController {
 
     // 유저 미션 조회
     @GetMapping("/v1/users/missions")
-    public ApiResponse<MissionResDTO.OffsetPagination<MissionResDTO.MyMissionInfo>> getMyMission(
+    public ApiResponse<OffsetPaginationResDTO<MissionResDTO.MyMissionInfo>> getMyMission(
             @Valid @RequestBody MissionReqDTO.UserId dto,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
@@ -44,7 +43,7 @@ public class MissionController {
 
     // 가게 내 미션들 조회
     @GetMapping("/v1/stores/{storeId}/missions")
-    public ApiResponse<MissionResDTO.Pagination<MissionResDTO.MissionInfo>> getMissions(
+    public ApiResponse<CursorPaginationResDTO<MissionResDTO.MissionInfo>> getMissions(
             @PathVariable Long storeId,
             @RequestParam Integer pageSize,
             @RequestParam String cursor,
