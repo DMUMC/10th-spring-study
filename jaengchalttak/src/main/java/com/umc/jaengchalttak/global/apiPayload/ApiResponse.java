@@ -29,6 +29,6 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> onFailure(BaseErrorCode code, T result) {
-        return new ApiResponse<>(false, code.getCode(), "요청 처리 중 오류가 발생했습니다.", result);
+        return new ApiResponse<>(false, code.getCode(), code.getMessage(), result);
     }
 }

@@ -35,4 +35,15 @@ public class AuthService {
         // 선호 음식 저장
         favoriteFoodRepository.saveAll(UserConverter.toFavoriteFoods(request, user));
     }
+
+    @Transactional(readOnly = true)
+    public boolean isEmailDuplicated(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isNameDuplicated(String name) {
+        return userRepository.existsByName(name);
+    }
+
 }
