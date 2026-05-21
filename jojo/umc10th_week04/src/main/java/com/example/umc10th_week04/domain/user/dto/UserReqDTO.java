@@ -9,6 +9,12 @@ public class UserReqDTO {
             @NotNull(message = "유저 이름은 필수 입니다.")
             String name,
 
+            @NotNull(message = "유저 이메일은 필수 입니다.")
+            String email,
+
+            @NotNull(message = "유저 비밀번호는 필수 입니다.")
+            String password,
+
             @NotNull(message = "유저 성별은 필수 입니다.")
             String gender,
 

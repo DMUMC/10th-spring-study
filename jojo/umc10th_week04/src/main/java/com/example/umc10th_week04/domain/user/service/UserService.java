@@ -1,6 +1,7 @@
 package com.example.umc10th_week04.domain.user.service;
 
 import com.example.umc10th_week04.domain.user.converter.UserConverter;
+import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.domain.user.dto.UserResDTO;
 import com.example.umc10th_week04.domain.user.entity.User;
 import com.example.umc10th_week04.domain.user.exception.UserException;

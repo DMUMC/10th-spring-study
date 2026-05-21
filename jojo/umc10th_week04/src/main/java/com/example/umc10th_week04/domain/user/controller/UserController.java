@@ -1,5 +1,6 @@
 package com.example.umc10th_week04.domain.user.controller;
 
+import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.domain.user.dto.UserResDTO;
 import com.example.umc10th_week04.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th_week04.domain.user.service.UserService;
@@ -23,12 +24,4 @@ public class UserController {
         BaseSuccessCode code = UserSuccessCode.OK;
         return ApiResponse.onSuccess(code, userService.getUserInfo(id));
     }
-
-//    @PostMapping("/signup")
-//    public ApiResponse<UserResDTO.SignupInfo> signupInfo(
-//            @RequestBody UserResDTO.SignupInfo dto
-//    ){
-//        BaseSuccessCode code = UserSuccessCode.OK;
-//        return ApiResponse.onSuccess(code, userService.signupInfo(dto));
-//    }
 }
