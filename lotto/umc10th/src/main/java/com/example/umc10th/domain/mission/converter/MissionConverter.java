@@ -4,6 +4,8 @@ import com.example.umc10th.domain.mission.dto.MemberMissionResDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc10th.global.common.Pagination;
+
 import java.util.List;
 
 public class MissionConverter {
@@ -37,12 +39,12 @@ public class MissionConverter {
 
 
 
-    public static <T> MemberMissionResDTO.Pagination<T> toPagination(
+    public static <T> Pagination.Pagi<T> toPagination(
             List<T> data,
             Integer pageNumber,
             Integer pageSize
     ){
-        return MemberMissionResDTO.Pagination.<T>builder()
+        return Pagination.Pagi.<T>builder()
                 .data(data)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)

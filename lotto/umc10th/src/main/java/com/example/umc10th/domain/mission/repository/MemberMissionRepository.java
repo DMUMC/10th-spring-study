@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface MemberMissionRepository extends JpaRepository<MemberMission, Long> {
 
-    Page<MemberMission> findByMemberIdAndStatus(
+    Page<MemberMission> findByMemberIdAndStatusIn(
             Long memberId,
             List<Status> status,
             Pageable pageable
@@ -21,7 +21,7 @@ public interface MemberMissionRepository extends JpaRepository<MemberMission, Lo
 
     @Query("""
         SELECT mm FROM MemberMission mm
-        LEFT JOIN mm.mission m
+        LEFT JOIN FETCH mm.mission m
         WHERE mm.member.id = :memberId
           AND mm.id < :missionId
           AND mm.status IN :status

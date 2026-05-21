@@ -26,7 +26,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(code, reviewService.getInfo(dto));
     }
 
-    @GetMapping("/reviews")
+    @GetMapping("/reviews/cursor")
     public ApiResponse <ReviewResDTO.Pagination<ReviewResDTO.GetInfo>> getCursorInfo(
             @RequestBody @Valid ReviewReqDTO.GetInfo dto,
             @RequestParam Integer pageSize,

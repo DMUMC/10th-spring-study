@@ -9,6 +9,7 @@ import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
+import com.example.umc10th.global.common.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,22 +28,18 @@ public class MissionService {
     private final MissionRepository missionRepository;
     private final MemberMissionRepository memberMissionRepository;
 
-    public List<MissionResDTO.GetInfo> getHomeMissions(
+    public Slice<MissionResDTO.GetInfo> getHomeMissions(
             MissionReqDTO.GetInfo dto,
             Long missionId,
             Long locationId,
             int size
     ) {
-
         Pageable pageable = PageRequest.of(0, size);
 
         Slice<Mission> missions = missionRepository
                 .findAvailableMissions(dto.id(), missionId, locationId, pageable);
 
-        return missions.getContent()
-                .stream()
-                .map(MissionConverter::toGetHomeInfo)
-                .collect(Collectors.toList());
+        return missions.map(MissionConverter::toGetHomeInfo);
     }
 
 
@@ -64,7 +61,7 @@ public class MissionService {
                 .collect(Collectors.toList());
     }
 
-    public MemberMissionResDTO.Pagination<MemberMissionResDTO.GetInfo> getOffsetMemberMissions(
+    public Pagination.Pagi<MemberMissionResDTO.GetInfo> getOffsetMemberMissions(
             MissionReqDTO.GetInfo dto,
             List<Status> status,
             int size,
@@ -81,7 +78,7 @@ public class MissionService {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sortInfo);
 
-        Page<MemberMission> missionList = memberMissionRepository.findByMemberIdAndStatus(dto.id(), status, pageRequest);
+        Page<MemberMission> missionList = memberMissionRepository.findByMemberIdAndStatusIn(dto.id(), status, pageRequest);
 
         return MissionConverter.toPagination(
                 missionList.map(MissionConverter::toGetInfo).toList(),

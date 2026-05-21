@@ -11,6 +11,7 @@ import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class ReviewService {
 
     public GetInfo getInfo(ReviewReqDTO.GetInfo dto) {
         Review review = reviewRepository.findById(dto.id())
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
         return ReviewConverter.toGetInfo(review,null);
     }
 
@@ -32,53 +33,36 @@ public class ReviewService {
             String cursor,
             String query
     ) {
-        PageRequest pageRequest = PageRequest.of(0, pageSize);
+        Pageable pageable = PageRequest.of(0, pageSize);
         Slice<Review> reviewList;
 
-        // 1. 커서 기반 조회 로직 정리
         if (cursor.equals("-1")) {
-            // 첫 페이지 조회
-            reviewList = reviewRepository.findByIdOrderByIdDesc(dto.id(), pageRequest);
+            reviewList = reviewRepository
+                    .findByMemberIdAndIdLessThanOrderByIdDesc(dto.id(), Long.MAX_VALUE, pageable);
         } else {
-            // 다음 페이지 조회
             String[] cursorSplit = cursor.split(":");
             switch (query.toLowerCase()) {
-                case "id": {
-                    // cursorSplit[1]이 실제 비교에 쓰일 ID라고 가정
+                case "id" -> {
                     long idCursor = Long.parseLong(cursorSplit[1]);
-                    reviewList = reviewRepository.findByIdAndIdLessThanOrderByIdDesc(
-                            dto.id(),
-                            idCursor,
-                            pageRequest
-                    );
-                    break;
+                    reviewList = reviewRepository
+                            .findByMemberIdAndIdLessThanOrderByIdDesc(dto.id(), idCursor, pageable);
                 }
-                case "star": {
-                    // 별점 높은 순 정렬
-                    int starCursor = Integer.parseInt(cursorSplit[0]); // 마지막으로 본 별점
-                    long idCursor = Long.parseLong(cursorSplit[1]);   // 마지막으로 본 리뷰 ID
-
-                    // 별점이 커서보다 낮거나, 별점이 같으면 ID가 커서보다 작은 데이터 조회
-                    reviewList = reviewRepository.findByIdOrderByStarDesc(
-                            dto.id(),
-                            starCursor,
-                            idCursor,
-                            pageRequest
-                    );
-                    break;
+                case "star" -> {
+                    int starCursor = Integer.parseInt(cursorSplit[0]);
+                    long idCursor = Long.parseLong(cursorSplit[1]);
+                    reviewList = reviewRepository
+                            .findByMemberIdOrderByStarDesc(dto.id(), starCursor, idCursor, pageable);
                 }
-                default:
-                    throw new ReviewException(ReviewErrorCode.QUERY_NOT_VALID);
+                default -> throw new ReviewException(ReviewErrorCode.QUERY_NOT_VALID);
             }
         }
 
-        // 2. 결과가 비어있을 경우에 대한 방어 코드
         String nextCursor = null;
         if (reviewList.hasContent()) {
             Review lastReview = reviewList.getContent().getLast();
-            // 실제 비즈니스 로직에 맞는 커서 문자열 생성
-            nextCursor = lastReview.getId() + ":" + lastReview.getId();
+            nextCursor = lastReview.getStar() + ":" + lastReview.getId();
         }
+
         return ReviewConverter.toPagination(
                 reviewList.map(ReviewConverter::toGetInfo).toList(),
                 reviewList.hasNext(),
