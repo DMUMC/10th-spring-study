@@ -13,6 +13,7 @@ import com.umcstudy.jace.domain.user.repository.*;
 import com.umcstudy.jace.global.security.JwtTokenProvider;
 import com.umcstudy.jace.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class UserService {
     private final PointRepository pointRepository;
     private final UserSettingRepository userSettingRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResDTO.PostSignup postSignup(UserReqDTO.PostSignup dto) {
@@ -56,6 +58,46 @@ public class UserService {
         );
 
         // 음식: 1번 조회 + 1번 일괄 저장
+        List<Food> foods = foodRepository.findAllById(dto.favoriteFoodList());
+        if (foods.size() != dto.favoriteFoodList().size()) {
+            throw new UserException(UserErrorCode.FOOD_NOT_FOUND);
+        }
+        userFoodRepository.saveAll(
+                foods.stream()
+                        .map(food -> UserConverter.toUserFood(user, food))
+                        .toList()
+        );
+
+        pointRepository.save(UserConverter.toPoint(user));
+        userSettingRepository.save(UserConverter.toUserSetting(user));
+
+        String token = jwtTokenProvider.generateToken(user.getId());
+        return UserConverter.toPostSignupRes(user, token);
+    }
+
+    @Transactional
+    public UserResDTO.PostSignup formSignup(UserReqDTO.FormSignup dto) {
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
+        }
+
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        User user = userRepository.save(UserConverter.toUserFromForm(dto, encodedPassword));
+
+        List<Long> termIds = dto.termsList().stream()
+                .map(UserReqDTO.TermsDTO::termsId)
+                .toList();
+        Map<Long, Term> termMap = termRepository.findAllById(termIds).stream()
+                .collect(Collectors.toMap(Term::getId, t -> t));
+        if (termMap.size() != termIds.size()) {
+            throw new UserException(UserErrorCode.TERMS_NOT_FOUND);
+        }
+        userTermRepository.saveAll(
+                dto.termsList().stream()
+                        .map(termsDto -> UserConverter.toUserTerm(user, termMap.get(termsDto.termsId()), termsDto.isAgree()))
+                        .toList()
+        );
+
         List<Food> foods = foodRepository.findAllById(dto.favoriteFoodList());
         if (foods.size() != dto.favoriteFoodList().size()) {
             throw new UserException(UserErrorCode.FOOD_NOT_FOUND);

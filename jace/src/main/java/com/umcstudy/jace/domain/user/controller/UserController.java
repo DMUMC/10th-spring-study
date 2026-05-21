@@ -34,6 +34,13 @@ public class UserController {
         return ApiResponse.onSuccess(code, userService.postSignup(dto));
     }
 
+    @PostMapping("/auth/signup/form")
+    public ApiResponse<UserResDTO.PostSignup> formSignup(
+            @Valid @RequestBody UserReqDTO.FormSignup dto
+    ){
+        return ApiResponse.onSuccess(UserSuccessCode.SignupOK, userService.formSignup(dto));
+    }
+
     @GetMapping("/myPage")
     public ApiResponse<UserResDTO.GetMyPage> getMyPage(){
         return ApiResponse.onSuccess(UserSuccessCode.MyPageOK, userService.getMyPage());
