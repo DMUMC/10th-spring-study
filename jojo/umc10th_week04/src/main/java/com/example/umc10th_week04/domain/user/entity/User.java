@@ -36,6 +36,9 @@ public class User extends BaseEntity {
     @Builder.Default
     private Gender gender = Gender.NONE;
 
+    @Column(name = "birth", nullable = false)
+    private String birth;
+
     @Column(name = "address", nullable = false)
     private String address;
 

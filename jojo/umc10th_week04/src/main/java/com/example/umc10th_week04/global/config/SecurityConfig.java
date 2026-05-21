@@ -2,7 +2,6 @@ package com.example.umc10th_week04.global.config;
 
 import com.example.umc10th_week04.global.security.handler.CustomAccessDenied;
 import com.example.umc10th_week04.global.security.handler.CustomEntryPoint;
-import org.hibernate.boot.internal.Abstract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,6 +40,8 @@ public class SecurityConfig {
                 // 성공 시 /swagger-ui/index.html 로 리다이렉트, alwaysUse를 true로 설정 시 로그인 성공 시 항상 Swagger로 리다이렉트
                 // 로그인 페이지는 모든 사용자가 접근 가능하도록 설정
                 .formLogin(form -> form
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/swagger-ui.html", true)
                         .permitAll()
                 )
