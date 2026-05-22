@@ -70,4 +70,12 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<StoreReview> storeReviews = new ArrayList<>();
+
+    public void updateInitialInfo(String username, String sex, LocalDate birth, String phone, String address) {
+        this.username = username;
+        this.sex = sex;
+        this.birth = birth;
+        this.phone = phone;
+        this.address = address;
+    }
 }

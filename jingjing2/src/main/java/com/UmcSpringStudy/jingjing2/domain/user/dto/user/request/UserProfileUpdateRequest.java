@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -34,4 +35,7 @@ public class UserProfileUpdateRequest {
     @Schema(description = "수정할 생년월일", example = "2000-05-05")
     @Past(message = "생년월일은 미래 날짜일 수 없습니다.")
     private LocalDate birth;
+
+    @Schema(description = "수정할 선호 음식(관심사) ID 목록 (선택)", example = "[2, 4]")
+    private List<Long> interestIds;
 }

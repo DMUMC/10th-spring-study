@@ -66,20 +66,4 @@ public class UserController {
             @RequestBody @Valid UserSettingsUpdateRequest request) {
         return CommonResponse.success("유저 설정 업데이트 성공", null);
     }
-
-    // 8. 관심사 추가
-    @PostMapping("/{userId}/interests")
-    public CommonResponse<Void> addUserInterests(
-            @PathVariable Long userId,
-            @RequestBody @Valid @NotEmpty(message = "최소 하나 이상의 관심사 ID가 필요합니다.") List<Long> request) {
-        return CommonResponse.success("유저 관심사 설정 성공", null);
-    }
-
-    // 9. 특정 관심사 삭제
-    @DeleteMapping("/{userId}/interests/{interestId}")
-    public CommonResponse<Void> deleteUserInterest(
-            @PathVariable Long userId,
-            @PathVariable Long interestId) {
-        return CommonResponse.success("유저 관심사 삭제 성공", null);
-    }
 }

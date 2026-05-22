@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -33,4 +34,9 @@ public class UserInitialInfoRequest {
 
     @Schema(description = "주소", example = "서울특별시 구로구 경인로 445")
     private String address; // 선택 사항
+
+    @Schema(description = "선호 음식(관심사) ID 목록", example = "[1, 3, 5]")
+    @NotNull(message = "선호 음식 종류를 선택해주세요.")
+    @Size(min = 1, message = "최소 1개 이상의 선호 음식을 선택해야 합니다.")
+    private List<Long> interestIds;
 }
