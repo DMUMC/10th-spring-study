@@ -14,5 +14,8 @@ public class UserProfileResponse {
     private String email;
     private String phone;
     private Integer point;
+    private String address;
     private List<String> interests; // 관심사 키워드 목록
+    private Boolean locAllow;
+    private Boolean adAllow;
 }

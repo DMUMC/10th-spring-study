@@ -3,6 +3,7 @@ package com.UmcSpringStudy.jingjing2.domain.user.service;
 import com.UmcSpringStudy.jingjing2.domain.user.converter.UserConverter;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.user.request.*;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.user.response.UserProfileResponse;
+import com.UmcSpringStudy.jingjing2.domain.user.entity.Autorication;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.Interest;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.User;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.UserInterest;
@@ -46,13 +47,11 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
-        //이미 온보딩 정보가 세팅되어 있는지 검증
-        // 닉네임, 생년월일, 전화번호 중 하나라도 null이 아니라면 이미 설정된 것으로 간주
         if (user.getUsername() != null || user.getBirth() != null || user.getPhone() != null) {
             throw new CustomException(UserErrorCode.ALREADY_ONBOARDED);
         }
 
-        // 1) User DB 업데이트
+        // 1) User 기본 정보 업데이트
         user.updateInitialInfo(
                 request.getUsername(),
                 request.getSex(),
@@ -61,10 +60,13 @@ public class UserService {
                 request.getAddress()
         );
 
-        // 2) UserInterest DB 데이터 생성
+        // 2) 약관 동의 (Autorication) 생성 및 매핑
+        Autorication autorication = UserConverter.toAutorication(user, request);
+        user.setAutorication(autorication);
+
+        // 3) UserInterest 관심사 DB 데이터 생성
         if (request.getInterestIds() != null && !request.getInterestIds().isEmpty()) {
             List<Interest> interests = interestRepository.findAllById(request.getInterestIds());
-
             List<UserInterest> userInterests = UserConverter.toUserInterestList(user, interests);
             userInterestRepository.saveAll(userInterests);
         }

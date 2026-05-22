@@ -38,4 +38,10 @@ public class UserProfileUpdateRequest {
 
     @Schema(description = "수정할 선호 음식(관심사) ID 목록 (선택)", example = "[2, 4]")
     private List<Long> interestIds;
+
+    @Schema(description = "위치정보 제공 동의 수정", example = "true")
+    private Boolean locAllow;
+
+    @Schema(description = "마케팅 수신 동의 수정", example = "false")
+    private Boolean adAllow;
 }

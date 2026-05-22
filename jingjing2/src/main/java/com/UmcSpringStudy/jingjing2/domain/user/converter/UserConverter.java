@@ -1,7 +1,9 @@
 package com.UmcSpringStudy.jingjing2.domain.user.converter;
 
+import com.UmcSpringStudy.jingjing2.domain.user.dto.user.request.UserInitialInfoRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.user.request.UserJoinRequest;
 import com.UmcSpringStudy.jingjing2.domain.user.dto.user.response.UserProfileResponse;
+import com.UmcSpringStudy.jingjing2.domain.user.entity.Autorication;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.Interest;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.User;
 import com.UmcSpringStudy.jingjing2.domain.user.entity.UserInterest;
@@ -26,7 +28,7 @@ public class UserConverter {
                 .build();
     }
 
-    // 2. 프로필 조회: Entity -> Response (선호 음식 포함)
+    // 2. 프로필 조회: Entity -> Response
     public static UserProfileResponse toUserProfileResponse(User user) {
         return UserProfileResponse.builder()
                 .userId(user.getId())
@@ -34,12 +36,14 @@ public class UserConverter {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .point(user.getPoint())
-                // User와 연관된 UserInterest 리스트에서 Interest의 이름(선호 음식)만 추출하여 리스트로 반환
+                .address(user.getAddress())
                 .interests(user.getUserInterests() != null ?
                         user.getUserInterests().stream()
-                        .map(ui -> ui.getInterest().getContext()) // Interest 엔티티의 이름/내용 필드 (getContext() 혹은 getName() 등에 맞춰 사용)
+                        .map(ui -> ui.getInterest().getContext())
                         .collect(Collectors.toList())
                         : null)
+                .locAllow(user.getAutorication() != null ? user.getAutorication().getLocAllow() : false)
+                .adAllow(user.getAutorication() != null ? user.getAutorication().getAdAllow() : false)
                 .build();
     }
     // 3. 관심사 매핑: User + Interest 목록 -> UserInterest 목록
@@ -50,5 +54,16 @@ public class UserConverter {
                         .interest(interest)
                         .build())
                 .collect(Collectors.toList());
+    }
+    // 4. 약관 동의 매핑: User + Request -> Autorication
+    public static Autorication toAutorication(User user, UserInitialInfoRequest request) {
+        return Autorication.builder()
+                .user(user)
+                .overFourteen(request.getOverFourteen())
+                .termsOfService(request.getTermsOfService())
+                .privacyPolicy(request.getPrivacyPolicy())
+                .locAllow(request.getLocAllow())
+                .adAllow(request.getAdAllow())
+                .build();
     }
 }

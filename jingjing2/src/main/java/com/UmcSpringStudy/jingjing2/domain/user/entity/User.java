@@ -78,4 +78,5 @@ public class User {
         this.phone = phone;
         this.address = address;
     }
+
 }
