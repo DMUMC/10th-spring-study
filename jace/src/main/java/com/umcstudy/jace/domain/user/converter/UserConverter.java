@@ -22,7 +22,22 @@ public class UserConverter {
                 .email(email)
                 .gender(dto.gender())
                 .birth(dto.birth())
-                .zipCode(String.valueOf(dto.zipcode()))
+                .zipCode(dto.zipcode())
+                .address(dto.address())
+                .addressDetail(dto.addressDtl())
+                .isQuit(false)
+                .isChkPhone(false)
+                .build();
+    }
+
+    public static User toUserFromForm(UserReqDTO.FormSignup dto, String encodedPassword) {
+        return User.builder()
+                .name(dto.name())
+                .email(dto.email())
+                .password(encodedPassword)
+                .gender(dto.gender())
+                .birth(dto.birth())
+                .zipCode(dto.zipcode())
                 .address(dto.address())
                 .addressDetail(dto.addressDtl())
                 .isQuit(false)

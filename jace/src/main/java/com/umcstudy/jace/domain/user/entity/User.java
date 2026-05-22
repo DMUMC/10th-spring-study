@@ -39,6 +39,9 @@ public class User {
     @Column(nullable = true, length = 50)
     private String email;
 
+    @Column(nullable = true)
+    private String password;
+
     @Column(name = "zip_code", nullable = false, length = 10)
     private String zipCode;
 

@@ -11,6 +11,8 @@ import com.umcstudy.jace.global.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,17 +31,14 @@ public class MissionService {
 
         long clearMissionCnt = missionUserRepository.countByUser_IdAndMissionCondition(userId, MissionStatus.SUCCESS);
 
-        List<Mission> missions = missionRepository.findByRegionWithCursor(region, cursorId, PageRequest.of(0, size + 1));
-        boolean hasNext = missions.size() > size;
-        if (hasNext) {
-            missions = missions.subList(0, size);
-        }
+        Slice<Mission> missions = missionRepository.findByRegionWithCursor(region, cursorId,
+                PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id")));
 
-        List<MissionResDTO.MissionItem> missionList = missions.stream()
+        List<MissionResDTO.MissionItem> missionList = missions.getContent().stream()
                 .map(MissionConverter::toMissionItem)
                 .toList();
 
-        return MissionConverter.toGetHome(clearMissionCnt, missionList, hasNext);
+        return MissionConverter.toGetHome(clearMissionCnt, missionList, missions.hasNext());
     }
 
     @Transactional(readOnly = true)

@@ -1,37 +1,40 @@
 package com.umcstudy.jace.global.client;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.umcstudy.jace.domain.user.enums.SocialProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class KakaoOAuthClient implements OAuthClient {
 
     private static final String USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
+
     private final RestClient restClient;
 
     @Override
-    @SuppressWarnings("unchecked")
     public SocialUserInfo getUserInfo(String accessToken) {
-        Map<String, Object> body = restClient.get()
+        KakaoUserInfoResponse response = restClient.get()
                 .uri(USER_INFO_URL)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .retrieve()
-                .body(new ParameterizedTypeReference<Map<String, Object>>() {});
+                .body(KakaoUserInfoResponse.class);
 
-        if (body == null) throw new IllegalStateException("Kakao API returned null body");
+        if (response == null) throw new IllegalStateException("Kakao API returned null body");
 
-        String id = String.valueOf(body.get("id"));
-        Map<String, Object> kakaoAccount = (Map<String, Object>) body.getOrDefault("kakao_account", Map.of());
-        String email = (String) kakaoAccount.getOrDefault("email", "");
-        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-        String name = profile != null ? (String) profile.getOrDefault("nickname", "") : "";
+        String id = String.valueOf(response.id());
+        String email = Optional.ofNullable(response.kakaoAccount())
+                .map(KakaoAccount::email)
+                .orElse("");
+        String name = Optional.ofNullable(response.kakaoAccount())
+                .map(KakaoAccount::profile)
+                .map(KakaoProfile::nickname)
+                .orElse("");
 
         return new SocialUserInfo(id, email, name);
     }
@@ -40,4 +43,18 @@ public class KakaoOAuthClient implements OAuthClient {
     public SocialProvider getProvider() {
         return SocialProvider.KAKAO;
     }
+
+    private record KakaoUserInfoResponse(
+            Long id,
+            @JsonProperty("kakao_account") KakaoAccount kakaoAccount
+    ) {}
+
+    private record KakaoAccount(
+            String email,
+            KakaoProfile profile
+    ) {}
+
+    private record KakaoProfile(
+            String nickname
+    ) {}
 }
