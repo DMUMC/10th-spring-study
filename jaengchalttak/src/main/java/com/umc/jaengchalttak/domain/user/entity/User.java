@@ -28,8 +28,14 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false, unique = true, length = 45)
     private String name;
+
+    @Column(nullable = false)
+    private String password;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -43,6 +49,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Address address;
 
+    @Column
     private Integer phoneNumber;
 
     @Column(nullable = false)

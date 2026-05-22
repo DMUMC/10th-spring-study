@@ -14,9 +14,9 @@ import java.util.List;
 
 import static com.umc.jaengchalttak.domain.user.enums.Address.TEHERAN_RO;
 
-@Tag(name = "가게 API", description = "가게 관련 API입니다.")
 @RestController
 @RequestMapping("/api/store")
+@Tag(name = "가게 API", description = "가게 관련 API입니다.")
 public class StoreController {
 
     @Operation(summary = "현재 지역 내 가게 조회", description = "입력된 주소(지역)를 기반으로 해당 지역의 가게 목록을 조회합니다.")

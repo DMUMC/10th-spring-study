@@ -27,7 +27,7 @@ public record UserInfoDTO(
         LocalDate birthday,
 
         @NotBlank(message = "주소는 필수입니다.")
-        String address,
+        Address address,
 
         Integer phoneNumber,
 

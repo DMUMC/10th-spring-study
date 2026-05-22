@@ -2,13 +2,12 @@ package com.umc.jaengchalttak.domain.user.entity;
 
 import com.umc.jaengchalttak.domain.user.enums.ServiceUseTitle;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "service_use_allow")
 public class ServiceUseAllow {

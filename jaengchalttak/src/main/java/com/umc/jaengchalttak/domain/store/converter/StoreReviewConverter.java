@@ -9,6 +9,8 @@ import com.umc.jaengchalttak.domain.user.entity.User;
 import com.umc.jaengchalttak.global.apiPayload.code.GeneralErrorCode;
 import com.umc.jaengchalttak.global.apiPayload.exception.ProjectException;
 
+import java.time.LocalDateTime;
+
 public class StoreReviewConverter {
 
     // 객체 생성하면 예외
@@ -19,6 +21,10 @@ public class StoreReviewConverter {
     public static StoreReviewListResDTO toStoreReviewListResDTO(StoreReview storeReview) {
         OwnerComment ownerComment = storeReview.getOwnerComment();
 
+        Long commentId = ownerComment != null ? ownerComment.getId() : null;
+        String commentContent = ownerComment != null ? ownerComment.getCommentContent() : null;
+        LocalDateTime commentCreateAt = ownerComment != null ? ownerComment.getCreatedAt() : null;
+
         return StoreReviewListResDTO.builder()
                 .userId(storeReview.getUser().getId())
                 .userName(storeReview.getUser().getName())
@@ -26,9 +32,9 @@ public class StoreReviewConverter {
                 .reviewStar(storeReview.getReviewStar())
                 .reviewContent(storeReview.getReviewContent())
                 .reviewCreatedAt(storeReview.getCreatedAt())
-                .commentId(ownerComment != null ? ownerComment.getId() : null)
-                .commentContent(ownerComment != null ? ownerComment.getCommentContent() : null)
-                .commentCreateAt(ownerComment != null ? ownerComment.getCreatedAt() : null)
+                .commentId(commentId)
+                .commentContent(commentContent)
+                .commentCreateAt(commentCreateAt)
                 .build();
     }
 

@@ -13,10 +13,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "가게 미션 API", description = "가게 미션 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/store/mission")
+@Tag(name = "가게 미션 API", description = "가게 미션 관련 API입니다.")
 public class StoreMissionController {
 
     private final StoreMissionService storeMissionService;

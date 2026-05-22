@@ -17,10 +17,10 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "미션 API", description = "미션 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/mission")
+@Tag(name = "미션 API", description = "미션 관련 API입니다.")
 public class MissionController {
 
     private final UserMissionService userMissionService;

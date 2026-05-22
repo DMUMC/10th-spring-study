@@ -1,47 +1,44 @@
 package com.umc.jaengchalttak.domain.user.controller;
 
-import com.umc.jaengchalttak.domain.user.dto.request.LoginReqDTO;
-import com.umc.jaengchalttak.domain.user.dto.UserInfoDTO;
+import com.umc.jaengchalttak.domain.user.dto.request.SignUpReqDTO;
+import com.umc.jaengchalttak.domain.user.service.AuthService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
-import com.umc.jaengchalttak.domain.user.payload.code.UserErrorCode;
 import com.umc.jaengchalttak.domain.user.payload.code.UserSuccessCode;
-import com.umc.jaengchalttak.domain.user.payload.UserException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "인증 API", description = "로그인, 회원가입 등 인증 관련 API입니다.")
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "인증 API", description = "로그인, 회원가입 등 인증 관련 API입니다.")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Operation(summary = "예외 처리 테스트용 API", description = "USER_NOT_FOUND 예외를 강제로 발생시켜 GlobalExceptionAdvice 작동을 확인합니다.")
-    @GetMapping("/test")
-    public ApiResponse<String> test() {
-        throw new UserException(UserErrorCode.USER_NOT_FOUND);
-    }
+    private final AuthService authService;
 
     @Operation(summary = "일반 회원가입", description = "새로운 유저 정보를 등록하여 회원가입을 진행합니다.")
     @PostMapping("/signup")
-    public ApiResponse<String> signUpUser(@Valid @RequestBody UserInfoDTO request) {
+    public ApiResponse<String> signUpUser(@Valid @RequestBody SignUpReqDTO request) {
+        authService.createUser(request);
+
         BaseSuccessCode code = UserSuccessCode.USER_CREATED;
         return ApiResponse.onSuccess(code, "회원가입 성공!");
     }
 
-    @Operation(summary = "로그인", description = "아이디와 비밀번호를 통해 인증을 진행하고 JWT 액세스 토큰을 발급합니다.")
-    @PostMapping("/login")
-    public ApiResponse<String> loginUser(@Valid @RequestBody LoginReqDTO request) {
-        BaseSuccessCode code = UserSuccessCode.LOGIN_OK;
-        return ApiResponse.onSuccess(code, "엑세스 토큰"); // 임시값, 완성되면 엑세스 토큰 넣음
+    @GetMapping("/email/{email}")
+    @Operation(summary = "이메일 중복 체크", description = "true면 사용 가능한 이메일, false면 이미 있는 이메일입니다.")
+    public ResponseEntity<Boolean> checkNameAvailability(@PathVariable String email) {
+        return ResponseEntity.ok(!authService.isEmailDuplicated(email));
     }
 
-    @Operation(summary = "로그아웃", description = "서버 측 세션 혹은 토큰 무효화 처리를 수행합니다.")
-    @PostMapping("/logout")
-    public ApiResponse<String> logoutUser() {
-        BaseSuccessCode code = UserSuccessCode.LOGOUT_OK;
-        return ApiResponse.onSuccess(code, "로그아웃 성공.");
+    @GetMapping("/name/{name}")
+    @Operation(summary = "이름 중복 체크", description = "true면 사용 가능한 이름, false면 이미 있는 이름입니다.")
+    public ResponseEntity<Boolean> checkEmailAvailability(@PathVariable String name) {
+        return ResponseEntity.ok(!authService.isNameDuplicated(name));
     }
 
 }

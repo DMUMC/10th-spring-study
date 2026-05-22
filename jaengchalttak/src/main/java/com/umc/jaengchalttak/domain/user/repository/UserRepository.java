@@ -11,7 +11,12 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    Optional<User> findByEmail(String email);
+
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.serviceUseAllows WHERE u.id = :id")
     Optional<User> findByIdWithServiceUseAllow(@Param("id") Long id);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByName(String name);
 }

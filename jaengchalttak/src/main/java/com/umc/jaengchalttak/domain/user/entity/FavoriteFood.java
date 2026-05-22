@@ -2,13 +2,12 @@ package com.umc.jaengchalttak.domain.user.entity;
 
 import com.umc.jaengchalttak.domain.user.enums.FoodName;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "favorite_food")
 public class FavoriteFood {
