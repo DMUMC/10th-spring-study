@@ -5,20 +5,21 @@ import com.example.umc10th_week04.domain.mission.dto.MissionResDTO;
 import com.example.umc10th_week04.domain.mission.entity.Mission;
 import com.example.umc10th_week04.domain.mission.entity.Store;
 import com.example.umc10th_week04.domain.mission.entity.UserMission;
-import com.example.umc10th_week04.domain.user.entity.User;
+import com.example.umc10th_week04.global.common.dto.CursorPaginationResDTO;
+import com.example.umc10th_week04.global.common.dto.OffsetPaginationResDTO;
 
 import java.util.List;
 
 public class MissionConverter {
 
     // 페이지네이션 틀 생성
-    public static <T> MissionResDTO.Pagination<T> toPagenation (
+    public static <T> CursorPaginationResDTO<T> toPagenation (
             List<T> data,
             Boolean hasNext,
             String nextCursor,
             Integer pageSize
     ) {
-        return MissionResDTO.Pagination.<T>builder()
+        return CursorPaginationResDTO.<T>builder()
                 .data(data)
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
@@ -49,12 +50,12 @@ public class MissionConverter {
     }
 
     // 유저 미션 조회
-    public static <T> MissionResDTO.OffsetPagination<T> toOffsetPagination(
+    public static <T> OffsetPaginationResDTO<T> toOffsetPagination(
             List<T> data,
             Integer pageNumber,
             Integer pageSize
     ) {
-        return MissionResDTO.OffsetPagination.<T>builder()
+        return OffsetPaginationResDTO.<T>builder()
                 .data(data)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)

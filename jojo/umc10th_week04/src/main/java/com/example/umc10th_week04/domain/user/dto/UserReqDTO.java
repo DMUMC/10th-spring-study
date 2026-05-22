@@ -1,6 +1,10 @@
 package com.example.umc10th_week04.domain.user.dto;
 
+import com.example.umc10th_week04.domain.user.enums.Gender;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class UserReqDTO {
 
@@ -9,8 +13,17 @@ public class UserReqDTO {
             @NotNull(message = "유저 이름은 필수 입니다.")
             String name,
 
+            @Email
+            @NotNull(message = "유저 이메일은 필수 입니다.")
+            String email,
+
+            @NotBlank
+            @Size(min = 8)
+            @NotNull(message = "유저 비밀번호는 필수 입니다.")
+            String password,
+
             @NotNull(message = "유저 성별은 필수 입니다.")
-            String gender,
+            Gender gender,
 
             @NotNull(message = "유저 생년월일은 필수 입니다.")
             String birth,

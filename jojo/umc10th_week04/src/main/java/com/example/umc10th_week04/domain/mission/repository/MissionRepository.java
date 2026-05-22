@@ -20,9 +20,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             """)
     List<Mission> findAvailableMissionsByLocation(String location);
 
-    Slice<Mission> findMissionsByStore_IdAndIdLessThanOrderByIdDesc(Long storeId, long idCursor, Pageable pageRequest);
+    Slice<Mission> findMissionsByStoreIdAndIdLessThanOrderByIdDesc(Long storeId, long idCursor, Pageable pageRequest);
 
-    Slice<Mission> findMissionsByStore_IdOrderByIdDesc(Long storeId, Pageable pageRequest);
+    Slice<Mission> findMissionsByStoreIdOrderByIdDesc(Long storeId, Pageable pageRequest);
 
     Page<Mission> findAllByStore_Id(Long storeId, Pageable pageable);
 }
