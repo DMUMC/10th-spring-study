@@ -15,16 +15,17 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
 
     @Query("""
-        SELECT m FROM Mission m
-        JOIN m.store s
-        LEFT JOIN MemberMission mm
-            ON mm.mission.id = m.id
-            AND mm.member.id = :memberId
-        WHERE mm.mission.id IS NULL
-          AND m.id < :missionId
-          AND s.location.id = :locationId
-        ORDER BY m.id DESC
-        """)
+    SELECT m FROM Mission m
+    JOIN FETCH m.store s
+    WHERE NOT EXISTS (
+        SELECT mm FROM MemberMission mm
+        WHERE mm.mission.id = m.id
+          AND mm.member.id = :memberId
+    )
+    AND m.id < :missionId
+    AND s.location.id = :locationId
+    ORDER BY m.id DESC
+    """)
     Slice<Mission> findAvailableMissions(
             @Param("memberId") Long memberId,
             @Param("missionId") Long missionId,

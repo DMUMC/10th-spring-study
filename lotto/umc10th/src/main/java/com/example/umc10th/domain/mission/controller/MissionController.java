@@ -5,7 +5,6 @@ package com.example.umc10th.domain.mission.controller;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.domain.mission.dto.MemberMissionResDTO;
 import com.example.umc10th.domain.mission.dto.MemberMissionResDTO.GetInfo;
-import com.example.umc10th.domain.mission.dto.MemberMissionResDTO.Pagination;
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.enums.Status;
@@ -13,9 +12,12 @@ import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.common.Pagination;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
+import com.example.umc10th.global.common.Pagination.Pagi;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class MissionController {
 
 
     @GetMapping("/home")
-    public ApiResponse<List<MissionResDTO.GetInfo>> getHomeMissions(
+    public ApiResponse<Slice<MissionResDTO.GetInfo>> getHomeMissions(
             @RequestBody @Valid MissionReqDTO.GetInfo dto,
             @RequestParam Long missionId,
             @RequestParam Long locationId,
@@ -62,7 +64,7 @@ public class MissionController {
 
 
     @GetMapping("/v2/missions")
-    public ApiResponse<Pagination<MemberMissionResDTO.GetInfo>> getOffsetMemberMissions(
+    public ApiResponse<Pagi<MemberMissionResDTO.GetInfo>> getOffsetMemberMissions(
             @RequestBody @Valid MissionReqDTO.GetInfo dto,
             @RequestParam List<Status> status,
             @RequestParam(defaultValue = "10") int size,

@@ -23,10 +23,5 @@ public class MemberMissionResDTO {
             Status status
     ) {}
 
-    @Builder
-    public record Pagination<T>(
-            List<T> data,
-            Integer pageNumber,
-            Integer pageSize
-    ){}
+
 }

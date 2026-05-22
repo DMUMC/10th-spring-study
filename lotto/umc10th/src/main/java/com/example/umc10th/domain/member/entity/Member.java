@@ -3,18 +3,15 @@ package com.example.umc10th.domain.member.entity;
 import com.example.umc10th.domain.member.enums.Address;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.SocialType;
-import com.example.umc10th.global.BaseEntity;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -24,6 +21,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "address")
     @Enumerated(EnumType.STRING)
