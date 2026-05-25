@@ -26,7 +26,9 @@ public enum UserErrorCode implements BaseErrorCode {
     // --- 409 CONFLICT ---
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "USER_4090", "이미 가입된 이메일입니다."),
     DUPLICATE_PHONE(HttpStatus.CONFLICT, "USER_4091", "이미 등록된 전화번호입니다."),
-    ALREADY_DELETED_USER(HttpStatus.CONFLICT, "USER_4092", "이미 탈퇴한 사용자입니다.");
+    ALREADY_DELETED_USER(HttpStatus.CONFLICT, "USER_4092", "이미 탈퇴한 사용자입니다."),
+
+    ALREADY_ONBOARDED(HttpStatus.CONFLICT, "USER_4093", "이미 기초 정보가 설정된 유저입니다. 프로필 수정을 이용해주세요.");
 
     private final HttpStatus httpStatus;
     private final String code;
