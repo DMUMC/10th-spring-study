@@ -34,7 +34,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true, length = 45)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column
@@ -42,10 +42,10 @@ public class User extends BaseEntity {
     @Builder.Default
     private Gender gender = Gender.NONE;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate birthDay;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private Address address;
 

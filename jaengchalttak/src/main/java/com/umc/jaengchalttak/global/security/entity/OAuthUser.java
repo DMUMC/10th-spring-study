@@ -1,21 +1,26 @@
 package com.umc.jaengchalttak.global.security.entity;
-
 import com.umc.jaengchalttak.domain.user.entity.User;
-import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-@Getter
 @RequiredArgsConstructor
-public class AuthUser implements UserDetails {
+public class OAuthUser implements OAuth2User {
 
+    @Getter
     private final User user;
+    private final Map<String, Object> attributes;
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,14 +28,8 @@ public class AuthUser implements UserDetails {
     }
 
     @Override
-    public @Nullable String getPassword() {
-        return user.getPassword();
+    public String getName() {
+        return user.getSocialUid();
     }
-
-    @Override
-    public String getUsername() {
-        return user.getEmail();
-    }
-
 
 }

@@ -35,7 +35,7 @@ public class UserController {
 
     @Operation(summary = "유저 보유 포인트 조회", description = "현재 유저가 사용 가능한 가용 포인트를 조회합니다.")
     @GetMapping("/point/{userId}")
-    public ApiResponse<Integer> getPointInfo(@PathVariable Long userId) {
+    public ApiResponse<Integer> getPointInfo(@AuthenticationPrincipal AuthUser user) {
         // 임시값 삽입, Service 완성 시 삭제 예정
         Integer point = 0;
 
@@ -78,7 +78,7 @@ public class UserController {
 
     @Operation(summary = "회원 탈퇴", description = "유저 계정을 삭제 처리합니다.")
     @DeleteMapping("/{userId}") // 회원 탈퇴
-    public ApiResponse<Void> deleteAccount(@PathVariable Long userId) {
+    public ApiResponse<Void> deleteAccount(@AuthenticationPrincipal AuthUser user) {
         BaseSuccessCode code = UserSuccessCode.DELETE_ACCOUNT_NO_CONTENT;
         return ApiResponse.onSuccess(code,null);
     }

@@ -82,8 +82,8 @@ public class ReviewService {
 
 
     @Transactional
-    public void createReview(StoreReviewReqDTO request) {
-        User user = userRepository.findById(request.userId())
+    public void createReview(StoreReviewReqDTO request, Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         Store store = storeRepository.findById(request.storeId())
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));

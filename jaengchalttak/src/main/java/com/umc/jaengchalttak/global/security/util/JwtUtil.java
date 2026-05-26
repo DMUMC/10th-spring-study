@@ -49,6 +49,40 @@ public class JwtUtil {
         }
     }
 
+    /** 토큰에서 provider 가져오기
+     *
+     * @param token 유저 정보를 추출할 토큰
+     * @return 유저 provider를 토큰에서 추출합니다
+     */
+    public String getProvider(String token) {
+        try {
+            return getClaims(token).getPayload().get("provider", String.class);
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
+    /** 토큰에서 uid 가져오기
+     *
+     * @param token 유저 정보를 추출할 토큰
+     * @return 유저 uid를 토큰에서 추출합니다
+     */
+    public String getUid(String token) {
+        try {
+            return getClaims(token).getPayload().get("uid", String.class);
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
+    public String getSocialUid(String token) {
+        try {
+            return getClaims(token).getPayload().get("uid", String.class);
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
     /** 토큰 유효성 확인
      *
      * @param token 유효한지 확인할 토큰
@@ -76,6 +110,8 @@ public class JwtUtil {
                 .subject(user.getUsername()) // User 이메일을 Subject로
                 .claim("role", authorities)
                 .claim("email", user.getUsername())
+                .claim("provider", user.getUser().getSocialProvider().name())
+                .claim("uid", user.getUser().getSocialUid())
                 .issuedAt(Date.from(now)) // 언제 발급한지
                 .expiration(Date.from(now.plus(expiration))) // 언제까지 유효한지
                 .signWith(secretKey) // sign할 Key

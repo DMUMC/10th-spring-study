@@ -40,6 +40,7 @@ public class AuthController {
         return ApiResponse.onSuccess(code, "회원가입 성공!");
     }
 
+
     @GetMapping("/email/{email}")
     @Operation(summary = "이메일 중복 체크", description = "false면 사용 가능한 이메일, true면 이미 있는 이메일입니다.")
     public ResponseEntity<Boolean> checkNameAvailability(@PathVariable String email) {

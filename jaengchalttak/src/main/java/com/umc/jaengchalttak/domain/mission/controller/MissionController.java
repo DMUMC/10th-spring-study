@@ -10,11 +10,13 @@ import com.umc.jaengchalttak.domain.user.enums.Address;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.global.dto.OffsetPagination;
+import com.umc.jaengchalttak.global.security.entity.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,13 +30,13 @@ public class MissionController {
     @Operation(summary = "현재 가능한 내 미션 목록 조회",
             description = "사용자 지역에서 현재 도전할 수 있는 새로운 미션 목록을 조회합니다. (홈 화면)")
     @GetMapping
-    public ApiResponse<MyMissionResDTO> getMyMissionList(@RequestParam("userId") Long userId,
+    public ApiResponse<MyMissionResDTO> getMyMissionList(@AuthenticationPrincipal AuthUser user,
                                                          @RequestParam("address") Address address,
                                                          @Min(value = 1, message = "페이지 번호는 1 이상이어야 합니다.")
                                                          @RequestParam(value = "page", defaultValue = "1") int page) {
 
         MyMissionResDTO result = userMissionService
-                .getAvailableMissionsByAddress(userId, address, page);
+                .getAvailableMissionsByAddress(user.getUser().getId(), address, page);
 
         BaseSuccessCode code = MissionSuccessCode.MY_MISSION_OK;
         return ApiResponse.onSuccess(code, result);
@@ -44,7 +46,7 @@ public class MissionController {
     @Operation(summary = "진행 상태별 내 미션 조회", description = "유저가 진행 중이거나 이미 완료한 미션 목록을 필터링하여 조회합니다.")
     @GetMapping("/me")
     public ApiResponse<OffsetPagination<MissionsProgressResDTO>> getMyMissionsByProgress(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal AuthUser user,
             @RequestParam boolean isProgress,
 
             @RequestParam(defaultValue = "3")
@@ -59,7 +61,7 @@ public class MissionController {
             String sort
     ) {
         OffsetPagination<MissionsProgressResDTO> result =
-                userMissionService.getUserMissionsByProgress(userId, isProgress, pageSize, pageNumber, sort);
+                userMissionService.getUserMissionsByProgress(user.getUser().getId(), isProgress, pageSize, pageNumber, sort);
 
         BaseSuccessCode code = MissionSuccessCode.MISSION_BY_PROGRESS_OK;
         return ApiResponse.onSuccess(code, result);

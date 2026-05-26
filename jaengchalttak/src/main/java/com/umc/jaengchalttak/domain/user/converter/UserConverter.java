@@ -5,10 +5,13 @@ import com.umc.jaengchalttak.domain.user.dto.request.SignUpReqDTO;
 import com.umc.jaengchalttak.domain.user.entity.FavoriteFood;
 import com.umc.jaengchalttak.domain.user.entity.ServiceUseAllow;
 import com.umc.jaengchalttak.domain.user.entity.User;
+import com.umc.jaengchalttak.domain.user.enums.Gender;
 import com.umc.jaengchalttak.domain.user.enums.ServiceUseTitle;
 import com.umc.jaengchalttak.domain.user.enums.SocialProvider;
 import com.umc.jaengchalttak.global.apiPayload.code.GeneralErrorCode;
 import com.umc.jaengchalttak.global.apiPayload.exception.ProjectException;
+import com.umc.jaengchalttak.global.security.dto.KakaoDTO;
+import com.umc.jaengchalttak.global.security.dto.OAuthDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +52,20 @@ public class UserConverter {
                 .address(request.address())
                 .phoneNumber(Integer.parseInt(request.phoneNumber().replace("-", "")))
                 .socialProvider(SocialProvider.LOCAL)
+                .build();
+    }
+
+    public static User toUser(OAuthDTO oAuthDTO) {
+        String name = oAuthDTO.getName().length() > 45
+                ? oAuthDTO.getName().substring(0, 45)
+                : oAuthDTO.getName();
+
+        return User.builder()
+                .email(oAuthDTO.getSocialEmail())
+                .name(name)
+                .socialUid(oAuthDTO.getSocialUid())
+                .gender(Gender.NONE)
+                .socialProvider(oAuthDTO.getSocialProvider())
                 .build();
     }
 
