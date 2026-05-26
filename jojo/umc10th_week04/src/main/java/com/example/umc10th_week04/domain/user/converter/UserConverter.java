@@ -3,8 +3,8 @@ package com.example.umc10th_week04.domain.user.converter;
 import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.domain.user.dto.UserResDTO;
 import com.example.umc10th_week04.domain.user.entity.User;
-
-import java.util.Optional;
+import com.example.umc10th_week04.domain.user.enums.Gender;
+import com.example.umc10th_week04.global.security.dto.OAuthDTO;
 
 public class UserConverter {
 
@@ -32,16 +32,36 @@ public class UserConverter {
                 .build();
     }
 
+    public static User toUser(
+            OAuthDTO dto
+    ) {
+        return User.builder()
+                .name(dto.getName())
+                .email(dto.getSocialEmail())
+                .password("")
+                .socialType(dto.getSocialType())
+                .socialUid(dto.getSocialUid())
+                .gender(Gender.NONE)
+                .birth("")
+                .address("")
+                .detailAddress("")
+                .point(0)
+                .build();
+    }
+
     // 확인용 컨버터
-    public static UserResDTO.SignupInfo toSignupInfo(User user){
-        return UserResDTO.SignupInfo.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .gender(user.getGender())
-                .birth(user.getBirth())
-                .address(user.getAddress())
-                .detailAddress(user.getDetailAddress())
+    public static UserResDTO.Signup toSignup(String accessToken){
+        return UserResDTO.Signup.builder()
+                .accessToken(accessToken)
+                .tokenType("Bearer")
+                .build();
+    }
+
+    // 로그인 컨버터
+    public static UserResDTO.Login toLogin(String accessToken) {
+        return UserResDTO.Login.builder()
+                .accessToken(accessToken)
+                .tokenType("Bearer")
                 .build();
     }
 }

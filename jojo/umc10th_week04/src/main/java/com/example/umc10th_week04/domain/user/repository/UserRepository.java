@@ -1,6 +1,7 @@
 package com.example.umc10th_week04.domain.user.repository;
 
 import com.example.umc10th_week04.domain.user.entity.User;
+import com.example.umc10th_week04.domain.user.enums.SocialType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String username);
 
     Boolean existsByEmail(String email);
+
+    Optional<User> findBySocialTypeAndSocialUid(SocialType socialType, String socialUid);
 }
