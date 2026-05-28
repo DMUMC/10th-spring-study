@@ -5,7 +5,9 @@ import com.UmcSpringStudy.jingjing2.global.response.ErrorDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -14,9 +16,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectProvider<ObjectMapper> objectMapperProvider;
 
     @Override
     public void handle(@NonNull HttpServletRequest request, HttpServletResponse response, @NonNull AccessDeniedException accessDeniedException) throws IOException {
@@ -38,6 +40,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         );
 
         // 3. JSON으로 직렬화하여 응답
+        ObjectMapper objectMapper = objectMapperProvider.getObject();
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }
