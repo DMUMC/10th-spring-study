@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,7 +21,7 @@ import java.util.Objects;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtProvider jwtProvider;
-    private final ObjectProvider<ObjectMapper> objectMapperProvider;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void onAuthenticationSuccess(@NonNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -43,7 +42,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         CommonResponse<LoginResponse> responseBody = CommonResponse.success("소셜 로그인 성공", loginResponse);
 
         // 5. 객체를 JSON 문자열로 변환하여 딱 한 번만 HTTP Response Body에 출력
-        ObjectMapper objectMapper = objectMapperProvider.getObject();
         objectMapper.writeValue(response.getWriter(), responseBody);
     }
 }

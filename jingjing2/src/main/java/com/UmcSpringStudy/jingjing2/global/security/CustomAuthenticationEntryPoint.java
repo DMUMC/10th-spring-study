@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.ObjectProvider; // ✨ ObjectProvider 임포트
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -19,7 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectProvider<ObjectMapper> objectMapperProvider;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void commence(@NonNull HttpServletRequest request, HttpServletResponse response, @NonNull AuthenticationException authException) throws IOException {
@@ -38,7 +37,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 errorDetail
         );
 
-        ObjectMapper objectMapper = objectMapperProvider.getObject();
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }
