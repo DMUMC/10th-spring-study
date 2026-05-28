@@ -30,4 +30,11 @@ public class MemberReqDTO {
             String phoneNumber,
             String email
     ){}
+
+    public record Login(
+            @NotNull(message = "이메일 입력은 필수입니다")
+            String email,
+            @NotNull(message = "비밀번호 입력은 필수입니다")
+            String password
+    ){}
 }

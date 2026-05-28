@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
     private SocialType socialType;
 
     @Column(name = "uid")
-    private String uid;
+    private String socialUid;
 
     @Column(name = "point")
     private Integer point;

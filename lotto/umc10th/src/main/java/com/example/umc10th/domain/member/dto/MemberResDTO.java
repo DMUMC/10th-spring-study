@@ -15,4 +15,9 @@ public class MemberResDTO {
             String profileUrl,
             Integer point
     ) {}
+
+    @Builder
+    public record Login(
+            String accessToken
+    ){}
 }

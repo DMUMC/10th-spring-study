@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.member.controller;
 
 import com.example.umc10th.domain.member.dto.MemberReqDTO;
+import com.example.umc10th.domain.member.dto.MemberResDTO;
 import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.domain.mission.dto.MemberMissionResDTO;
@@ -27,5 +28,13 @@ public class AuthController {
         memberService.signup(dto);
         BaseSuccessCode code = MemberSuccessCode.SIGNUP;
         return ApiResponse.onSuccess(code, null);
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<MemberResDTO.Login> login(
+            @RequestBody @Valid MemberReqDTO.Login dto
+    ){
+        BaseSuccessCode code = MemberSuccessCode.LOGIN;
+        return ApiResponse.onSuccess(code, memberService.login(dto));
     }
 }
