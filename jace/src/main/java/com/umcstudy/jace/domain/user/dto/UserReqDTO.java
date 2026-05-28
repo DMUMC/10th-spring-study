@@ -34,6 +34,15 @@ public class UserReqDTO {
             @NotBlank(message = "소셜 액세스 토큰은 필수입니다") String socialAccessToken
     ) {}
 
+    public record FormLogin(
+            @NotBlank(message = "이메일은 필수입니다") @Email(message = "올바른 이메일 형식이 아닙니다") String email,
+            @NotBlank(message = "비밀번호는 필수입니다") String password
+    ) {}
+
+    public record TokenReissue(
+            @NotBlank(message = "리프레시 토큰은 필수입니다") String refreshToken
+    ) {}
+
     public record FormSignup(
             @Valid @NotEmpty(message = "약관 목록은 필수입니다") List<TermsDTO> termsList,
             @NotBlank(message = "이름은 필수입니다") @Size(max = 50, message = "이름은 50자 이하여야 합니다") String name,

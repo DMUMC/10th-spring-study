@@ -8,3 +8,10 @@ spring:
     url: jdbc:mysql://localhost:3306/umc_study?allowPublicKeyRetrieval=true&useSSL=false # jdbc:mysql://localhost:3306/{데이터베이스명}
     username: umc_study # MySQL 유저 이름
     password: jace # MySQL 비밀번호
+
+  sql:
+    init:
+      mode: always  # data.sql 항상 실행
+
+  jpa:
+    defer-datasource-initialization: true  # Hibernate 스키마 생성 후 data.sql 실행

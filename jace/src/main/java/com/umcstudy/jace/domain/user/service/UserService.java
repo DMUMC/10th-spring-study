@@ -1,6 +1,6 @@
 package com.umcstudy.jace.domain.user.service;
 
-import com.umcstudy.jace.domain.point.repository.PointRepository;
+import com.umcstudy.jace.domain.point.service.PointService;
 import com.umcstudy.jace.domain.user.converter.UserConverter;
 import com.umcstudy.jace.domain.user.dto.UserReqDTO;
 import com.umcstudy.jace.domain.user.dto.UserResDTO;
@@ -31,8 +31,9 @@ public class UserService {
     private final FoodRepository foodRepository;
     private final UserTermRepository userTermRepository;
     private final UserFoodRepository userFoodRepository;
-    private final PointRepository pointRepository;
     private final UserSettingRepository userSettingRepository;
+    private final PointService pointService;
+    private final RefreshTokenService refreshTokenService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -42,7 +43,6 @@ public class UserService {
 
         userSocialRepository.save(UserConverter.toUserSocial(user, dto));
 
-        // 약관: 1번 조회 + 1번 일괄 저장
         List<Long> termIds = dto.termsList().stream()
                 .map(UserReqDTO.TermsDTO::termsId)
                 .toList();
@@ -57,7 +57,6 @@ public class UserService {
                         .toList()
         );
 
-        // 음식: 1번 조회 + 1번 일괄 저장
         List<Food> foods = foodRepository.findAllById(dto.favoriteFoodList());
         if (foods.size() != dto.favoriteFoodList().size()) {
             throw new UserException(UserErrorCode.FOOD_NOT_FOUND);
@@ -68,11 +67,12 @@ public class UserService {
                         .toList()
         );
 
-        pointRepository.save(UserConverter.toPoint(user));
+        pointService.createInitialPoint(user);
         userSettingRepository.save(UserConverter.toUserSetting(user));
 
-        String token = jwtTokenProvider.generateToken(user.getId());
-        return UserConverter.toPostSignupRes(user, token);
+        String accessToken = jwtTokenProvider.generateToken(user.getId());
+        String refreshToken = refreshTokenService.issue(user.getId());
+        return UserConverter.toPostSignupRes(user, accessToken, refreshToken);
     }
 
     @Transactional
@@ -108,11 +108,12 @@ public class UserService {
                         .toList()
         );
 
-        pointRepository.save(UserConverter.toPoint(user));
+        pointService.createInitialPoint(user);
         userSettingRepository.save(UserConverter.toUserSetting(user));
 
-        String token = jwtTokenProvider.generateToken(user.getId());
-        return UserConverter.toPostSignupRes(user, token);
+        String accessToken = jwtTokenProvider.generateToken(user.getId());
+        String refreshToken = refreshTokenService.issue(user.getId());
+        return UserConverter.toPostSignupRes(user, accessToken, refreshToken);
     }
 
     @Transactional(readOnly = true)
@@ -122,18 +123,36 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        int pointBalance = pointRepository.findById(userId)
-                .map(point -> point.getPointBalance())
-                .orElse(0);
+        int pointBalance = pointService.getPointBalance(userId);
 
         return UserConverter.toGetMyPage(user, pointBalance);
     }
 
-    public UserResDTO.GetTerms getTerms() {
-        return null;
+    @Transactional
+    public UserResDTO.FormLogin formLogin(UserReqDTO.FormLogin dto) {
+        User user = userRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
+            throw new UserException(UserErrorCode.INVALID_PASSWORD);
+        }
+
+        String accessToken = jwtTokenProvider.generateToken(user.getId());
+        String refreshToken = refreshTokenService.issue(user.getId());
+        return UserResDTO.FormLogin.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .build();
     }
 
+    @Transactional(readOnly = true)
+    public UserResDTO.GetTerms getTerms() {
+        return UserConverter.toGetTerms(termRepository.findAll());
+    }
+
+    @Transactional(readOnly = true)
     public UserResDTO.GetFoods getFoods() {
-        return null;
+        return UserConverter.toGetFoods(foodRepository.findAll());
     }
 }

@@ -14,6 +14,7 @@ public class UserResDTO {
             String name,
             LocalDate createdAt,
             String accessToken,
+            String refreshToken,
             String tokenType
     ){}
 
@@ -47,9 +48,24 @@ public class UserResDTO {
             List<FoodsItem> foodsList
     ){}
 
+    @Builder
+    public record FormLogin(
+            String accessToken,
+            String refreshToken,
+            String tokenType
+    ) {}
+
+    @Builder
+    public record TokenReissue(
+            String accessToken,
+            String refreshToken,
+            String tokenType
+    ) {}
+
     public record SocialLogin(
             Boolean isNewUser,
             String accessToken,
+            String refreshToken,
             String tokenType,
             String email,
             String name,

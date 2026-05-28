@@ -1,6 +1,5 @@
 package com.umcstudy.jace.domain.user.converter;
 
-import com.umcstudy.jace.domain.point.entity.Point;
 import com.umcstudy.jace.domain.user.dto.UserReqDTO;
 import com.umcstudy.jace.domain.user.dto.UserResDTO;
 import com.umcstudy.jace.domain.user.entity.Food;
@@ -12,6 +11,7 @@ import com.umcstudy.jace.domain.user.entity.mapping.UserSocial;
 import com.umcstudy.jace.domain.user.entity.mapping.UserTerm;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserConverter {
 
@@ -68,13 +68,6 @@ public class UserConverter {
                 .build();
     }
 
-    public static Point toPoint(User user) {
-        return Point.builder()
-                .user(user)
-                .pointBalance(0)
-                .build();
-    }
-
     public static UserSetting toUserSetting(User user) {
         return UserSetting.builder()
                 .user(user)
@@ -84,13 +77,38 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResDTO.PostSignup toPostSignupRes(User user, String token) {
+    public static UserResDTO.PostSignup toPostSignupRes(User user, String accessToken, String refreshToken) {
         return UserResDTO.PostSignup.builder()
                 .userId(user.getId().intValue())
                 .name(user.getName())
                 .createdAt(LocalDate.now())
-                .accessToken(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .tokenType("Bearer")
+                .build();
+    }
+
+    public static UserResDTO.GetTerms toGetTerms(List<Term> terms) {
+        return UserResDTO.GetTerms.builder()
+                .termsList(terms.stream()
+                        .map(term -> new UserResDTO.TermsItem(
+                                term.getId().intValue(),
+                                term.getTermsTitle(),
+                                term.getTermsContent(),
+                                term.getIsRequired()
+                        ))
+                        .toList())
+                .build();
+    }
+
+    public static UserResDTO.GetFoods toGetFoods(List<Food> foods) {
+        return UserResDTO.GetFoods.builder()
+                .foodsList(foods.stream()
+                        .map(food -> new UserResDTO.FoodsItem(
+                                food.getId().intValue(),
+                                food.getFoodName()
+                        ))
+                        .toList())
                 .build();
     }
 

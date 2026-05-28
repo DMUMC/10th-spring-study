@@ -3,7 +3,8 @@ server:
 
 jwt:
   secret: amFjZS11bWMtc3R1ZHktMjAyNC1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LWtleS1oZXJl
-  expiration: 86400000
+  expiration: 86400000         # access token 1일
+  refresh-expiration: 604800000  # refresh token 7일
 
 spring:
   profiles:
