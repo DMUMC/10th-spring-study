@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class MissionService {
     private final MemberMissionRepository memberMissionRepository;
 
     public Slice<MissionResDTO.GetInfo> getHomeMissions(
-            MissionReqDTO.GetInfo dto,
+            Long id,
             Long missionId,
             Long locationId,
             int size
@@ -37,14 +38,14 @@ public class MissionService {
         Pageable pageable = PageRequest.of(0, size);
 
         Slice<Mission> missions = missionRepository
-                .findAvailableMissions(dto.id(), missionId, locationId, pageable);
+                .findAvailableMissions(id, missionId, locationId, pageable);
 
         return missions.map(MissionConverter::toGetHomeInfo);
     }
 
 
     public List<MemberMissionResDTO.GetInfo> getMemberMissions(
-            MissionReqDTO.GetInfo dto,
+            Long id,
             Long missionId,
             List<Status> status,
             int size
@@ -53,7 +54,7 @@ public class MissionService {
         Pageable pageable = PageRequest.of(0, size);
 
         Slice<MemberMission> memberMissions = memberMissionRepository
-                .findMemberMissions(dto.id(), missionId, status, pageable);
+                .findMemberMissions(id, missionId, status, pageable);
 
         return memberMissions.getContent()
                 .stream()
@@ -62,7 +63,7 @@ public class MissionService {
     }
 
     public Pagination.Pagi<MemberMissionResDTO.GetInfo> getOffsetMemberMissions(
-            MissionReqDTO.GetInfo dto,
+            Long id,
             List<Status> status,
             int size,
             Integer pageNumber,
@@ -78,7 +79,7 @@ public class MissionService {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sortInfo);
 
-        Page<MemberMission> missionList = memberMissionRepository.findByMemberIdAndStatusIn(dto.id(), status, pageRequest);
+        Page<MemberMission> missionList = memberMissionRepository.findByMemberIdAndStatusIn(id, status, pageRequest);
 
         return MissionConverter.toPagination(
                 missionList.map(MissionConverter::toGetInfo).toList(),
