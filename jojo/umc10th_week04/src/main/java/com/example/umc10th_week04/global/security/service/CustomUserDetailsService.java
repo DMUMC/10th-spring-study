@@ -8,7 +8,6 @@ import com.example.umc10th_week04.domain.user.repository.UserRepository;
 import com.example.umc10th_week04.global.security.entity.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

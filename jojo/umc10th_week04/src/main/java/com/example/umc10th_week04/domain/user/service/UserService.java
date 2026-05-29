@@ -24,9 +24,11 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     public UserResDTO.UserInfo getUserInfo(
-            AuthUser user
+            AuthUser authUser
     ){
-        return UserConverter.toUserInfo(user.getUser());
+        User user = userRepository.findById(authUser.getUser().getId())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        return UserConverter.toUserInfo(user);
     }
 
     public UserResDTO.Login login(
@@ -39,7 +41,16 @@ public class UserService {
             throw new UserException(UserErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = jwtUtil.createAccessToken(new AuthUser(user));
+        AuthUser authUser = new AuthUser(user);
+
+        String accessToken = jwtUtil.createAccessToken(
+                authUser.getUser().getId(),
+                authUser.getUser().getName(),
+                authUser.getUser().getEmail(),
+                authUser.getUser().getSocialType(),
+                authUser.getUser().getSocialUid(),
+                authUser.getAuthorities()
+        );
 
         return UserConverter.toLogin(accessToken);
     }
@@ -61,8 +72,17 @@ public class UserService {
         // DB에 User 정보 저장
         userRepository.save(user);
 
+        AuthUser authUser = new AuthUser(user);
+
         // 액세스 토큰 발급
-        String accessToken = jwtUtil.createAccessToken(new AuthUser(user));
+        String accessToken = jwtUtil.createAccessToken(
+                authUser.getUser().getId(),
+                authUser.getUser().getName(),
+                authUser.getUser().getEmail(),
+                authUser.getUser().getSocialType(),
+                authUser.getUser().getSocialUid(),
+                authUser.getAuthorities()
+        );
 
         // 확인용 UserResDTO return
         return UserConverter.toSignup(accessToken);

@@ -43,7 +43,14 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         OAuthUser user = (OAuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // 토큰 제작을 위해 OAuth 인증 객체에서 User 추출 -> AuthUser 제작
-        String accessToken = jwtUtil.createAccessToken(new AuthUser(user.getUser()));
+        String accessToken = jwtUtil.createAccessToken(
+                user.getUser().getId(),
+                user.getUser().getName(),
+                user.getUser().getEmail(),
+                user.getUser().getSocialType(),
+                user.getUser().getSocialUid(),
+                user.getAuthorities()
+        );
 
         // 응답 통일 객체 래핑
         ApiResponse<UserResDTO.Login> responseBody = ApiResponse.onSuccess(

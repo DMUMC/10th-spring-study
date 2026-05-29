@@ -3,6 +3,7 @@ package com.example.umc10th_week04.domain.user.entity;
 import com.example.umc10th_week04.domain.mission.entity.UserMission;
 import com.example.umc10th_week04.domain.review.entity.Review;
 import com.example.umc10th_week04.domain.user.enums.Gender;
+import com.example.umc10th_week04.domain.user.enums.Role;
 import com.example.umc10th_week04.domain.user.enums.SocialType;
 import com.example.umc10th_week04.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -34,8 +35,7 @@ public class User extends BaseEntity {
 
     @Column(name = "socialType")
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private SocialType socialType = SocialType.LOCAL;
+    private SocialType socialType;
 
     @Column(name = "social_uid")
     private String socialUid;
@@ -56,6 +56,10 @@ public class User extends BaseEntity {
 
     @Column(name = "point", nullable = false)
     private Integer point;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     // 연관 관계
     @Builder.Default

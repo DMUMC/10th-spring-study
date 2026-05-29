@@ -4,7 +4,10 @@ import com.example.umc10th_week04.domain.user.dto.UserReqDTO;
 import com.example.umc10th_week04.domain.user.dto.UserResDTO;
 import com.example.umc10th_week04.domain.user.entity.User;
 import com.example.umc10th_week04.domain.user.enums.Gender;
+import com.example.umc10th_week04.domain.user.enums.Role;
 import com.example.umc10th_week04.global.security.dto.OAuthDTO;
+import com.example.umc10th_week04.global.security.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 
 public class UserConverter {
 
@@ -41,6 +44,7 @@ public class UserConverter {
                 .password("")
                 .socialType(dto.getSocialType())
                 .socialUid(dto.getSocialUid())
+                .role(Role.USER)
                 .gender(Gender.NONE)
                 .birth("")
                 .address("")

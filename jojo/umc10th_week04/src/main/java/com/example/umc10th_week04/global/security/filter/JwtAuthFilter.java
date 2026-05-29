@@ -1,11 +1,15 @@
 package com.example.umc10th_week04.global.security.filter;
 
+import com.example.umc10th_week04.domain.user.converter.UserConverter;
+import com.example.umc10th_week04.domain.user.entity.User;
+import com.example.umc10th_week04.domain.user.enums.Role;
 import com.example.umc10th_week04.domain.user.enums.SocialType;
 import com.example.umc10th_week04.global.apiPayload.ApiResponse;
 import com.example.umc10th_week04.global.apiPayload.code.BaseErrorCode;
 import com.example.umc10th_week04.global.apiPayload.code.GeneralErrorCode;
-import com.example.umc10th_week04.global.security.service.CustomUserDetailsService;
+import com.example.umc10th_week04.global.security.entity.AuthUser;
 import com.example.umc10th_week04.global.security.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tools.jackson.databind.ObjectMapper;
 
@@ -25,7 +28,6 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -46,26 +48,35 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             // Bearer이면 추출
-            token = token.replace("Bearer ", "");
+            token = token.substring(7);
 
-            // AccessToken 검증하기: 올바를 토큰의 경우
-            if(jwtUtil.isValid(token)){
+            // AccessToken 검증하기: 실패 시 즉시 예외 발생
+            Claims claims = jwtUtil.validateAndGetClaims(token);
 
-                // JWT 토큰에서 유저 정보 조회: UID와 소셜 로그인 타입 가져오기
-                String uid = jwtUtil.getUid(token);
-                SocialType socialType = jwtUtil.getSocialType(token);
+            String roleClaim = claims.get("role", String.class);
+            Role role = Role.valueOf(roleClaim.replace("ROLE_", ""));
 
-                // 인증 객체 생성: 로그인 타입과 UID로 찾아온 뒤, 인증 객체 생성
-                UserDetails user = customUserDetailsService.loadUserByUidAndSocialType(socialType, uid);
-                Authentication auth = new UsernamePasswordAuthenticationToken(
-                        user,
-                        null,
-                        user.getAuthorities()
-                );
+            User domainUser = User.builder()
+                    .id(jwtUtil.getUserId(claims))
+                    .name(claims.get("name", String.class))
+                    .email(claims.get("email", String.class))
+                    .socialType(jwtUtil.getSocialType(claims))
+                    .socialUid(jwtUtil.getSocialUid(claims))
+                    .role(role)
+                    .build();
 
-                // 인증 완료 후 SecurityContextHolder에 넣기
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
+            // JWT 토큰 클레임으로 인증 객체 생성
+            AuthUser user = new AuthUser(domainUser);
+
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                    user,
+                    null,
+                    user.getAuthorities()
+            );
+
+            // 인증 완료 후 SecurityContextHolder에 넣기
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
             filterChain.doFilter(request, response);
         } catch (Exception e){
             ObjectMapper mapper = new ObjectMapper();

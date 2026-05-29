@@ -6,13 +6,17 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,79 +34,124 @@ public class JwtUtil {
     }
 
     // AccessToken 생성
-    public String createAccessToken(AuthUser user) {
-        return createToken(user, accessExpiration);
+    public String createAccessToken(
+            Long userId,
+            String name,
+            String email,
+            SocialType socialType,
+            String socialUid,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
+        return createToken(
+                userId,
+                name,
+                email,
+                socialType,
+                socialUid,
+                authorities,
+                accessExpiration
+        );
     }
 
-//    /** 토큰에서 이메일 가져오기
-//     *
-//     * @param token 유저 정보를 추출할 토큰
-//     * @return 유저 이메일을 토큰에서 추출합니다
-//     */
-//    public String getEmail(String token) {
-//        try {
-//            return getClaims(token).getPayload().getSubject(); // Parsing해서 Subject 가져오기
-//        } catch (JwtException e) {
-//            return null;
-//        }
-//    }
-
-    /** 토큰에서 uid 가져오기
-     * @param token 유저 정보를 추출할 토큰
-     * @return 유저 uid를 추출합니다.
-     */
-
-    public String getUid(String token) {
-        try {
-            return getClaims(token).getPayload().getSubject();
-        } catch (Exception e) {
-            return null;
+    public Claims validateAndGetClaims(String token) {
+        if (token == null || token.isBlank()) {
+            throw new JwtException("JWT token is empty");
         }
+
+        Claims claims = getClaims(token).getPayload();
+        validateRequiredClaims(claims);
+        return claims;
     }
 
-    /** 토큰에서 소셜 로그인 타입 가져오기
-     * @param token 유저 정보를 추출할 토큰
-     * @return 유저 소셜 로그인 타입을 추출합니다.
-     */
+    public Long getUserId(Claims claims) {
+        return Long.valueOf(claims.getSubject());
+    }
 
-    public SocialType getSocialType(String token) {
-        try {
-            return SocialType.valueOf(getClaims(token).getPayload().get("social_type").toString().toUpperCase());
-        } catch (Exception e) {
-            return null;
+    public SocialType getSocialType(Claims claims) {
+        String socialType = claims.get("social_type", String.class);
+        return socialType == null ? null : SocialType.valueOf(socialType);
+    }
+
+    public String getSocialUid(Claims claims) {
+        return claims.get("social_uid", String.class);
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities(Claims claims) {
+        String roles = claims.get("role", String.class);
+        if (roles == null || roles.isBlank()) {
+            return List.of();
         }
+        return Arrays.stream(roles.split(","))
+                .map(String::trim)
+                .filter(role -> !role.isBlank())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
-    /** 토큰 유효성 확인
-     * @param token 유효한지 확인할 토큰
-     * @return True, False 반환합니다
-     */
-    public boolean isValid(String token) {
+    private void validateRequiredClaims(Claims claims) {
+        String subject = claims.getSubject();
+        String name = claims.get("name", String.class);
+        String email = claims.get("email", String.class);
+        String role = claims.get("role", String.class);
+
+        if (subject == null || subject.isBlank()) {
+            throw new JwtException("JWT subject is missing");
+        }
+
         try {
-            getClaims(token);
-            return true;
-        } catch (JwtException e) {
-            return false;
+            Long.parseLong(subject);
+        } catch (NumberFormatException e) {
+            throw new JwtException("JWT subject is invalid", e);
+        }
+
+        if (name == null || name.isBlank()) {
+            throw new JwtException("JWT name claim is missing");
+        }
+
+        if (email == null || email.isBlank()) {
+            throw new JwtException("JWT email claim is missing");
+        }
+
+        if (role == null || role.isBlank()) {
+            throw new JwtException("JWT role claim is missing");
         }
     }
 
     // 토큰 생성
-    private String createToken(AuthUser user, Duration expiration) {
+    private String createToken(
+            Long userId,
+            String name,
+            String email,
+            SocialType socialType,
+            String socialUid,
+            Collection<? extends GrantedAuthority> authorities,
+            Duration expiration
+    ) {
         Instant now = Instant.now();
 
         // 인가 정보
-        String authorities = user.getAuthorities().stream()
+        String roles = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        return Jwts.builder()
-                .subject(user.getUsername()) // User Uid를 Subject로
-                .claim("role", authorities)
-                .claim("social_type", user.getUser().getSocialType())
+        JwtBuilder builder = Jwts.builder()
+                .subject(String.valueOf(userId))
+                .claim("name", name)
+                .claim("email", email)
+                .claim("role", roles)
                 .issuedAt(Date.from(now)) // 언제 발급한지
                 .expiration(Date.from(now.plus(expiration))) // 언제까지 유효한지
-                .signWith(secretKey)
-                .compact();
+                .signWith(secretKey);
+
+        if (socialType != null) {
+            builder.claim("social_type", socialType.name());
+        }
+
+        if (socialUid != null) {
+            builder.claim("social_uid", socialUid);
+        }
+
+        return builder.compact();
     }
 
     // 토큰 정보 가져오기
