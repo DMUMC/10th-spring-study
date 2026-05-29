@@ -1,9 +1,9 @@
 package com.example.umc10th_week04.global.security.entity;
 
 import com.example.umc10th_week04.domain.user.entity.User;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,13 +23,11 @@ public class AuthUser implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return user.getPassword();
+        return null;
     }
 
     @Override
     public String getUsername() {
         return user.getEmail();
     }
-
-
 }

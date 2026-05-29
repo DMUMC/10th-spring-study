@@ -8,6 +8,16 @@ import jakarta.validation.constraints.Size;
 
 public class UserReqDTO {
 
+    public record Login(
+            @Email
+            @NotNull(message = "이메일 입력은 필수입니다.")
+            String email,
+
+            @NotBlank
+            @NotNull(message = "비밀번호 입력은 필수입니다.")
+            String password
+    ) {}
+
     public record SignupInfo(
 
             @NotNull(message = "유저 이름은 필수 입니다.")
