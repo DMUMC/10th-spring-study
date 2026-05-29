@@ -9,12 +9,14 @@ import com.umc.jaengchalttak.domain.store.service.ReviewService;
 import com.umc.jaengchalttak.global.apiPayload.ApiResponse;
 import com.umc.jaengchalttak.global.apiPayload.code.BaseSuccessCode;
 import com.umc.jaengchalttak.global.dto.CursorPagination;
+import com.umc.jaengchalttak.global.security.entity.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -58,7 +60,7 @@ public class ReviewController {
             description = "특정 가게에 작성된 리뷰와 사장님 답글 목록 중 내 리뷰를 페이징하여 조회합니다.")
     @GetMapping("/me")
     public ApiResponse<CursorPagination<StoreReviewListResDTO>> getMyStoreReview(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal AuthUser user,
             @RequestParam Long storeId,
 
             @RequestParam(defaultValue = "3")
@@ -72,7 +74,7 @@ public class ReviewController {
             QueryType query
     ) {
         CursorPagination<StoreReviewListResDTO> result =
-                reviewService.getMyReviewList(userId, storeId, pageSize, cursor, query);
+                reviewService.getMyReviewList(user.getUser().getId(), storeId, pageSize, cursor, query);
 
         BaseSuccessCode code = StoreSuccessCode.MY_REVIEW_LIST_OK;
         return ApiResponse.onSuccess(code, result);
@@ -82,8 +84,9 @@ public class ReviewController {
 
     @Operation(summary = "가게 리뷰 작성", description = "유저가 방문한 가게에 대해 별점과 사진을 포함한 리뷰를 작성합니다.")
     @PostMapping
-    public ApiResponse<String> writerReview(@Valid @RequestBody StoreReviewReqDTO request) {
-        reviewService.createReview(request); // 리뷰 생성
+    public ApiResponse<String> writerReview(@Valid @RequestBody StoreReviewReqDTO request,
+                                            @AuthenticationPrincipal AuthUser user) {
+        reviewService.createReview(request, user.getUser().getId()); // 리뷰 생성
 
         BaseSuccessCode code = StoreSuccessCode.REVIEW_CREATED;
         return ApiResponse.onSuccess(code, "리뷰 작성 완료!");

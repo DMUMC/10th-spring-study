@@ -3,9 +3,6 @@ package com.umc.jaengchalttak.domain.store.dto.request;
 import jakarta.validation.constraints.*;
 
 public record StoreReviewReqDTO(
-        @NotNull(message = "사용자 ID는 반드시 존재해야 합니다.") // Long은 NotNull 사용
-        Long userId,
-
         @NotNull(message = "가게 ID는 반드시 존재해야 합니다.")
         Long storeId,
 
