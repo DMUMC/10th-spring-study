@@ -21,6 +21,11 @@ public class UserController {
     public CommonResponse<Long> join(@RequestBody @Valid UserJoinRequest request) {
         return CommonResponse.success("회원가입 성공", userService.join(request));
     }
+    // 로컬 로그인
+    @PostMapping("/login")
+    public CommonResponse<LoginResponse> login(@RequestBody @Valid LocalLoginRequest request) {
+        return CommonResponse.success("로그인 성공", userService.login(request));
+    }
 
     // 2. 가입 후 최초 정보 설정 (온보딩)
     @PatchMapping("/{userId}/initial-info")

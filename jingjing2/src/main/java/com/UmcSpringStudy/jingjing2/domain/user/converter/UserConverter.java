@@ -27,7 +27,16 @@ public class UserConverter {
                 .created(LocalDate.now())
                 .build();
     }
-
+    //1-1. 소셜 회원가입: Provider + SocialId -> Entity
+    public static User toOAuth2User(Provider provider, String socialId) {
+        return User.builder()
+                .sub(socialId)
+                .provider(provider)
+                .point(0)
+                .cmCount(0)
+                .created(LocalDate.now())
+                .build();
+    }
     // 2. 프로필 조회: Entity -> Response
     public static UserProfileResponse toUserProfileResponse(User user) {
         return UserProfileResponse.builder()

@@ -14,6 +14,7 @@ public enum UserErrorCode implements BaseErrorCode {
 
     // --- 401 UNAUTHORIZED ---
     USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "USER_4010", "로그인이 필요한 서비스입니다."),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "USER_4011", "아이디 또는 비밀번호가 일치하지 않습니다."),
 
     // --- 403 FORBIDDEN ---
     USER_FORBIDDEN(HttpStatus.FORBIDDEN, "USER_4030", "해당 권한이 없습니다."),
