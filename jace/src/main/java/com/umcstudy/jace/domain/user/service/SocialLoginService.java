@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,9 @@ public class SocialLoginService {
     private final List<OAuthClient> oAuthClients;
     private final UserSocialRepository userSocialRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
+    @Transactional
     public UserResDTO.SocialLogin login(UserReqDTO.SocialLogin dto) {
         OAuthClient oAuthClient = oAuthClients.stream()
                 .filter(client -> client.getProvider() == dto.provider())
@@ -35,15 +36,16 @@ public class SocialLoginService {
         return userSocialRepository
                 .findByProviderAndProviderUserId(dto.provider(), userInfo.providerUserId())
                 .map(userSocial -> {
-                    // 기존 회원 → JWT 발급
-                    String token = jwtTokenProvider.generateToken(userSocial.getUser().getId());
-                    return new UserResDTO.SocialLogin(false, token, "Bearer", null, null, null, null);
+                    Long userId = userSocial.getUser().getId();
+                    String accessToken = jwtTokenProvider.generateToken(userId);
+                    String refreshToken = refreshTokenService.issue(userId);
+                    return new UserResDTO.SocialLogin(false, accessToken, refreshToken, "Bearer",
+                            null, null, null, null);
                 })
                 .orElseGet(() ->
-                    // 신규 유저 → 회원가입 유도
-                    new UserResDTO.SocialLogin(true, null, null,
-                            userInfo.email(), userInfo.name(),
-                            dto.provider(), userInfo.providerUserId())
+                        new UserResDTO.SocialLogin(true, null, null, null,
+                                userInfo.email(), userInfo.name(),
+                                dto.provider(), userInfo.providerUserId())
                 );
     }
 }

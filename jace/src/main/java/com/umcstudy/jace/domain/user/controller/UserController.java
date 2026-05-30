@@ -1,30 +1,28 @@
 package com.umcstudy.jace.domain.user.controller;
 
+import com.umcstudy.jace.domain.user.controller.docs.UserControllerDocs;
 import com.umcstudy.jace.domain.user.dto.UserReqDTO;
 import com.umcstudy.jace.domain.user.dto.UserResDTO;
 import com.umcstudy.jace.domain.user.exception.code.UserSuccessCode;
+import com.umcstudy.jace.domain.user.service.RefreshTokenService;
 import com.umcstudy.jace.domain.user.service.SocialLoginService;
 import com.umcstudy.jace.domain.user.service.UserService;
 import com.umcstudy.jace.global.apiPayload.ApiResponse;
 import com.umcstudy.jace.global.apiPayload.code.BaseSuccessCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "User", description = "사용자 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
     private final SocialLoginService socialLoginService;
+    private final RefreshTokenService refreshTokenService;
 
-    @Operation(summary = "소셜 로그인", description = "카카오, 네이버, 구글, 애플 소셜 액세스 토큰으로 로그인합니다. 신규 사용자는 isNewUser=true를 반환합니다.")
-    @SecurityRequirements
+    @Override
     @PostMapping("/auth/login")
     public ApiResponse<UserResDTO.SocialLogin> socialLogin(
             @Valid @RequestBody UserReqDTO.SocialLogin dto
@@ -32,43 +30,55 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.LoginOK, socialLoginService.login(dto));
     }
 
-    @Operation(summary = "소셜 회원가입", description = "소셜 로그인 후 추가 정보를 입력해 회원가입을 완료합니다. 약관 동의, 선호 음식 선택이 필수입니다.")
-    @SecurityRequirements
+    @Override
+    @PostMapping("/auth/token/refresh")
+    public ApiResponse<UserResDTO.TokenReissue> tokenReissue(
+            @Valid @RequestBody UserReqDTO.TokenReissue dto
+    ) {
+        return ApiResponse.onSuccess(UserSuccessCode.LoginOK, refreshTokenService.reissue(dto.refreshToken()));
+    }
+
+    @Override
+    @PostMapping("/auth/login/form")
+    public ApiResponse<UserResDTO.FormLogin> formLogin(
+            @Valid @RequestBody UserReqDTO.FormLogin dto
+    ) {
+        return ApiResponse.onSuccess(UserSuccessCode.LoginOK, userService.formLogin(dto));
+    }
+
+    @Override
     @PostMapping("/auth/signup")
     public ApiResponse<UserResDTO.PostSignup> postSignup(
             @Valid @RequestBody UserReqDTO.PostSignup dto
-    ){
+    ) {
         BaseSuccessCode code = UserSuccessCode.SignupOK;
         return ApiResponse.onSuccess(code, userService.postSignup(dto));
     }
 
-    @Operation(summary = "폼 회원가입", description = "이메일과 비밀번호로 회원가입합니다. 비밀번호는 BCrypt로 암호화되어 저장됩니다. 이메일 중복 시 409를 반환합니다.")
-    @SecurityRequirements
+    @Override
     @PostMapping("/auth/signup/form")
     public ApiResponse<UserResDTO.PostSignup> formSignup(
             @Valid @RequestBody UserReqDTO.FormSignup dto
-    ){
+    ) {
         return ApiResponse.onSuccess(UserSuccessCode.SignupOK, userService.formSignup(dto));
     }
 
-    @Operation(summary = "마이페이지 조회", description = "JWT 토큰으로 인증된 사용자의 이름, 이메일, 포인트 잔액을 조회합니다.")
+    @Override
     @GetMapping("/myPage")
-    public ApiResponse<UserResDTO.GetMyPage> getMyPage(){
+    public ApiResponse<UserResDTO.GetMyPage> getMyPage() {
         return ApiResponse.onSuccess(UserSuccessCode.MyPageOK, userService.getMyPage());
     }
 
-    @Operation(summary = "약관 목록 조회", description = "회원가입 시 동의해야 할 약관 목록을 조회합니다.")
-    @SecurityRequirements
+    @Override
     @GetMapping("/terms")
-    public ApiResponse<UserResDTO.GetTerms> getTerms(){
+    public ApiResponse<UserResDTO.GetTerms> getTerms() {
         BaseSuccessCode code = UserSuccessCode.TermsListOK;
         return ApiResponse.onSuccess(code, userService.getTerms());
     }
 
-    @Operation(summary = "선호 음식 목록 조회", description = "회원가입 시 선택 가능한 음식 카테고리 목록을 조회합니다.")
-    @SecurityRequirements
+    @Override
     @GetMapping("/foods")
-    public ApiResponse<UserResDTO.GetFoods> getFoods(){
+    public ApiResponse<UserResDTO.GetFoods> getFoods() {
         BaseSuccessCode code = UserSuccessCode.FoodsListOK;
         return ApiResponse.onSuccess(code, userService.getFoods());
     }

@@ -16,6 +16,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final String TOKEN_TYPE = "ACCESS";
+    private static final String REFRESH_TOKEN_TYPE = "REFRESH";
     private static final String CLAIM_TYPE = "type";
     private static final String CLAIM_ROLE = "role";
 
@@ -24,6 +25,9 @@ public class JwtTokenProvider {
 
     @Value("${jwt.expiration}")
     private long expirationMs;
+
+    @Value("${jwt.refresh-expiration}")
+    private long refreshExpirationMs;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
@@ -38,6 +42,29 @@ public class JwtTokenProvider {
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    public String generateRefreshToken(Long userId) {
+        return Jwts.builder()
+                .subject(String.valueOf(userId))
+                .claim(CLAIM_TYPE, REFRESH_TOKEN_TYPE)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshExpirationMs))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public long getRefreshExpirationMs() {
+        return refreshExpirationMs;
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+            return REFRESH_TOKEN_TYPE.equals(claims.get(CLAIM_TYPE, String.class));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getUserId(String token) {
