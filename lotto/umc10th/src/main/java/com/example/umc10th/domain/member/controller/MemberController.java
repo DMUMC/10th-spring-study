@@ -6,8 +6,10 @@ import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.security.entity.AuthMember;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +21,9 @@ public class MemberController {
 
     @PostMapping("/members/me")
     public ApiResponse<MemberResDTO.GetInfo> getInfo(
-            @RequestBody @Valid MemberReqDTO.GetInfo dto
+            @AuthenticationPrincipal AuthMember member
     ) {
         BaseSuccessCode code = MemberSuccessCode.OK;
-        return ApiResponse.onSuccess(code, memberService.GetInfo(dto));
+        return ApiResponse.onSuccess(code, memberService.GetInfo(member));
     }
 }

@@ -13,7 +13,10 @@ public enum MemberSuccessCode implements BaseSuccessCode {
             "조회 요청을 성공했습니다."),
     SIGNUP(HttpStatus.OK,
             "MEMBER200_2",
-                    "회원가입 요청을 성공했습니다.");
+                    "회원가입 요청을 성공했습니다."),
+    LOGIN(HttpStatus.OK,
+            "MEMBER200_3",
+                    "로그인 요청을 성공했습니다.");;
 
     private final HttpStatus status;
     private final String code;

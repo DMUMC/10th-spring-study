@@ -2,6 +2,10 @@ package com.example.umc10th.global.config;
 
 import com.example.umc10th.global.security.exception.CustomAccessDenied;
 import com.example.umc10th.global.security.exception.CustomEntryPoint;
+import com.example.umc10th.global.security.filter.JwtAuthFilter;
+import com.example.umc10th.global.security.service.CustomUserDetailsService;
+import com.example.umc10th.global.security.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,10 +14,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private final String[] allowUris = {
             // Swagger 허용
@@ -35,6 +44,8 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .permitAll()
                 )
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
@@ -62,4 +73,9 @@ public class SecurityConfig {
     public CustomEntryPoint customEntryPoint() {
         return new CustomEntryPoint();
     }
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter(){
+        return new JwtAuthFilter(jwtUtil, customUserDetailsService);
+    };
 }

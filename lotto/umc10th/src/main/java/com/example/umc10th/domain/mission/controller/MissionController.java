@@ -33,7 +33,7 @@ public class MissionController {
 
     @GetMapping("/home")
     public ApiResponse<Slice<MissionResDTO.GetInfo>> getHomeMissions(
-            @RequestBody @Valid MissionReqDTO.GetInfo dto,
+            @RequestParam Long id,
             @RequestParam Long missionId,
             @RequestParam Long locationId,
             @RequestParam(defaultValue = "10") int size
@@ -42,13 +42,13 @@ public class MissionController {
 
         return ApiResponse.onSuccess(
                 code,
-                missionService.getHomeMissions(dto, missionId, locationId, size)
+                missionService.getHomeMissions(id, missionId, locationId, size)
         );
     }
 
     @GetMapping("/v1/missions")
     public ApiResponse<List<MemberMissionResDTO.GetInfo>> getMemberMissions(
-            @RequestBody @Valid MissionReqDTO.GetInfo dto,
+            @RequestParam Long id,
             @RequestParam Long missionId,
             @RequestParam List<Status> status,
             @RequestParam(defaultValue = "10") int size
@@ -57,7 +57,7 @@ public class MissionController {
 
         return ApiResponse.onSuccess(
                 code,
-                missionService.getMemberMissions(dto, missionId, status, size)
+                missionService.getMemberMissions(id, missionId, status, size)
         );
     }
 
@@ -65,7 +65,7 @@ public class MissionController {
 
     @GetMapping("/v2/missions")
     public ApiResponse<Pagi<MemberMissionResDTO.GetInfo>> getOffsetMemberMissions(
-            @RequestBody @Valid MissionReqDTO.GetInfo dto,
+            @RequestParam Long id,
             @RequestParam List<Status> status,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam Integer pageNumber,
@@ -73,7 +73,7 @@ public class MissionController {
     ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
         return ApiResponse.onSuccess(code, missionService.getOffsetMemberMissions(
-                dto, status, size, pageNumber, sort)
+                id, status, size, pageNumber, sort)
         );
     }
 

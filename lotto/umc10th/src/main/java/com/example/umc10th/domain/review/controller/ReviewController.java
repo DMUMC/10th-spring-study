@@ -20,20 +20,20 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     public ApiResponse <ReviewResDTO.GetInfo> getInfo(
-            @RequestBody @Valid ReviewReqDTO.GetInfo dto
+            @RequestParam Long id
     ){
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return ApiResponse.onSuccess(code, reviewService.getInfo(dto));
+        return ApiResponse.onSuccess(code, reviewService.getInfo(id));
     }
 
     @GetMapping("/reviews/cursor")
     public ApiResponse <ReviewResDTO.Pagination<ReviewResDTO.GetInfo>> getCursorInfo(
-            @RequestBody @Valid ReviewReqDTO.GetInfo dto,
+            @RequestParam Long id,
             @RequestParam Integer pageSize,
             @RequestParam String cursor,
             @RequestParam String query
     ){
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return ApiResponse.onSuccess(code, reviewService.getCursorInfo(dto, pageSize, cursor, query));
+        return ApiResponse.onSuccess(code, reviewService.getCursorInfo(id, pageSize, cursor, query));
     }
 }

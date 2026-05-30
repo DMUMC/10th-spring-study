@@ -21,14 +21,14 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public GetInfo getInfo(ReviewReqDTO.GetInfo dto) {
-        Review review = reviewRepository.findById(dto.id())
+    public GetInfo getInfo(Long id) {
+        Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
         return ReviewConverter.toGetInfo(review,null);
     }
 
     public Pagination<GetInfo> getCursorInfo(
-            ReviewReqDTO.GetInfo dto,
+            Long id,
             Integer pageSize,
             String cursor,
             String query
@@ -38,20 +38,20 @@ public class ReviewService {
 
         if (cursor.equals("-1")) {
             reviewList = reviewRepository
-                    .findByMemberIdAndIdLessThanOrderByIdDesc(dto.id(), Long.MAX_VALUE, pageable);
+                    .findByMemberIdAndIdLessThanOrderByIdDesc(id, Long.MAX_VALUE, pageable);
         } else {
             String[] cursorSplit = cursor.split(":");
             switch (query.toLowerCase()) {
                 case "id" -> {
                     long idCursor = Long.parseLong(cursorSplit[1]);
                     reviewList = reviewRepository
-                            .findByMemberIdAndIdLessThanOrderByIdDesc(dto.id(), idCursor, pageable);
+                            .findByMemberIdAndIdLessThanOrderByIdDesc(id, idCursor, pageable);
                 }
                 case "star" -> {
                     int starCursor = Integer.parseInt(cursorSplit[0]);
                     long idCursor = Long.parseLong(cursorSplit[1]);
                     reviewList = reviewRepository
-                            .findByMemberIdOrderByStarDesc(dto.id(), starCursor, idCursor, pageable);
+                            .findByMemberIdOrderByStarDesc(id, starCursor, idCursor, pageable);
                 }
                 default -> throw new ReviewException(ReviewErrorCode.QUERY_NOT_VALID);
             }
